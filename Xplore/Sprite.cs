@@ -9,6 +9,7 @@ namespace Xplore
         protected Texture2D texture;
         protected Vector2 position;
         protected float rotation;
+        protected MouseState previousMouseState;
         protected KeyboardState previousKeyboardState;
         protected Vector2 velocity = Vector2.Zero;
 
@@ -30,6 +31,7 @@ namespace Xplore
         public virtual void Update(GameTime gameTime)
         {
             position = position + velocity;
+            previousMouseState = Mouse.GetState();
             previousKeyboardState = Keyboard.GetState();
         }
 

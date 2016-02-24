@@ -14,10 +14,15 @@ namespace Xplore
         public Texture2D Laser { get; set; }
         public Texture2D Boulder { get; set; }
         public List<Texture2D> ExhaustParticles { get; set; }
+        public List<Texture2D> EnemyShips { get; set; }
 
         public ContentProvider(ContentManager contentManager)
         {
             ExhaustParticles = new List<Texture2D>();
+            EnemyShips = new List<Texture2D>();
+            EnemyShips.Add(contentManager.Load<Texture2D>("Ships/enemyBlue1"));
+            EnemyShips.Add(contentManager.Load<Texture2D>("Ships/enemyGreen2"));
+            EnemyShips.Add(contentManager.Load<Texture2D>("Ships/enemyRed4"));
 
             Boulder = contentManager.Load<Texture2D>("Boulders/boulder1");
             //Background = contentManager.Load<Texture2D>("backgroundLevel1");

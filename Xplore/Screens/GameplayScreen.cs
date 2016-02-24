@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,6 +9,9 @@ namespace Xplore
 {
     public class GameplayScreen : Screen
     {
+        private Random rand = new Random();
+        private List<Enemy> Enemies = new List<Enemy>();
+        private MouseState previousMouseState;
         private Player player;
         private const int gameSize = 1000;
         private Rectangle gameBounds = new Rectangle(-(gameSize / 2), -(gameSize / 2), gameSize, gameSize);
@@ -30,8 +35,20 @@ namespace Xplore
             //var playerWorldPos = Camera.GetScreenPosition(new Vector2(player.Position.X, player.Position.Y));
             Camera.Location = new Vector2(player.Position.X,player.Position.Y);
 
+            var mouseState = Mouse.GetState();
+
+            if (mouseState.RightButton == ButtonState.Pressed && previousMouseState.RightButton == ButtonState.Released)
+            {
+                Enemies.Add(new Enemy(Content.EnemyShips[rand.Next(Content.EnemyShips.Count-1)],Camera.GetWorldPosition(new Vector2(mouseState.X,mouseState.Y))));
+            }
+            previousMouseState = mouseState;
+
             //Camera.CenterPosition = Camera.GetWorldPosition(mousePos);
             player.Update(gameTime);
+            foreach (var enemy in Enemies)
+            {
+                enemy.Update(gameTime);
+            }
             
             Debug.WriteLine($"{player.Position.X},{player.Position.Y}");
             //Camera.CenterPosition = new Vector2(player.Position.X - Game.GraphicsDevice.Viewport.Width/2f,
@@ -43,6 +60,10 @@ namespace Xplore
            //spriteBatch.Draw(Content.Background,Vector2.Zero,Color.White);
             spriteBatch.Draw(Content.Background, new Vector2(gameBounds.X, gameBounds.Y), new Rectangle(gameBounds.X, gameBounds.Y, gameBounds.Width, gameBounds.Height), Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
             player.Draw(spriteBatch);
+            foreach (var enemy in Enemies)
+            {
+                enemy.Draw(spriteBatch);
+            }
             //spriteBatch.Draw(Content.ExhaustParticles[0],Camera.GetWorldPosition(new Vector2(Game.GraphicsDevice.Viewport.Width/2f-(Content.ExhaustParticles[0].Width/2f),Game.GraphicsDevice.Viewport.Height/2f-(Content.ExhaustParticles[0].Height / 2f))));
         }
 
