@@ -37,7 +37,7 @@ namespace Xplore
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position,null,Color.White,rotation, new Vector2(texture.Width/2f,texture.Height/2f), 1f,SpriteEffects.None,0f);
+            spriteBatch.Draw(texture, new Vector2(position.X+texture.Width/2f,position.Y+texture.Height/2f),null,Color.White,rotation, new Vector2(texture.Width/2f,texture.Height/2f), 1f,SpriteEffects.None,0f);
         }
 
 

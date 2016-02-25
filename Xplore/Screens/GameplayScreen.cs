@@ -50,7 +50,7 @@ namespace Xplore
                 enemy.Update(gameTime);
             }
             
-            Debug.WriteLine($"{player.Position.X},{player.Position.Y}");
+            //Debug.WriteLine($"{player.Position.X},{player.Position.Y}");
             //Camera.CenterPosition = new Vector2(player.Position.X - Game.GraphicsDevice.Viewport.Width/2f,
             //    player.Position.Y - Game.GraphicsDevice.Viewport.Height/2f);
         }

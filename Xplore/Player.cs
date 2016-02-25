@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -75,8 +76,9 @@ namespace Xplore
                 velocityGoal += new Vector2(directionVector.Y, -directionVector.X) * Speed;
             }
 
-
-            directionVector = Vector2.Lerp(directionGoalVector, directionVector, 0.99f);
+            Debug.WriteLine(position);
+            Debug.WriteLine(BoundingBox);
+            directionVector = Vector2.Lerp(directionGoalVector, directionVector, 0.95f);
             velocity = Vector2.Lerp(velocityGoal, velocity, 0.99f);
             //scale = Vector2.Lerp(scaleGoal,scale,0.995f);
 
@@ -124,11 +126,14 @@ namespace Xplore
             var particleTexture = _particleTextures[rand];
 
 
-            //var exhuastPoint = new Vector2(position.X + texture.Width / 2f, position.Y + texture.Height);
-            var origin = new Vector2(BoundingBox.X, BoundingBox.Y);
+            var exhuastPoint = new Vector2(position.X+texture.Width/2f,position.Y+texture.Height);
+            var origin = new Vector2(position.X+texture.Width/2f,position.Y+texture.Height/2f);
+            
+            
+            exhuastPoint = RotateAboutOrigin(exhuastPoint, origin);
+            //Debug.WriteLine(exhuastPoint);
 
-            //exhuastPoint = RotateAboutOrigin(exhuastPoint, origin, MathHelper.ToRadians(rotation));
-            var spread = 300;
+            var spread = 500;
             for (int i = 0; i < 4; i++)
             {
                 
@@ -138,14 +143,18 @@ namespace Xplore
                 var randomVector = new Vector2(x, y);
                 randomVector.Normalize();
 
-                currentParticles.Add(new ShipExhaust(particleTexture, origin, randomVector));
+                currentParticles.Add(new ShipExhaust(particleTexture, exhuastPoint, randomVector));
             }
 
         }
 
-        public Vector2 RotateAboutOrigin(Vector2 point, Vector2 origin, float rotation)
+        public Vector2 RotateAboutOrigin(Vector2 point, Vector2 origin)
         {
-            return Vector2.Transform(point - origin, Matrix.CreateRotationZ(rotation)) + origin;
+            return Vector2.Transform(point,
+                Matrix.CreateTranslation(-origin.X, -origin.Y, 0f)*
+                Matrix.CreateRotationZ(rotation) *
+                Matrix.CreateTranslation(origin.X,origin.Y,0f)
+                );
         }
 
         public override void Draw(SpriteBatch spriteBatch)

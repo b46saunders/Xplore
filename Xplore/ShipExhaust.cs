@@ -6,7 +6,7 @@ namespace Xplore
     public class ShipExhaust : Sprite , IParticle
     {
         private Vector2 velocityGoal;
-        private float Speed = 1f;
+        private float Speed = 3f;
         private float fadeSpeed = 90f;
         private float fadeCurrent = 0f;
         public float fadePercent = 1f;

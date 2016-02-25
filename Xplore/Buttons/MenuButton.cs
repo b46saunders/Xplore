@@ -88,7 +88,7 @@ namespace Xplore
                 if (pressed)
                 {
                     ClickEvent?.Invoke(this, null);
-                    Debug.WriteLine("CLICK ON BUTTON");
+                    //Debug.WriteLine("CLICK ON BUTTON");
                 }
             }
             if (mouseState.LeftButton == ButtonState.Released)
