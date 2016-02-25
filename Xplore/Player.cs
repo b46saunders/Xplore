@@ -131,7 +131,6 @@ namespace Xplore
             
             
             exhuastPoint = RotateAboutOrigin(exhuastPoint, origin);
-            //Debug.WriteLine(exhuastPoint);
 
             var spread = 500;
             for (int i = 0; i < 4; i++)
