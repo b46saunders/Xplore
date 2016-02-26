@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -55,12 +54,12 @@ namespace Xplore
             var worldPosz = new Vector2(mousePoss.X,mousePoss.Y + 16);
             var cameraPos = new Vector2(worldPosz.X,worldPosz.Y + 16);
             var cameraPos2 = new Vector2(cameraPos.X, cameraPos.Y + 16);
-            spriteBatch.DrawString(Content.SpriteFont, $"UPS : {_previousUpdateCount}", updatePos, Color.Black);
-            spriteBatch.DrawString(Content.SpriteFont, $"FPS : {_previousFrameCount}", fpsPos, Color.Black);
-            spriteBatch.DrawString(Content.SpriteFont,$"Mouse pos : [{mousePos.X},{mousePos.Y}]", mousePoss, Color.Black);
-            spriteBatch.DrawString(Content.SpriteFont, $"World Pos : [{worldPos.X},{worldPos.Y}]", worldPosz, Color.Black);
-            spriteBatch.DrawString(Content.SpriteFont,$"Camera Pos: [{Camera.Location.X},{Camera.Location.Y}]",cameraPos,Color.Black);
-            spriteBatch.DrawString(Content.SpriteFont, $"Camera Pos2: [{Camera.Location.X},{Camera.Location.Y}]", cameraPos2, Color.Black);
+            spriteBatch.DrawString(ContentProvider.SpriteFont, $"UPS : {_previousUpdateCount}", updatePos, Color.Black);
+            spriteBatch.DrawString(ContentProvider.SpriteFont, $"FPS : {_previousFrameCount}", fpsPos, Color.Black);
+            spriteBatch.DrawString(ContentProvider.SpriteFont,$"Mouse pos : [{mousePos.X},{mousePos.Y}]", mousePoss, Color.Black);
+            spriteBatch.DrawString(ContentProvider.SpriteFont, $"World Pos : [{worldPos.X},{worldPos.Y}]", worldPosz, Color.Black);
+            spriteBatch.DrawString(ContentProvider.SpriteFont,$"Camera Pos: [{Camera.Location.X},{Camera.Location.Y}]",cameraPos,Color.Black);
+            spriteBatch.DrawString(ContentProvider.SpriteFont, $"Camera Pos2: [{Camera.Location.X},{Camera.Location.Y}]", cameraPos2, Color.Black);
             _frameCount++;
             if (gameTime.TotalGameTime.TotalSeconds > _lastFrameSecond + 1)
             {
@@ -70,7 +69,7 @@ namespace Xplore
             }
         }
 
-        public DebugScreen(bool active, ContentProvider content, Main game, ScreenManager screenManager) : base(active, content, game, screenManager)
+        public DebugScreen(bool active, Main game, ScreenManager screenManager) : base(active, game, screenManager)
         {
             ScreenType = ScreenType.Debug;
         }

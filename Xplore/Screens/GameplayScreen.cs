@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -39,7 +38,7 @@ namespace Xplore
 
             if (mouseState.RightButton == ButtonState.Pressed && previousMouseState.RightButton == ButtonState.Released)
             {
-                Enemies.Add(new Enemy(Content.EnemyShips[rand.Next(Content.EnemyShips.Count-1)],Camera.GetWorldPosition(new Vector2(mouseState.X,mouseState.Y))));
+                Enemies.Add(new Enemy(ContentProvider.EnemyShips[rand.Next(ContentProvider.EnemyShips.Count-1)],Camera.GetWorldPosition(new Vector2(mouseState.X,mouseState.Y))));
             }
             previousMouseState = mouseState;
 
@@ -58,7 +57,7 @@ namespace Xplore
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
            //spriteBatch.Draw(Content.Background,Vector2.Zero,Color.White);
-            spriteBatch.Draw(Content.Background, new Vector2(gameBounds.X, gameBounds.Y), new Rectangle(gameBounds.X, gameBounds.Y, gameBounds.Width, gameBounds.Height), Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+            spriteBatch.Draw(ContentProvider.Background, new Vector2(gameBounds.X, gameBounds.Y), new Rectangle(gameBounds.X, gameBounds.Y, gameBounds.Width, gameBounds.Height), Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
             player.Draw(spriteBatch);
             foreach (var enemy in Enemies)
             {
@@ -67,13 +66,13 @@ namespace Xplore
             //spriteBatch.Draw(Content.ExhaustParticles[0],Camera.GetWorldPosition(new Vector2(Game.GraphicsDevice.Viewport.Width/2f-(Content.ExhaustParticles[0].Width/2f),Game.GraphicsDevice.Viewport.Height/2f-(Content.ExhaustParticles[0].Height / 2f))));
         }
 
-        public GameplayScreen(bool active, ContentProvider content, Main game,
+        public GameplayScreen(bool active, Main game,
             ScreenManager screenManager)
-            : base(active, content, game, screenManager)
+            : base(active, game, screenManager)
         {
             ScreenType = ScreenType.Gameplay;
             Camera.Bounds = Game.GraphicsDevice.Viewport.Bounds;
-            player = new Player(Content.Ship, new Vector2(0,0),gameBounds,content.ExhaustParticles,content.Laser);
+            player = new Player(ContentProvider.Ship, new Vector2(0,0),gameBounds, ContentProvider.ExhaustParticles, ContentProvider.Laser);
         }
     }
 }

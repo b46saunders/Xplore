@@ -16,11 +16,11 @@ namespace Xplore
         public override void LoadContent()
         {
             //get center of screen
-            var buttonTexture = Content.ButtonTexture;
-            var mouseOverTexture = Content.MouseOverTexture;
+            var buttonTexture = ContentProvider.ButtonTexture;
+            var mouseOverTexture = ContentProvider.MouseOverTexture;
             var pos = new Vector2(100, 100);
             var pos2 = new Vector2(100, pos.Y + buttonTexture.Height + 20);
-            var font = Content.SpriteFont;
+            var font = ContentProvider.SpriteFont;
 
             _resumeButton = new MenuButton(pos, buttonTexture, mouseOverTexture, "RESUME", font);
             _menuButton = new MenuButton(pos2, buttonTexture, mouseOverTexture, "MENU", font);
@@ -52,7 +52,7 @@ namespace Xplore
         }
 
 
-        public PauseScreen(bool active, ContentProvider content, Main game, ScreenManager screenManager) : base(active, content, game, screenManager)
+        public PauseScreen(bool active, Main game, ScreenManager screenManager) : base(active, game, screenManager)
         {
             ScreenType = ScreenType.Pause;
 

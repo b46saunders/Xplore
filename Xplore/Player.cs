@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -100,7 +101,7 @@ namespace Xplore
 
         private void Fire()
         {
-            currentParticles.Add(new Lazer(laser, RotateAboutOrigin(new Vector2(position.X + texture.Width/2f,position.Y),new Vector2(BoundingBox.Center.X,BoundingBox.Center.Y)), directionVector,2000f) {IsActive = true});
+            currentParticles.Add(new Lazer(laser, RotateAboutOrigin(new Vector2(position.X + texture.Width/2f,position.Y),new Vector2(BoundingBox.Center.X,BoundingBox.Center.Y),rotation), directionVector,2000f) {IsActive = true});
         }
 
 
@@ -116,33 +117,44 @@ namespace Xplore
             }
         }
 
-        public static void DrawRectangle(Rectangle rec, Texture2D tex, Color col, SpriteBatch spriteBatch, bool solid, int thickness)
+        public static void DrawRectangle(Rectangle rec, Texture2D tex, Color col, SpriteBatch spriteBatch, bool solid, int thickness,float rotation,Vector2 origin)
         {
+            Vector2 Position = new Vector2(rec.X, rec.Y);
             if (!solid)
             {
-
-                Vector2 Position = new Vector2(rec.X, rec.Y);
                 int border = thickness;
 
                 int borderWidth = (int)(rec.Width) + (border * 2);
                 int borderHeight = (int)(rec.Height) + (border);
 
-                DrawStraightLine(new Vector2((int)rec.X, (int)rec.Y), new Vector2((int)rec.X + rec.Width, (int)rec.Y), tex, col, spriteBatch, thickness); //top bar 
-                DrawStraightLine(new Vector2((int)rec.X, (int)rec.Y + rec.Height), new Vector2((int)rec.X + rec.Width, (int)rec.Y + rec.Height), tex, col, spriteBatch, thickness); //bottom bar 
-                DrawStraightLine(new Vector2((int)rec.X, (int)rec.Y), new Vector2((int)rec.X, (int)rec.Y + rec.Height), tex, col, spriteBatch, thickness); //left bar 
-                DrawStraightLine(new Vector2((int)rec.X + rec.Width, (int)rec.Y), new Vector2((int)rec.X + rec.Width, (int)rec.Y + rec.Height), tex, col, spriteBatch, thickness); //right bar 
+                //now we need to rotate all the vectors...
+                var topStart = new Vector2((int) rec.X, (int) rec.Y);
+                var topEnd = new Vector2((int) rec.X + rec.Width, (int) rec.Y);
+                var bottomStart = new Vector2((int) rec.X, (int) rec.Y + rec.Height);
+                var bottomEnd = new Vector2((int) rec.X + rec.Width, (int) rec.Y + rec.Height);
+                var leftStart = new Vector2((int) rec.X, (int) rec.Y);
+                var leftEnd = new Vector2((int) rec.X, (int) rec.Y + rec.Height);
+                var rightStart = new Vector2((int) rec.X + rec.Width, (int) rec.Y);
+                var rightEnd = new Vector2((int) rec.X + rec.Width, (int) rec.Y + rec.Height);
+
+                DrawStraightLine(topStart,topEnd , tex, col, spriteBatch, thickness,rotation,origin); //top bar 
+                DrawStraightLine(bottomStart, bottomEnd, tex, col, spriteBatch, thickness, rotation, origin); //bottom bar 
+                DrawStraightLine(leftStart, leftEnd, tex, col, spriteBatch, thickness, rotation, origin); //left bar 
+                DrawStraightLine(rightStart, rightEnd, tex, col, spriteBatch, thickness, rotation, origin); //right bar 
             }
             else
             {
-                spriteBatch.Draw(tex, new Vector2((float)rec.X, (float)rec.Y), rec, col, 0.0f, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0.0f);
+                //var c = new Vector2(rec.X + rec.Width/2f, rec.Y + rec.Height/2f);
+                spriteBatch.Draw(tex, Position, rec, col, rotation, origin, 1.0f, SpriteEffects.None, 0.0f);
             }
 
         }
 
         //draws a line (rectangle of thickness) from A to B.  A and B have make either horiz or vert line. 
-        public static void DrawStraightLine(Vector2 A, Vector2 B, Texture2D tex, Color col, SpriteBatch spriteBatch, int thickness)
+        public static void DrawStraightLine(Vector2 A, Vector2 B, Texture2D tex, Color col, SpriteBatch spriteBatch, int thickness,float rotation,Vector2 origin)
         {
             Rectangle rec;
+            
             if (A.X < B.X) // horiz line 
             {
                 rec = new Rectangle((int)A.X, (int)A.Y, (int)(B.X - A.X), thickness);
@@ -152,7 +164,7 @@ namespace Xplore
                 rec = new Rectangle((int)A.X, (int)A.Y, thickness, (int)(B.Y - A.Y));
             }
 
-            spriteBatch.Draw(tex, rec, col);
+            spriteBatch.Draw(tex, rec,col);
         }
 
         public static Random random = new Random(100);
@@ -164,7 +176,7 @@ namespace Xplore
 
             var exhuastPoint = new Vector2(position.X+texture.Width/2f,position.Y+texture.Height);
             var origin = new Vector2(position.X+texture.Width/2f,position.Y+texture.Height/2f);
-            exhuastPoint = RotateAboutOrigin(exhuastPoint, origin);
+            exhuastPoint = RotateAboutOrigin(exhuastPoint, origin,rotation);
 
             var spread = 30;
             for (int i = 0; i < 4; i++)
@@ -181,7 +193,7 @@ namespace Xplore
 
         }
 
-        public Vector2 RotateAboutOrigin(Vector2 point, Vector2 origin)
+        public static Vector2 RotateAboutOrigin(Vector2 point, Vector2 origin,float rotation)
         {
             return Vector2.Transform(point,
                 Matrix.CreateTranslation(-origin.X, -origin.Y, 0f)*
@@ -192,7 +204,7 @@ namespace Xplore
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            DrawRectangle(BoundingBox,)
+            DrawRectangle(BoundingBox, ContentProvider.OutlineTexture, Color.Purple, spriteBatch, false, 5,rotation,new Vector2(position.X,position.Y));
             foreach (var currentParticle in currentParticles)
             {
                 currentParticle.Draw(spriteBatch);

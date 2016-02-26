@@ -16,12 +16,12 @@ namespace Xplore
         public override void LoadContent()
         {
             //get center of screen
-            var buttonTexture = Content.ButtonTexture;
-            var mouseOverTexture = Content.MouseOverTexture;
+            var buttonTexture = ContentProvider.ButtonTexture;
+            var mouseOverTexture = ContentProvider.MouseOverTexture;
             var pos = new Vector2(100, 100);
             var pos2 = new Vector2(100, pos.Y + buttonTexture.Height + 20);
             var pos3 = new Vector2(100, pos2.Y + buttonTexture.Height + 20);
-            var font = Content.SpriteFont;
+            var font = ContentProvider.SpriteFont;
 
             _singleplayer = new MenuButton(pos, buttonTexture, mouseOverTexture, "Singleplayer", font);
             _endButton = new MenuButton(pos3, buttonTexture, mouseOverTexture, "Quit", font);
@@ -53,7 +53,7 @@ namespace Xplore
         }
 
 
-        public MenuSceen(bool active, ContentProvider content, Main game, ScreenManager screenManager) : base(active, content, game, screenManager)
+        public MenuSceen(bool active, Main game, ScreenManager screenManager) : base(active, game, screenManager)
         {
             ScreenType = ScreenType.Menu;
 

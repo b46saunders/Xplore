@@ -45,7 +45,7 @@ namespace Xplore
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            _screenManager.ContentProvider = new ContentProvider(Content);
+            ContentProvider.InitializeContent(Content);
             Camera.Bounds = graphics.GraphicsDevice.Viewport.Bounds;
             Camera.Location = new Vector2(graphics.GraphicsDevice.Viewport.Bounds.Width / 2f, graphics.GraphicsDevice.Viewport.Bounds.Height / 2f);
             screenBounds = new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);

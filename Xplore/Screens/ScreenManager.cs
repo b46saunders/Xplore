@@ -11,7 +11,6 @@ namespace Xplore
         public GraphicsDeviceManager GraphicsDeviceManager { get; set; }
         public Dictionary<string, Screen> Screens { get; set; }
         public SpriteFont SpriteFont { get; set; }
-        public ContentProvider ContentProvider { get; set; }
         public Main Game { get; set; }
 
         public ScreenManager()
@@ -21,11 +20,11 @@ namespace Xplore
         public void Init()
         {
 
-            var menuScreen = new MenuSceen(true, ContentProvider, Game, this);
-            var debugScreen = new DebugScreen(true, ContentProvider, Game, this);
+            var menuScreen = new MenuSceen(true, Game, this);
+            var debugScreen = new DebugScreen(true, Game, this);
             menuScreen.StartSinglePlayerGame += (sender, args) => StartSinglePlayerGame();
             menuScreen.EndGame += (sender, args) => QuitGame();
-            var pauseScreen = new PauseScreen(false, ContentProvider, Game, this);
+            var pauseScreen = new PauseScreen(false, Game, this);
             pauseScreen.MenuClick += (sender, args) => MainMenu();
             pauseScreen.ResumeClick += (sender, args) => ResumeGame();
             Screens.Add("Menu", menuScreen);
@@ -37,7 +36,7 @@ namespace Xplore
         private void StartSinglePlayerGame()
         {
             Screens["Menu"].Active = false;
-            Screens.Add("Gameplay", new GameplayScreen(true, ContentProvider, Game, this));
+            Screens.Add("Gameplay", new GameplayScreen(true, Game, this));
         }
 
         public void ResumeGame()
@@ -90,7 +89,7 @@ namespace Xplore
             {
                 Screens.Remove("Gameplay");
             }
-            screen = new GameplayScreen(true, ContentProvider, Game, this);
+            screen = new GameplayScreen(true, Game, this);
             screen.Active = true;
             Screens["Menu"].Active = false;
             Screens.Add("Gameplay", screen);

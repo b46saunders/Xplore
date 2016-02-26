@@ -9,15 +9,12 @@ namespace Xplore
         public bool Active { get; set; }
         public ScreenType ScreenType { get; protected set; }
         protected ScreenManager ScreenManager { get; set; }
-        protected ContentProvider Content;
         protected Main Game;
 
 
-        protected Screen(bool active, ContentProvider content, Main game,
-            ScreenManager screenManager)
+        protected Screen(bool active, Main game, ScreenManager screenManager)
         {
             Active = active;
-            Content = content;
             Game = game;
             ScreenManager = screenManager;
         }
