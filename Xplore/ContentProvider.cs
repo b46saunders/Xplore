@@ -15,9 +15,11 @@ namespace Xplore
         public Texture2D Boulder { get; set; }
         public List<Texture2D> ExhaustParticles { get; set; }
         public List<Texture2D> EnemyShips { get; set; }
+        public Texture2D OutlineTexture { get; set; }
 
         public ContentProvider(ContentManager contentManager)
         {
+            OutlineTexture = contentManager.Load<Texture2D>("Vectors/outline");
             ExhaustParticles = new List<Texture2D>();
             EnemyShips = new List<Texture2D>();
             EnemyShips.Add(contentManager.Load<Texture2D>("Ships/enemyBlue1"));

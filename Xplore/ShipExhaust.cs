@@ -6,8 +6,8 @@ namespace Xplore
     public class ShipExhaust : Sprite , IParticle
     {
         private Vector2 velocityGoal;
-        private float Speed = 3f;
-        private float fadeSpeed = 90f;
+        private float Speed = 5f;
+        private float fadeSpeed = 20f;
         private float fadeCurrent = 0f;
         public float fadePercent = 1f;
         private Vector2 _directionVector;
@@ -25,8 +25,8 @@ namespace Xplore
 
             //lets spin
             //rotation = (float)_directionVector.GetRotationFromVector();
-            velocityGoal = _directionVector * Speed;
-            velocity = Vector2.Lerp(velocityGoal, velocity, 0.99f);
+            velocity = _directionVector * Speed;
+            //velocity = Vector2.Lerp(velocityGoal, velocity, 0.99f);
             //progressivly fade
 
 

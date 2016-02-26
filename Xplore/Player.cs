@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -11,7 +10,7 @@ namespace Xplore
     {
         public Rectangle BoundingBox => new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
         private float rotationSpeed = 0.01f;
-        private float Speed = 5f;
+        private float Speed = 4f;
         private Vector2 scale = new Vector2(1.0f,1.0f);
         private Vector2 originalScale = new Vector2(1f,1f);
         private Vector2 zoomOutScale = new Vector2(0.5f,0.5f);
@@ -76,11 +75,9 @@ namespace Xplore
                 velocityGoal += new Vector2(directionVector.Y, -directionVector.X) * Speed;
             }
 
-            Debug.WriteLine(position);
-            Debug.WriteLine(BoundingBox);
             directionVector = Vector2.Lerp(directionGoalVector, directionVector, 0.95f);
             velocity = Vector2.Lerp(velocityGoal, velocity, 0.99f);
-            //scale = Vector2.Lerp(scaleGoal,scale,0.995f);
+            scale = Vector2.Lerp(scaleGoal,scale,0.995f);
 
             Camera.Zoom = scale.X;
             //rotation = (float)getRotationFromDirection(directionVector);
@@ -97,13 +94,13 @@ namespace Xplore
 
         private void CheckBounds()
         {
-            position.Y = MathHelper.Clamp(position.Y, -(_screenBounds.Height/2)+BoundingBox.Height/2, _screenBounds.Height/2 - BoundingBox.Height/2);
-            position.X = MathHelper.Clamp(position.X, -(_screenBounds.Width / 2)+BoundingBox.Width/2, _screenBounds.Width/2 - BoundingBox.Width/2);
+            position.Y = MathHelper.Clamp(position.Y, -(_screenBounds.Height/2), _screenBounds.Height/2 - BoundingBox.Height);
+            position.X = MathHelper.Clamp(position.X, -(_screenBounds.Width / 2), _screenBounds.Width/2 - BoundingBox.Width);
         }
 
         private void Fire()
         {
-            currentParticles.Add(new Lazer(laser, position,directionVector,2000f) {IsActive = true});
+            currentParticles.Add(new Lazer(laser, RotateAboutOrigin(new Vector2(position.X + texture.Width/2f,position.Y),new Vector2(BoundingBox.Center.X,BoundingBox.Center.Y)), directionVector,2000f) {IsActive = true});
         }
 
 
@@ -119,6 +116,45 @@ namespace Xplore
             }
         }
 
+        public static void DrawRectangle(Rectangle rec, Texture2D tex, Color col, SpriteBatch spriteBatch, bool solid, int thickness)
+        {
+            if (!solid)
+            {
+
+                Vector2 Position = new Vector2(rec.X, rec.Y);
+                int border = thickness;
+
+                int borderWidth = (int)(rec.Width) + (border * 2);
+                int borderHeight = (int)(rec.Height) + (border);
+
+                DrawStraightLine(new Vector2((int)rec.X, (int)rec.Y), new Vector2((int)rec.X + rec.Width, (int)rec.Y), tex, col, spriteBatch, thickness); //top bar 
+                DrawStraightLine(new Vector2((int)rec.X, (int)rec.Y + rec.Height), new Vector2((int)rec.X + rec.Width, (int)rec.Y + rec.Height), tex, col, spriteBatch, thickness); //bottom bar 
+                DrawStraightLine(new Vector2((int)rec.X, (int)rec.Y), new Vector2((int)rec.X, (int)rec.Y + rec.Height), tex, col, spriteBatch, thickness); //left bar 
+                DrawStraightLine(new Vector2((int)rec.X + rec.Width, (int)rec.Y), new Vector2((int)rec.X + rec.Width, (int)rec.Y + rec.Height), tex, col, spriteBatch, thickness); //right bar 
+            }
+            else
+            {
+                spriteBatch.Draw(tex, new Vector2((float)rec.X, (float)rec.Y), rec, col, 0.0f, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0.0f);
+            }
+
+        }
+
+        //draws a line (rectangle of thickness) from A to B.  A and B have make either horiz or vert line. 
+        public static void DrawStraightLine(Vector2 A, Vector2 B, Texture2D tex, Color col, SpriteBatch spriteBatch, int thickness)
+        {
+            Rectangle rec;
+            if (A.X < B.X) // horiz line 
+            {
+                rec = new Rectangle((int)A.X, (int)A.Y, (int)(B.X - A.X), thickness);
+            }
+            else //vert line 
+            {
+                rec = new Rectangle((int)A.X, (int)A.Y, thickness, (int)(B.Y - A.Y));
+            }
+
+            spriteBatch.Draw(tex, rec, col);
+        }
+
         public static Random random = new Random(100);
         private void CreateExhaustParticles()
         {
@@ -128,11 +164,9 @@ namespace Xplore
 
             var exhuastPoint = new Vector2(position.X+texture.Width/2f,position.Y+texture.Height);
             var origin = new Vector2(position.X+texture.Width/2f,position.Y+texture.Height/2f);
-            
-            
             exhuastPoint = RotateAboutOrigin(exhuastPoint, origin);
 
-            var spread = 500;
+            var spread = 30;
             for (int i = 0; i < 4; i++)
             {
                 
@@ -158,6 +192,7 @@ namespace Xplore
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            DrawRectangle(BoundingBox,)
             foreach (var currentParticle in currentParticles)
             {
                 currentParticle.Draw(spriteBatch);
