@@ -51,6 +51,7 @@
     <Compile Include="Buttons\MenuButton.cs" />
     <Compile Include="Buttons\MenuItem.cs" />
     <Compile Include="Screens\MenuSceen.cs" />
+    <Compile Include="Ship.cs" />
     <Compile Include="ShipExhaust.cs" />
     <Compile Include="Screens\PauseScreen.cs" />
     <Compile Include="Player.cs" />
@@ -76,6 +77,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Ships\enemyRed4.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Ships\playerShip1_orange - Copy.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Smoke\blackSmoke00.png">

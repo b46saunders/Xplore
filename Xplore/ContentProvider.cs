@@ -19,10 +19,8 @@ namespace Xplore
 
         static ContentProvider()
         {
-            
             ExhaustParticles = new List<Texture2D>();
             EnemyShips = new List<Texture2D>();
-            
         }
 
         public static void InitializeContent(ContentManager contentManager)
@@ -32,8 +30,9 @@ namespace Xplore
             EnemyShips.Add(contentManager.Load<Texture2D>("Ships/enemyGreen2"));
             EnemyShips.Add(contentManager.Load<Texture2D>("Ships/enemyRed4"));
 
-            Boulder = contentManager.Load<Texture2D>("Boulders/boulder1");
-            Ship = contentManager.Load<Texture2D>("Ships/playerShip1_orange");
+            Boulder = contentManager.Load<Texture2D>("Boulders/boulder1"); 
+            Ship = contentManager.Load<Texture2D>("Ships/playerShip1_orange - Copy");
+            //Ship = contentManager.Load<Texture2D>("Ships/playerShip1_orange");
             SpriteFont = contentManager.Load<SpriteFont>("Fonts/spriteFont");
             ButtonTexture = contentManager.Load<Texture2D>("Buttons/red_button11");
             MouseOverTexture = contentManager.Load<Texture2D>("Buttons/red_button12");

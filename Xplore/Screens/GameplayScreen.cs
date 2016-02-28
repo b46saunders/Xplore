@@ -21,7 +21,7 @@ namespace Xplore
 
         public override void UnloadContent()
         {
-            //throw new System.NotImplementedException();
+
         }
 
         public override void Update(GameTime gameTime)
@@ -29,41 +29,35 @@ namespace Xplore
             
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 ScreenManager.PauseGame();
-            
-            //get the new players center after scale etc
-            //var playerWorldPos = Camera.GetScreenPosition(new Vector2(player.Position.X, player.Position.Y));
+
             Camera.Location = new Vector2(player.Position.X,player.Position.Y);
 
             var mouseState = Mouse.GetState();
 
             if (mouseState.RightButton == ButtonState.Pressed && previousMouseState.RightButton == ButtonState.Released)
             {
-                Enemies.Add(new Enemy(ContentProvider.EnemyShips[rand.Next(ContentProvider.EnemyShips.Count-1)],Camera.GetWorldPosition(new Vector2(mouseState.X,mouseState.Y))));
+                Enemies.Add(new Enemy(ContentProvider.EnemyShips[rand.Next(ContentProvider.EnemyShips.Count-1)],Camera.GetWorldPosition(new Vector2(mouseState.X,mouseState.Y)),gameBounds));
             }
+
+
             previousMouseState = mouseState;
 
-            //Camera.CenterPosition = Camera.GetWorldPosition(mousePos);
             player.Update(gameTime);
             foreach (var enemy in Enemies)
             {
                 enemy.Update(gameTime);
             }
-            
-            //Debug.WriteLine($"{player.Position.X},{player.Position.Y}");
-            //Camera.CenterPosition = new Vector2(player.Position.X - Game.GraphicsDevice.Viewport.Width/2f,
-            //    player.Position.Y - Game.GraphicsDevice.Viewport.Height/2f);
         }
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-           //spriteBatch.Draw(Content.Background,Vector2.Zero,Color.White);
             spriteBatch.Draw(ContentProvider.Background, new Vector2(gameBounds.X, gameBounds.Y), new Rectangle(gameBounds.X, gameBounds.Y, gameBounds.Width, gameBounds.Height), Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
             player.Draw(spriteBatch);
             foreach (var enemy in Enemies)
             {
                 enemy.Draw(spriteBatch);
             }
-            //spriteBatch.Draw(Content.ExhaustParticles[0],Camera.GetWorldPosition(new Vector2(Game.GraphicsDevice.Viewport.Width/2f-(Content.ExhaustParticles[0].Width/2f),Game.GraphicsDevice.Viewport.Height/2f-(Content.ExhaustParticles[0].Height / 2f))));
+            
         }
 
         public GameplayScreen(bool active, Main game,
@@ -72,7 +66,7 @@ namespace Xplore
         {
             ScreenType = ScreenType.Gameplay;
             Camera.Bounds = Game.GraphicsDevice.Viewport.Bounds;
-            player = new Player(ContentProvider.Ship, new Vector2(0,0),gameBounds, ContentProvider.ExhaustParticles, ContentProvider.Laser);
+            player = new Player(ContentProvider.Ship, new Vector2(0,0),gameBounds);
         }
     }
 }

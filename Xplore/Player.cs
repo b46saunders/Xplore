@@ -1,36 +1,23 @@
 using System;
-using System.Collections.Generic;
-using System.Net.NetworkInformation;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace Xplore
 {
-    public class Player : Sprite, IShip
+   
+    public class Player : Ship, IShip
     {
-        public Rectangle BoundingBox => new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
-        private float rotationSpeed = 0.01f;
-        private float Speed = 4f;
-        private Vector2 scale = new Vector2(1.0f,1.0f);
+        private Vector2 scale = new Vector2(1.5f,1.5f);
         private Vector2 originalScale = new Vector2(1f,1f);
         private Vector2 zoomOutScale = new Vector2(0.5f,0.5f);
         private Vector2 scaleGoal = new Vector2(1,1);
-        private Vector2 directionVector;
-        private Vector2 directionGoalVector;
-        private Vector2 velocityGoal;
-        private Texture2D laser;
-        private Rectangle _screenBounds;
-        private double lastFire = 0;
-        private List<Texture2D> _particleTextures;
-        private List<IParticle> currentParticles = new List<IParticle>();
-        public Player(Texture2D texture, Vector2 position, Rectangle screenBounds, List<Texture2D> particleTextures,Texture2D laser) : base(texture, position)
+
+        public Player(Texture2D texture, Vector2 position,Rectangle screenBounds) : base(texture, position, screenBounds)
         {
-            directionVector = new Vector2(0, -1);
-            directionGoalVector = directionVector;
-            _screenBounds = screenBounds;
-            this.laser = laser;
-            _particleTextures = particleTextures;
+            DirectionVector = new Vector2(0, -1);
+            DirectionGoalVector = DirectionVector;
         }
 
         public override void Update(GameTime gameTime)
@@ -38,17 +25,17 @@ namespace Xplore
             var keyboardState = Keyboard.GetState();
             var mouseState = Mouse.GetState();
 
-            velocityGoal = Vector2.Zero;
+            VelocityGoal = Vector2.Zero;
             var vector = Camera.GetWorldPosition(new Vector2(mouseState.X, mouseState.Y));
 
-            directionGoalVector.X = vector.X - (BoundingBox.Center.X - BoundingBox.Width / 2f);
-            directionGoalVector.Y = vector.Y - (BoundingBox.Center.Y - BoundingBox.Height / 2f);
-            directionGoalVector.Normalize();
-            rotation = (float)directionVector.GetRotationFromVector();
+            DirectionGoalVector.X = vector.X - (BoundingBox.Center.X - BoundingBox.Width / 2f);
+            DirectionGoalVector.Y = vector.Y - (BoundingBox.Center.Y - BoundingBox.Height / 2f);
+            DirectionGoalVector.Normalize();
+            rotation = (float)DirectionVector.GetRotationFromVector();
 
-            if (mouseState.LeftButton == ButtonState.Pressed && gameTime.TotalGameTime.TotalMilliseconds > lastFire+200 )
+            if (mouseState.LeftButton == ButtonState.Pressed && gameTime.TotalGameTime.TotalMilliseconds > LastFire+200 )
             {
-                lastFire = gameTime.TotalGameTime.TotalMilliseconds;
+                LastFire = gameTime.TotalGameTime.TotalMilliseconds;
                 Fire();
             }
 
@@ -56,7 +43,7 @@ namespace Xplore
             {
                 scaleGoal = zoomOutScale;
                 CreateExhaustParticles();
-                velocityGoal = (directionVector)*Speed;
+                VelocityGoal = (DirectionVector)*Speed;
             }
             else
             {
@@ -65,19 +52,19 @@ namespace Xplore
 
             if (keyboardState.IsKeyDown(Keys.S))
             {
-                velocityGoal += (directionVector) * -Speed;
+                VelocityGoal += (DirectionVector) * -Speed;
             }
             if (keyboardState.IsKeyDown(Keys.D))
             {
-                velocityGoal += new Vector2(-directionVector.Y, directionVector.X) * Speed;
+                VelocityGoal += new Vector2(-DirectionVector.Y, DirectionVector.X) * Speed;
             }
             else if (keyboardState.IsKeyDown(Keys.A))
             {
-                velocityGoal += new Vector2(directionVector.Y, -directionVector.X) * Speed;
+                VelocityGoal += new Vector2(DirectionVector.Y, -DirectionVector.X) * Speed;
             }
 
-            directionVector = Vector2.Lerp(directionGoalVector, directionVector, 0.95f);
-            velocity = Vector2.Lerp(velocityGoal, velocity, 0.99f);
+            DirectionVector = Vector2.Lerp(DirectionGoalVector, DirectionVector, RotationSpeed);
+            velocity = Vector2.Lerp(VelocityGoal, velocity, 0.99f);
             scale = Vector2.Lerp(scaleGoal,scale,0.995f);
 
             Camera.Zoom = scale.X;
@@ -85,7 +72,7 @@ namespace Xplore
             //KeepWithinBounds();
             CleanupParticles();
 
-            foreach (var currentParticle in currentParticles)
+            foreach (var currentParticle in CurrentParticles)
             {
                 currentParticle.Update(gameTime);
             }
@@ -95,24 +82,25 @@ namespace Xplore
 
         private void CheckBounds()
         {
-            position.Y = MathHelper.Clamp(position.Y, -(_screenBounds.Height/2), _screenBounds.Height/2 - BoundingBox.Height);
-            position.X = MathHelper.Clamp(position.X, -(_screenBounds.Width / 2), _screenBounds.Width/2 - BoundingBox.Width);
+            position.Y = MathHelper.Clamp(position.Y, -(ScreenBounds.Height/2), ScreenBounds.Height/2 - BoundingBox.Height);
+            position.X = MathHelper.Clamp(position.X, -(ScreenBounds.Width / 2), ScreenBounds.Width/2 - BoundingBox.Width);
         }
 
         private void Fire()
         {
-            currentParticles.Add(new Lazer(laser, RotateAboutOrigin(new Vector2(position.X + texture.Width/2f,position.Y),new Vector2(BoundingBox.Center.X,BoundingBox.Center.Y),rotation), directionVector,2000f) {IsActive = true});
+            CurrentParticles.Add(new Lazer(ContentProvider.Laser,new Vector2(Center.X- ContentProvider.Laser.Width/2f,Center.Y- ContentProvider.Laser.Height/2f), DirectionVector,2000f) {IsActive = true});
+            Debug.WriteLine(Center);
         }
 
 
         public void CleanupParticles()
         {
-            var particleArray = currentParticles.ToArray();
+            var particleArray = CurrentParticles.ToArray();
             for (int i = 0; i < particleArray.Length; i++)
             {
                 if (!particleArray[i].IsActive)
                 {
-                    currentParticles.Remove(particleArray[i]);
+                    CurrentParticles.Remove(particleArray[i]);
                 }
             }
         }
@@ -149,7 +137,6 @@ namespace Xplore
             }
 
         }
-
         //draws a line (rectangle of thickness) from A to B.  A and B have make either horiz or vert line. 
         public static void DrawStraightLine(Vector2 A, Vector2 B, Texture2D tex, Color col, SpriteBatch spriteBatch, int thickness,float rotation,Vector2 origin)
         {
@@ -170,8 +157,8 @@ namespace Xplore
         public static Random random = new Random(100);
         private void CreateExhaustParticles()
         {
-            var rand = random.Next(0, _particleTextures.Count - 1);
-            var particleTexture = _particleTextures[rand];
+            var rand = random.Next(0, ContentProvider.ExhaustParticles.Count - 1);
+            var particleTexture = ContentProvider.ExhaustParticles[rand];
 
 
             var exhuastPoint = new Vector2(position.X+texture.Width/2f,position.Y+texture.Height);
@@ -182,13 +169,13 @@ namespace Xplore
             for (int i = 0; i < 4; i++)
             {
                 
-                var particleDirection = -directionVector;
+                var particleDirection = -DirectionVector;
                 var x = (particleDirection.X + random.Next(-spread, spread) / 100f);
                 var y = (particleDirection.Y + random.Next(-spread, spread) / 100f);
                 var randomVector = new Vector2(x, y);
                 randomVector.Normalize();
 
-                currentParticles.Add(new ShipExhaust(particleTexture, exhuastPoint, randomVector));
+                CurrentParticles.Add(new ShipExhaust(particleTexture, exhuastPoint, randomVector));
             }
 
         }
@@ -204,12 +191,16 @@ namespace Xplore
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            DrawRectangle(BoundingBox, ContentProvider.OutlineTexture, Color.Purple, spriteBatch, false, 5,rotation,new Vector2(position.X,position.Y));
-            foreach (var currentParticle in currentParticles)
+            //var firePoint = new Vector2(Center.X - laser.Width/2f, Center.Y+10);
+
+
+            DrawRectangle(BoundingBox, ContentProvider.OutlineTexture, Color.Purple, spriteBatch, false, 1,rotation,new Vector2(position.X,position.Y));
+            foreach (var currentParticle in CurrentParticles)
             {
                 currentParticle.Draw(spriteBatch);
             }
             base.Draw(spriteBatch);
+            //spriteBatch.Draw(ContentProvider.ExhaustParticles[0], firePoint, Color.Black);
         }
     }
 

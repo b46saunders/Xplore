@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,6 +12,7 @@ namespace Xplore
         {
             _maxDistance = maxDistance;
             Origin = position;
+            Debug.WriteLine($"laser origin: {Origin}");
             rotation = (float)directionVector.GetRotationFromVector();
             velocityVector = new Vector2(directionVector.X, directionVector.Y);
             velocityVector.Normalize();
@@ -19,7 +21,7 @@ namespace Xplore
         public Vector2 Origin { get; set; }
         public bool IsActive { get; set; }
 
-        private float Speed = 10f;
+        private float Speed = 4f;
 
         public override void Update(GameTime gameTime)
         {
