@@ -5,14 +5,14 @@ Aim of this project is to learn about game development by creating a simple 2d s
 I plan to use kenney's great set of free game assets for the project available at www.kenney.nl
 
 Stage 1
-  - Basic movement
-  - Camera follow player center
-  - Collisions
+  - Basic movement (DONE)
+  - Camera follow player center(DONE)
+  - Collisions (Boundary done)
   
 Stage 2
-  - Particles for exhaust (looks fun)
-  - Zooming camera out on speed increase
-  - Acceleration physics
+  - Particles for exhaust (DONE)
+  - Zooming camera out on speed increase (DONE)
+  - Acceleration physics (Using Lerp currently...)
   
 Stage 3
   - Basic enemy behaviour
