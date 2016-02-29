@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="ContentProvider.cs" />
+    <Compile Include="DrawHelper.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Screens\DebugScreen.cs" />
     <Compile Include="Game1.cs" />
@@ -79,7 +80,10 @@
     <Content Include="Content\Ships\enemyRed4.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Ships\playerShip1_orange - Copy.png">
+    <Content Include="Content\Ships\debugPlayer.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Ships\debugEnemy.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Smoke\blackSmoke00.png">

@@ -12,7 +12,8 @@ namespace Xplore
         private List<Enemy> Enemies = new List<Enemy>();
         private MouseState previousMouseState;
         private Player player;
-        private const int gameSize = 1000;
+        
+        private const int gameSize = 2000;
         private Rectangle gameBounds = new Rectangle(-(gameSize / 2), -(gameSize / 2), gameSize, gameSize);
         public override void LoadContent()
         {
@@ -26,7 +27,6 @@ namespace Xplore
 
         public override void Update(GameTime gameTime)
         {
-            
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 ScreenManager.PauseGame();
 
@@ -39,13 +39,16 @@ namespace Xplore
                 Enemies.Add(new Enemy(ContentProvider.EnemyShips[rand.Next(ContentProvider.EnemyShips.Count-1)],Camera.GetWorldPosition(new Vector2(mouseState.X,mouseState.Y)),gameBounds));
             }
 
-
             previousMouseState = mouseState;
 
             player.Update(gameTime);
             foreach (var enemy in Enemies)
             {
                 enemy.Update(gameTime);
+                if ((player.Center - enemy.Center).Length() < 500)
+                {
+                    enemy.Seek(player.Center);
+                }
             }
         }
 
