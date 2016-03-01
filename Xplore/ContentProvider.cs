@@ -26,9 +26,9 @@ namespace Xplore
         public static void InitializeContent(ContentManager contentManager)
         {
             OutlineTexture = contentManager.Load<Texture2D>("Vectors/outline");
-            EnemyShips.Add(contentManager.Load<Texture2D>("Ships/debugEnemy"));
-            //EnemyShips.Add(contentManager.Load<Texture2D>("Ships/enemyGreen2"));
-            //EnemyShips.Add(contentManager.Load<Texture2D>("Ships/enemyRed4"));
+            //EnemyShips.Add(contentManager.Load<Texture2D>("Ships/debugEnemy"));
+            EnemyShips.Add(contentManager.Load<Texture2D>("Ships/enemyGreen2"));
+            EnemyShips.Add(contentManager.Load<Texture2D>("Ships/enemyRed4"));
 
             Boulder = contentManager.Load<Texture2D>("Boulders/boulder1"); 
             Ship = contentManager.Load<Texture2D>("Ships/debugPlayer");
