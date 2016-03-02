@@ -40,7 +40,6 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="ContentProvider.cs" />
-    <Compile Include="ConvertUnits.cs" />
     <Compile Include="DrawHelper.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Screens\DebugScreen.cs" />
@@ -65,9 +64,6 @@
     <Compile Include="Sprite.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="FarseerPhysics MonoGame">
-      <HintPath>..\..\..\Farseer\Farseer Physics Engine 3.5 Samples\Farseer Physics Engine 3.5\bin\WindowsGL\Release\FarseerPhysics MonoGame.dll</HintPath>
-    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MSBuildProgramFiles32)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
