@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -8,6 +10,7 @@ namespace Xplore
 {
     public abstract class Ship : Sprite
     {
+
         protected Vector2 DirectionVector;
         protected Vector2 DirectionGoalVector;
         protected Vector2 VelocityGoal;
@@ -19,8 +22,9 @@ namespace Xplore
         protected double LastFire = 0;
         protected readonly List<IParticle> CurrentParticles = new List<IParticle>();
 
-        protected Ship(Texture2D texture, Vector2 position, Rectangle screenBounds) : base(texture, position)
+        protected Ship(Texture2D texture, Vector2 position, Rectangle screenBounds) : base(texture, position,true)
         {
+            
             ScreenBounds = screenBounds;
         }
 
@@ -50,6 +54,7 @@ namespace Xplore
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            DrawHelper.DrawRectangle(new Rectangle((int)ConvertUnits.ToDisplayUnits(Body.Position.X), (int)ConvertUnits.ToDisplayUnits(Body.Position.Y), texture.Width, texture.Height),ContentProvider.OutlineTexture,Color.Green,spriteBatch,false,1,rotation,position);
             DrawHelper.DrawRectangle(BoundingBox, ContentProvider.OutlineTexture, Color.Purple, spriteBatch, false, 1, rotation, new Vector2(position.X, position.Y));
             foreach (var currentParticle in CurrentParticles)
             {
@@ -60,12 +65,15 @@ namespace Xplore
 
         public override void Update(GameTime gameTime)
         {
+            //Body.Position = new Vector2(ConvertUnits.ToSimUnits(position.X), ConvertUnits.ToSimUnits(position.Y));
             CleanupParticles();
             foreach (var currentParticle in CurrentParticles)
             {
                 currentParticle.Update(gameTime);
             }
             CheckBounds();
+
+
             base.Update(gameTime);
         }
 

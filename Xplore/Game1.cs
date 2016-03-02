@@ -1,4 +1,5 @@
 ﻿using System;
+using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,6 +7,16 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Xplore
 {
+    public static class GameWorld
+    {
+        public static World World;
+
+        static GameWorld()
+        {
+            World = new World(new Vector2(0, 0));
+        }
+
+    }
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
@@ -85,9 +96,11 @@ namespace Xplore
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            
             elapsedTime += gameTime.ElapsedGameTime.Milliseconds;
             if (elapsedTime > timestep)
             {
+                GameWorld.World.Step(0.004f);
                 _screenManager.Update(gameTime);
                 elapsedTime -= timestep;
                 // TODO: Add your update logic here

@@ -1,14 +1,18 @@
 using System;
 using System.Diagnostics;
+using FarseerPhysics;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace Xplore
 {
-
+    
     public class Player : Ship, IShip
     {
+        
         private Vector2 scale = new Vector2(1f, 1f);
         private Vector2 originalScale = new Vector2(1f, 1f);
         private Vector2 zoomOutScale = new Vector2(0.5f, 0.5f);
@@ -16,12 +20,14 @@ namespace Xplore
 
         public Player(Texture2D texture, Vector2 position, Rectangle screenBounds) : base(texture, position, screenBounds)
         {
+            
             DirectionVector = new Vector2(0, -1);
             DirectionGoalVector = DirectionVector;
         }
 
         public override void Update(GameTime gameTime)
         {
+            Camera.Location = new Vector2(position.X, position.Y);
             var keyboardState = Keyboard.GetState();
             var mouseState = Mouse.GetState();
 

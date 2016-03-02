@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using FarseerPhysics.Common;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -8,13 +11,29 @@ namespace Xplore
 {
     public class GameplayScreen : Screen
     {
+        private const int MaxEnemyCount = 10;
         private Random rand = new Random();
         private List<Enemy> Enemies = new List<Enemy>();
         private MouseState previousMouseState;
         private Player player;
+        private Body Boundary;
         
-        private const int gameSize = 2000;
+        private const int gameSize = 1000;
         private Rectangle gameBounds = new Rectangle(-(gameSize / 2), -(gameSize / 2), gameSize, gameSize);
+
+        private Vertices GetPhysicsBounds()
+        {
+            float width = ConvertUnits.ToSimUnits(gameBounds.Width);
+            float height = ConvertUnits.ToSimUnits(gameBounds.Height);
+
+            Vertices bounds = new Vertices(4);
+            bounds.Add(new Vector2(0,0));
+            bounds.Add(new Vector2(width,0));
+            bounds.Add(new Vector2(width,height));
+            bounds.Add(new Vector2(0,height));
+            return bounds;
+        }
+
         public override void LoadContent()
         {
             
@@ -30,14 +49,11 @@ namespace Xplore
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 ScreenManager.PauseGame();
 
-            Camera.Location = new Vector2(player.Position.X,player.Position.Y);
+            
 
             var mouseState = Mouse.GetState();
 
-            if (mouseState.RightButton == ButtonState.Pressed && previousMouseState.RightButton == ButtonState.Released)
-            {
-                Enemies.Add(new Enemy(ContentProvider.EnemyShips[rand.Next(ContentProvider.EnemyShips.Count-1)],Camera.GetWorldPosition(new Vector2(mouseState.X,mouseState.Y)),gameBounds));
-            }
+            //SpawnEnemies();
 
             previousMouseState = mouseState;
 
@@ -50,6 +66,25 @@ namespace Xplore
                     enemy.Seek(player.Center);
                 }
             }
+            
+        }
+
+        public void SpawnEnemies()
+        {
+            //spawn an emeny if the count of total enemies is less than maxEnemyCount
+            while (Enemies.Count < MaxEnemyCount)
+            {
+                float radius = (float)1000/2;
+                float angle = (float) rand.NextDouble()*MathHelper.TwoPi;
+                float x = player.Center.X + radius * (float)Math.Cos(angle);
+                float y = player.Center.Y + radius * (float)Math.Sin(angle);
+
+                Enemies.Add(new Enemy(ContentProvider.EnemyShips[rand.Next(ContentProvider.EnemyShips.Count - 1)],
+                    new Vector2(x, y),
+                    gameBounds));
+            }
+            
+            
         }
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
@@ -70,6 +105,10 @@ namespace Xplore
             ScreenType = ScreenType.Gameplay;
             Camera.Bounds = Game.GraphicsDevice.Viewport.Bounds;
             player = new Player(ContentProvider.Ship, new Vector2(0,0),gameBounds);
+            Boundary = BodyFactory.CreateLoopShape(GameWorld.World,GetPhysicsBounds());
+            Boundary.CollisionCategories = Category.All;
+            Boundary.CollidesWith = Category.All;
         }
     }
+
 }
