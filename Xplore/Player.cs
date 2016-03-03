@@ -9,7 +9,7 @@ namespace Xplore
 
     public class Player : Ship, IShip
     {
-        private Vector2 scale = new Vector2(1f, 1f);
+        private Vector2 scale = new Vector2(0.5f, 0.5f);
         private Vector2 originalScale = new Vector2(1f, 1f);
         private Vector2 zoomOutScale = new Vector2(0.5f, 0.5f);
         private Vector2 scaleGoal = new Vector2(1, 1);

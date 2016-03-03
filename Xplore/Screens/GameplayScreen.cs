@@ -12,6 +12,7 @@ namespace Xplore
         private List<Enemy> Enemies = new List<Enemy>();
         private MouseState previousMouseState;
         private Player player;
+        private const int MaxEnemyCount = 10;
         
         private const int gameSize = 2000;
         private Rectangle gameBounds = new Rectangle(-(gameSize / 2), -(gameSize / 2), gameSize, gameSize);
@@ -25,6 +26,25 @@ namespace Xplore
 
         }
 
+        public void SpawnEnemies()
+        {
+            //spawn an emeny if the count of total enemies is less than maxEnemyCount
+            while (Enemies.Count < MaxEnemyCount)
+            {
+                float radius = (float)rand.Next(gameBounds.Width/2,gameBounds.Width)/2;
+                float angle = (float)rand.NextDouble() * MathHelper.TwoPi;
+                float x = player.Center.X + radius * (float)Math.Cos(angle);
+                float y = player.Center.Y + radius * (float)Math.Sin(angle);
+
+                Enemies.Add(new Enemy(ContentProvider.EnemyShips[rand.Next(ContentProvider.EnemyShips.Count - 1)],
+                    new Vector2(x, y),
+                    gameBounds));
+            }
+
+
+        }
+
+
         public override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -34,10 +54,7 @@ namespace Xplore
 
             var mouseState = Mouse.GetState();
 
-            if (mouseState.RightButton == ButtonState.Pressed && previousMouseState.RightButton == ButtonState.Released)
-            {
-                Enemies.Add(new Enemy(ContentProvider.EnemyShips[rand.Next(ContentProvider.EnemyShips.Count-1)],Camera.GetWorldPosition(new Vector2(mouseState.X,mouseState.Y)),gameBounds));
-            }
+            SpawnEnemies();
 
             previousMouseState = mouseState;
 
