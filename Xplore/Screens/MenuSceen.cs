@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Xplore.Buttons;
 
 namespace Xplore
 {
@@ -55,6 +56,7 @@ namespace Xplore
 
         public MenuSceen(bool active, Main game, ScreenManager screenManager) : base(active, game, screenManager)
         {
+            UserInterface = true;
             ScreenType = ScreenType.Menu;
 
         }

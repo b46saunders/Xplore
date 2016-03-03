@@ -71,6 +71,7 @@ namespace Xplore
 
         public DebugScreen(bool active, Main game, ScreenManager screenManager) : base(active, game, screenManager)
         {
+            UserInterface = true;
             ScreenType = ScreenType.Debug;
         }
     }

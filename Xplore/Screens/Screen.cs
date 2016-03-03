@@ -7,6 +7,7 @@ namespace Xplore
     public abstract class Screen
     {
         public bool Active { get; set; }
+        public bool UserInterface { get; set; }
         public ScreenType ScreenType { get; protected set; }
         protected ScreenManager ScreenManager { get; set; }
         protected Main Game;

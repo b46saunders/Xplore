@@ -84,6 +84,7 @@ namespace Xplore
             ScreenManager screenManager)
             : base(active, game, screenManager)
         {
+            UserInterface = false;
             ScreenType = ScreenType.Gameplay;
             Camera.Bounds = Game.GraphicsDevice.Viewport.Bounds;
             player = new Player(ContentProvider.Ship, new Vector2(0,0),gameBounds);

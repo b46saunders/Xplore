@@ -12,6 +12,7 @@ namespace Xplore
         public Dictionary<string, Screen> Screens { get; set; }
         public SpriteFont SpriteFont { get; set; }
         public Main Game { get; set; }
+        
 
         public ScreenManager()
         {
@@ -43,6 +44,7 @@ namespace Xplore
         {
             Screens["Pause"].Active = false;
             Screens["Gameplay"].Active = true;
+            Screens["Debug"].Active = true;
         }
 
         public void MainMenu()
@@ -58,17 +60,20 @@ namespace Xplore
         {
             //get the pause menu
             var pauseMenu = Screens["Pause"];
-            var activeScreen = GetActiveScreen();
-            activeScreen.Active = false;
+            var activeScreens = GetActiveScreens();
+            foreach (var screen in activeScreens)
+            {
+                screen.Active = false;
+            }
             if (pauseMenu != null)
             {
                 pauseMenu.Active = true;
             }
         }
 
-        private Screen GetActiveScreen()
+        private IEnumerable<Screen> GetActiveScreens()
         {
-            return Screens.Values.First(a => a.Active);
+            return Screens.Values.Where(a => a.Active);
         }
 
         public void StartGame()
@@ -107,9 +112,11 @@ namespace Xplore
         {
             for (int i = 0; i < Screens.Values.Count; i++)
             {
-                if (Screens.Values.ElementAt(i).Active)
+                var screen = Screens.Values.ElementAt(i);
+                if (screen.Active)
                 {
-                    Screens.Values.ElementAt(i).Update(gameTime);
+                    screen.Update(gameTime);
+                    
                 }
             }
         }
@@ -120,6 +127,7 @@ namespace Xplore
             {
                 if (screen.Active)
                     screen.Draw(spriteBatch, gameTime);
+                
 
             }
         }
