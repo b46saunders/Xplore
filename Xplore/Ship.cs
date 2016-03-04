@@ -13,6 +13,7 @@ namespace Xplore
         protected Vector2 VelocityGoal;
         protected static Random random = new Random(100);
         public Rectangle BoundingBox => new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
+        public Circle BoundingCircle => new Circle(Center,texture.Height/2f);
         protected float RotationSpeed = 0.95f;
         protected float Speed = 4f;
         protected Rectangle ScreenBounds;
@@ -116,6 +117,7 @@ namespace Xplore
         public override void Draw(SpriteBatch spriteBatch)
         {
             DrawHelper.DrawRectangle(BoundingBox, ContentProvider.OutlineTexture, Color.Purple, spriteBatch, false, 1, rotation, new Vector2(position.X, position.Y));
+            spriteBatch.Draw(ContentProvider.CollsionSphereTexture,BoundingCircle.SourceRectangle,Color.White);
             foreach (var currentParticle in CurrentParticles)
             {
                 currentParticle.Draw(spriteBatch);
@@ -158,6 +160,24 @@ namespace Xplore
                 CurrentParticles.Add(new ShipExhaust(particleTexture, exhuastPoint, randomVector));
             }
 
+        }
+
+    }
+
+    public class Circle
+    {
+        public float Radius { get; set; }
+        public Vector2 Position { get; set; }
+
+        public Rectangle SourceRectangle
+            => new Rectangle((int) (Position.X - Radius),
+                    (int) (Position.Y - Radius), (int) (Radius*2),
+                    (int) (Radius*2));
+
+        public Circle(Vector2 position,float radius)
+        {
+            Radius = radius;
+            Position = position;
         }
 
     }
