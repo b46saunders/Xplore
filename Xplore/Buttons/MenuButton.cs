@@ -32,7 +32,6 @@ namespace Xplore.Buttons
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            Debug.WriteLine(Position);
             //we want to make sure the position is trasformed by the camera correctly
             var worldPosition = Camera.GetWorldPosition(Position);
             var stringSize = Font.MeasureString(Text);

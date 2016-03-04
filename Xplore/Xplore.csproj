@@ -43,7 +43,7 @@
     <Compile Include="DrawHelper.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Screens\DebugScreen.cs" />
-    <Compile Include="Game1.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="Screens\GameplayScreen.cs" />
     <Compile Include="IParticle.cs" />
     <Compile Include="IPlayer.cs" />

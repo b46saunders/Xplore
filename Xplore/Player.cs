@@ -9,10 +9,6 @@ namespace Xplore
 
     public class Player : Ship, IShip
     {
-        private Vector2 scale = new Vector2(0.5f, 0.5f);
-        private Vector2 originalScale = new Vector2(1f, 1f);
-        private Vector2 zoomOutScale = new Vector2(0.5f, 0.5f);
-        private Vector2 scaleGoal = new Vector2(1, 1);
 
         public Player(Texture2D texture, Vector2 position, Rectangle screenBounds) : base(texture, position, screenBounds)
         {
@@ -41,13 +37,8 @@ namespace Xplore
 
             if (keyboardState.IsKeyDown(Keys.W))
             {
-                scaleGoal = zoomOutScale;
                 CreateExhaustParticles();
                 VelocityGoal = (DirectionVector) * Speed;
-            }
-            else
-            {
-                scaleGoal = originalScale;
             }
 
             if (keyboardState.IsKeyDown(Keys.S))
@@ -67,12 +58,13 @@ namespace Xplore
             velocity = Vector2.Lerp(VelocityGoal, velocity, 0.99f);
             //scale = Vector2.Lerp(scaleGoal,scale,0.995f);
 
-            Camera.Zoom = scale.X;
-
             base.Update(gameTime);
         }
 
+        
     }
+
+
 
     public static class Vector2DEx
     {

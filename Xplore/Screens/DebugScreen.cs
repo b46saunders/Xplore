@@ -53,13 +53,11 @@ namespace Xplore
             var mousePoss = new Vector2(fpsPos.X, fpsPos.Y + 16);
             var worldPosz = new Vector2(mousePoss.X,mousePoss.Y + 16);
             var cameraPos = new Vector2(worldPosz.X,worldPosz.Y + 16);
-            var cameraPos2 = new Vector2(cameraPos.X, cameraPos.Y + 16);
             spriteBatch.DrawString(ContentProvider.SpriteFont, $"UPS : {_previousUpdateCount}", updatePos, Color.Black);
             spriteBatch.DrawString(ContentProvider.SpriteFont, $"FPS : {_previousFrameCount}", fpsPos, Color.Black);
             spriteBatch.DrawString(ContentProvider.SpriteFont,$"Mouse pos : [{mousePos.X},{mousePos.Y}]", mousePoss, Color.Black);
             spriteBatch.DrawString(ContentProvider.SpriteFont, $"World Pos : [{worldPos.X},{worldPos.Y}]", worldPosz, Color.Black);
             spriteBatch.DrawString(ContentProvider.SpriteFont,$"Camera Pos: [{Camera.Location.X},{Camera.Location.Y}]",cameraPos,Color.Black);
-            spriteBatch.DrawString(ContentProvider.SpriteFont, $"Camera Pos2: [{Camera.Location.X},{Camera.Location.Y}]", cameraPos2, Color.Black);
             _frameCount++;
             if (gameTime.TotalGameTime.TotalSeconds > _lastFrameSecond + 1)
             {

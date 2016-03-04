@@ -12,7 +12,6 @@ namespace Xplore
         {
             _maxDistance = maxDistance;
             Origin = position;
-            Debug.WriteLine($"laser origin: {Origin}");
             rotation = (float)directionVector.GetRotationFromVector();
             velocityVector = new Vector2(directionVector.X, directionVector.Y);
             velocityVector.Normalize();
