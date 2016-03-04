@@ -14,11 +14,15 @@ Stage 2
   - Zooming camera out on speed increase (DONE)
   - Acceleration physics (Using Lerp currently...)
   
+Stage 2.5 (Refactor)
+  - Cleanup ScreenManager.cs and screen management in general
+  - Define entities that need rendering/updates with interfaces
+  
 Stage 3
   - Basic enemy behaviour
     - Wander
-    - Seek
-    - Flee
+    - Seek (DONE)
+    - Flee (DONE)
   
 Stage 4
   - Boulders
