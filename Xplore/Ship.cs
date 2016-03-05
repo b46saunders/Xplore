@@ -43,6 +43,25 @@ namespace Xplore
             }
         }
 
+        public bool IsCircleColliding(Circle collidingWith,out Vector2 collisionVector)
+        {
+            collisionVector = new Vector2(0,0);
+            var dx = BoundingCircle.Position.X - collidingWith.Position.X;
+            var dy = BoundingCircle.Position.Y - collidingWith.Position.Y;
+
+            var vector = new Vector2(dx,dy);
+            if (vector.Length() < BoundingCircle.Radius + collidingWith.Radius)
+            {
+                collisionVector = vector;
+                return true;
+            }
+            return false;
+        }
+
+        public void ResolveSphereCollision(Circle collidingWith)
+        {
+            
+        }
 
         public Vector2 ResolveCollision(Rectangle collidingWith)
         {

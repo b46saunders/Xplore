@@ -14,7 +14,7 @@ namespace Xplore
         private MouseState previousMouseState;
         private MouseState mouseState;
         private Player player;
-        private const int MaxEnemyCount = 6;
+        private const int MaxEnemyCount = 1;
 
 
 
@@ -104,24 +104,49 @@ namespace Xplore
             bool collisionFound;
             //do
             //{
-                collisionFound = false;
+                //collisionFound = false;
                 foreach (var ship in GetAllShips())
                 {
                     //check that this ship is not colliding with any other ships
                     foreach (var checkShip in GetAllShips())
                     {
                         //if intersect and not the same ship
-                        if (checkShip != ship && checkShip.BoundingBox.Intersects(ship.BoundingBox))
+                        Vector2 collsionVector;
+                        if (checkShip != ship && checkShip.IsCircleColliding(ship.BoundingCircle,out collsionVector))
                         {
-                            ship.ResolveCollision(checkShip.BoundingBox);
-                            collisionFound = true;
+                            Debug.WriteLine("COLLSION!");
+                            //ship.ResolveCollision(checkShip.BoundingBox);
+                            //collisionFound = true;
                         }
                     }
                 }
 
             //} while (collisionFound);
         }
-        
+
+
+        //private void CheckAndResolveCollisions()
+        //{
+        //    bool collisionFound;
+        //    //do
+        //    //{
+        //    collisionFound = false;
+        //    foreach (var ship in GetAllShips())
+        //    {
+        //        //check that this ship is not colliding with any other ships
+        //        foreach (var checkShip in GetAllShips())
+        //        {
+        //            //if intersect and not the same ship
+        //            if (checkShip != ship && checkShip.BoundingBox.Intersects(ship.BoundingBox))
+        //            {
+        //                ship.ResolveCollision(checkShip.BoundingBox);
+        //                collisionFound = true;
+        //            }
+        //        }
+        //    }
+
+        //    //} while (collisionFound);
+        //}
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
