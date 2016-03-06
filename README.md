@@ -1,6 +1,6 @@
 # Xplore
 
-Aim of this project is to learn about game development by creating a simple 2d space shooter with XNA.
+Aim of this project is to learn about game development by creating a simple 2d space shooter with MonoGame.
 
 I plan to use kenney's great set of free game assets for the project available at www.kenney.nl
 
