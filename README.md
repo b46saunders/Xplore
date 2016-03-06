@@ -4,6 +4,10 @@ Aim of this project is to learn about game development by creating a simple 2d s
 
 I plan to use kenney's great set of free game assets for the project available at www.kenney.nl
 
+Current WIP (Refactor)
+  - Cleanup ScreenManager.cs and screen management in general
+  - Define entities that need rendering/updates with interfaces
+
 Stage 1
   - Basic movement (DONE)
   - Camera follow player center(DONE)
@@ -13,18 +17,21 @@ Stage 2
   - Particles for exhaust (DONE)
   - Zooming camera out on speed increase (DONE)
   - Acceleration physics (Using Lerp currently...)
-  
-Stage 2.5 (Refactor)
-  - Cleanup ScreenManager.cs and screen management in general
-  - Define entities that need rendering/updates with interfaces
-  
+
 Stage 3
+  - Collision Detection and Resolution
+    - AABB Collision Detection and Resolution (DONE)
+    - Sphere-Sphere Collision Detection and Resolution (DONE)
+    - Sphere-Rectangle Collision Detection and Resolution
+    - Create nice API for this stuff for future use in other projects?
+
+Stage 4
   - Basic enemy behaviour
     - Wander
     - Seek (DONE)
     - Flee (DONE)
   
-Stage 4
+Stage 5
   - Boulders
    - Random sizes and speeds
    - Other random stuff to make them more fun
@@ -36,7 +43,7 @@ Stage 4
     - Random planets
     - Types of planets
 
-Stage 5
+Stage 6
   - Further AI
     - Navigate round boulders and planets
     - Grouping movement
