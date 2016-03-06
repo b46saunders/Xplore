@@ -37,7 +37,7 @@ namespace Xplore
 
             if (keyboardState.IsKeyDown(Keys.W))
             {
-                CreateExhaustParticles();
+                //CreateExhaustParticles();
                 VelocityGoal = (DirectionVector) * Speed;
             }
 

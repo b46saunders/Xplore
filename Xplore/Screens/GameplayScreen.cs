@@ -14,7 +14,7 @@ namespace Xplore
         private MouseState previousMouseState;
         private MouseState mouseState;
         private Player player;
-        private const int MaxEnemyCount = 1;
+        private const int MaxEnemyCount = 100;
 
 
 
@@ -114,7 +114,8 @@ namespace Xplore
                         Vector2 collsionVector;
                         if (checkShip != ship && checkShip.IsCircleColliding(ship.BoundingCircle,out collsionVector))
                         {
-                            Debug.WriteLine("COLLSION!");
+                            checkShip.ResolveSphereCollision(collsionVector);
+                            //Debug.WriteLine("COLLSION!");
                             //ship.ResolveCollision(checkShip.BoundingBox);
                             //collisionFound = true;
                         }

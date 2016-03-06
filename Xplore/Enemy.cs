@@ -106,7 +106,7 @@ namespace Xplore
             var c = Math.Abs(Vector2.Dot(DirectionVector, directionVector));
             var a = MathHelper.Clamp(c,0,1);
             VelocityGoal = DirectionVector * Speed * a;
-            CreateExhaustParticles();
+            //CreateExhaustParticles();
         }
     }
 

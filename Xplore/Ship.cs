@@ -8,6 +8,7 @@ namespace Xplore
 {
     public abstract class Ship : Sprite
     {
+        protected bool Colliding;
         protected Vector2 DirectionVector;
         protected Vector2 DirectionGoalVector;
         protected Vector2 VelocityGoal;
@@ -43,6 +44,27 @@ namespace Xplore
             }
         }
 
+        public void ResolveSphereCollision(Vector2 mtdVector)
+        {
+            //calculate the max speed at which the ship should experience speed loss due to friction
+            //max speed will just be the speed of the ship...
+            if (velocity.Length() > Speed * 0.5f)
+            {
+                var newVelocity = new Vector2(velocity.X,velocity.Y);
+                newVelocity.Normalize();
+                newVelocity = newVelocity*Speed*0.5f;
+                VelocityGoal = newVelocity;
+            }
+
+            position += mtdVector;
+            //mtdVector.Normalize();
+            //var v1 = mtdVector;
+            //var v2 = velocity;
+
+            //var newDirection = v1 + v2;
+            //velocity = newDirection;
+        }
+
         public bool IsCircleColliding(Circle collidingWith,out Vector2 collisionVector)
         {
             collisionVector = new Vector2(0,0);
@@ -50,9 +72,13 @@ namespace Xplore
             var dy = BoundingCircle.Position.Y - collidingWith.Position.Y;
 
             var vector = new Vector2(dx,dy);
-            if (vector.Length() < BoundingCircle.Radius + collidingWith.Radius)
+            var vectorLength = vector.Length();
+            if (vectorLength < BoundingCircle.Radius + collidingWith.Radius)
             {
-                collisionVector = vector;
+                var mtdVectorLength = BoundingCircle.Radius + collidingWith.Radius - vectorLength;
+                vector.Normalize();
+                var mtdVector = vector*mtdVectorLength;
+                collisionVector = mtdVector;
                 return true;
             }
             return false;
