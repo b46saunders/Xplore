@@ -14,6 +14,7 @@ namespace Xplore
         private readonly float _fleeDistance = 200f;
         private bool _seeking = false;
         private bool _fleeing = false;
+        public event EventHandler Destroyed;
 
         public Enemy(Texture2D texture, Vector2 position, Rectangle screenBounds) : base(texture, position, screenBounds)
         {
@@ -69,7 +70,18 @@ namespace Xplore
             CheckBounds();
             rotation = (float)DirectionVector.GetRotationFromVector();
             healthBar.Update(gameTime);
+
+            CheckIfDestroyed();
+
             base.Update(gameTime);
+        }
+
+        public void CheckIfDestroyed()
+        {
+            if (HealthPoints == 0)
+            {
+                Destroyed?.Invoke(this,null);
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)

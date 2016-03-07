@@ -12,7 +12,7 @@ namespace Xplore
     public abstract class Ship : Sprite
     {
         protected double LastCollisionTime;
-        protected double CollisionMillisecondInterval = 1000;
+        protected double CollisionMillisecondInterval = 100;
         protected Vector2 Velocity = Vector2.Zero;
         public int HealthPoints;
         public int MaxHealthPoints;
@@ -85,15 +85,16 @@ namespace Xplore
 
         public bool IsCircleColliding(Circle collidingWith,out Vector2 collisionVector)
         {
+            var localBoundingCircle = BoundingCircle;
             collisionVector = new Vector2(0,0);
-            var dx = BoundingCircle.Position.X - collidingWith.Position.X;
-            var dy = BoundingCircle.Position.Y - collidingWith.Position.Y;
+            var dx = localBoundingCircle.Position.X - collidingWith.Position.X;
+            var dy = localBoundingCircle.Position.Y - collidingWith.Position.Y;
 
             var vector = new Vector2(dx,dy);
             var vectorLength = vector.Length();
-            if (vectorLength < BoundingCircle.Radius + collidingWith.Radius)
+            if (vectorLength < localBoundingCircle.Radius + collidingWith.Radius)
             {
-                var mtdVectorLength = BoundingCircle.Radius + collidingWith.Radius - vectorLength;
+                var mtdVectorLength = localBoundingCircle.Radius + collidingWith.Radius - vectorLength;
                 vector.Normalize();
                 var mtdVector = vector*mtdVectorLength;
                 collisionVector = mtdVector;

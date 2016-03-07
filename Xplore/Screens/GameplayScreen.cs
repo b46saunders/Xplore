@@ -14,7 +14,7 @@ namespace Xplore
         private MouseState previousMouseState;
         private MouseState mouseState;
         private Player player;
-        private const int MaxEnemyCount = 10;
+        private const int MaxEnemyCount = 100;
 
 
 
@@ -28,6 +28,11 @@ namespace Xplore
         public override void UnloadContent()
         {
 
+        }
+
+        private void EnemyShipDestroyed(object ship, EventArgs eventArgs)
+        {
+             Enemies.Remove((Enemy)ship);
         }
 
         private IEnumerable<Ship> GetAllShips()
@@ -48,9 +53,11 @@ namespace Xplore
                 float x = player.Center.X + radius * (float)Math.Cos(angle);
                 float y = player.Center.Y + radius * (float)Math.Sin(angle);
 
-                Enemies.Add(new Enemy(ContentProvider.EnemyShips[rand.Next(ContentProvider.EnemyShips.Count - 1)],
+                var enemy = new Enemy(ContentProvider.EnemyShips[rand.Next(ContentProvider.EnemyShips.Count - 1)],
                     new Vector2(x, y),
-                    gameBounds));
+                    gameBounds);
+                enemy.Destroyed += EnemyShipDestroyed;
+                Enemies.Add(enemy);
             }
 
 
@@ -80,14 +87,15 @@ namespace Xplore
             Camera.Location = new Vector2(player.Position.X, player.Position.Y);
             SpawnEnemies();
             player.Update(gameTime);
-            foreach (var enemy in Enemies)
-            {
-                enemy.Update(gameTime);
-                if ((player.Center - enemy.Center).Length() < 500)
-                {
-                    enemy.Seek(player.Center);
-                }
 
+            var enemies = Enemies.ToArray();
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                enemies[i].Update(gameTime);
+                if ((player.Center - enemies[i].Center).Length() < 500)
+                {
+                    enemies[i].Seek(player.Center);
+                }
             }
 
             CheckAndResolveCollisions(gameTime);
