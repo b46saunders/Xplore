@@ -6,16 +6,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Xplore
 {
-    public class HealthBar : Sprite
-    {
-        public HealthBar(Texture2D texture, Vector2 position) : base(texture, position)
-        {
-
-        }
-    }
-
     public class Enemy : Ship, IShip
     {
+        private HealthBar healthBar;
         private Vector2 _destination;
         private readonly float _seekDistance = 100f;
         private readonly float _fleeDistance = 200f;
@@ -24,8 +17,10 @@ namespace Xplore
 
         public Enemy(Texture2D texture, Vector2 position, Rectangle screenBounds) : base(texture, position, screenBounds)
         {
+            Speed = 2f;
             DirectionVector = new Vector2(0,-1);
             RotationSpeed = 0.95f;
+            healthBar = new HealthBar(this);
         }
 
         public void Flee(Vector2 location)
@@ -73,16 +68,17 @@ namespace Xplore
 
             CheckBounds();
             rotation = (float)DirectionVector.GetRotationFromVector();
+            healthBar.Update(gameTime);
             base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (_seeking)
-            {
-                spriteBatch.Draw(ContentProvider.ExhaustParticles[0], _destination, Color.Black);
-            }
-            
+            //if (_seeking)
+            //{
+            //    spriteBatch.Draw(ContentProvider.ExhaustParticles[0], _destination, Color.Black);
+            //}
+            healthBar.Draw(spriteBatch);
             base.Draw(spriteBatch);
         }
 

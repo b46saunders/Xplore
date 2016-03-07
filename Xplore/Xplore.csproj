@@ -39,9 +39,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
+    <Compile Include="Circle.cs" />
     <Compile Include="ContentProvider.cs" />
     <Compile Include="DrawHelper.cs" />
     <Compile Include="Enemy.cs" />
+    <Compile Include="HealthBar.cs" />
     <Compile Include="Screens\DebugScreen.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Screens\GameplayScreen.cs" />
@@ -210,6 +212,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Backgrounds\starBackground.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\healthBar.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\UI\healthBarSegment.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Vectors\circle.png">

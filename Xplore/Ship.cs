@@ -7,10 +7,15 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Xplore
 {
+    
+
     public abstract class Ship : Sprite
     {
+        protected double LastCollisionTime;
+        protected double CollisionMillisecondInterval = 1000;
         protected Vector2 Velocity = Vector2.Zero;
-        protected int HealthPoints;
+        public int HealthPoints;
+        public int MaxHealthPoints;
         protected bool Colliding;
         protected Vector2 DirectionVector;
         protected Vector2 DirectionGoalVector;
@@ -31,6 +36,7 @@ namespace Xplore
         protected Ship(Texture2D texture, Vector2 position, Rectangle screenBounds) : base(texture, position)
         {
             ScreenBounds = screenBounds;
+            MaxHealthPoints = 10;
             HealthPoints = 10;
         }
 
@@ -65,12 +71,16 @@ namespace Xplore
             }
 
             position += mtdVector;
-            //mtdVector.Normalize();
-            //var v1 = mtdVector;
-            //var v2 = Velocity;
+        }
 
-            //var newDirection = v1 + v2;
-            //Velocity = newDirection;
+        public void ApplyCollisionDamage(GameTime gametime)
+        {
+            if (gametime.TotalGameTime.TotalMilliseconds > LastCollisionTime + CollisionMillisecondInterval)
+            {
+                LastCollisionTime = gametime.TotalGameTime.TotalMilliseconds;
+                HealthPoints -= 1;
+                MathHelper.Clamp(HealthPoints, 0, MaxHealthPoints);
+            }
         }
 
         public bool IsCircleColliding(Circle collidingWith,out Vector2 collisionVector)
@@ -165,8 +175,8 @@ namespace Xplore
         public override void Draw(SpriteBatch spriteBatch)
         {
             
-            DrawHelper.DrawRectangle(BoundingBox, ContentProvider.OutlineTexture, Color.Purple, spriteBatch, false, 1, rotation, new Vector2(position.X, position.Y));
-            spriteBatch.Draw(ContentProvider.CollsionSphereTexture,BoundingCircle.SourceRectangle,Color.White);
+            //DrawHelper.DrawRectangle(BoundingBox, ContentProvider.OutlineTexture, Color.Purple, spriteBatch, false, 1, rotation, new Vector2(position.X, position.Y));
+            //spriteBatch.Draw(ContentProvider.CollsionSphereTexture,BoundingCircle.SourceRectangle,Color.White);
             foreach (var currentParticle in CurrentParticles)
             {
                 currentParticle.Draw(spriteBatch);
@@ -176,6 +186,7 @@ namespace Xplore
 
         public override void Update(GameTime gameTime)
         {
+            
             previousMouseState = Mouse.GetState();
             previousKeyboardState = Keyboard.GetState();
             CleanupParticles();
@@ -212,24 +223,6 @@ namespace Xplore
                 CurrentParticles.Add(new ShipExhaust(particleTexture, exhuastPoint, randomVector));
             }
 
-        }
-
-    }
-
-    public class Circle
-    {
-        public float Radius { get; set; }
-        public Vector2 Position { get; set; }
-
-        public Rectangle SourceRectangle
-            => new Rectangle((int) (Position.X - Radius),
-                    (int) (Position.Y - Radius), (int) (Radius*2),
-                    (int) (Radius*2));
-
-        public Circle(Vector2 position,float radius)
-        {
-            Radius = radius;
-            Position = position;
         }
 
     }

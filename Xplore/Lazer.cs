@@ -8,9 +8,9 @@ namespace Xplore
     {
         public Vector2 Origin { get; set; }
         public bool IsActive { get; set; }
-        private float Speed = 4f;
-        private Vector2 velocityVector;
-        private float _maxDistance;
+        private float Speed = 8f;
+        private Vector2 _velocityVector;
+        private readonly float _maxDistance;
         protected Vector2 Velocity = Vector2.Zero;
 
         public Lazer(Texture2D texture, Vector2 position, Vector2 directionVector,float maxDistance) : base(texture, position)
@@ -18,8 +18,8 @@ namespace Xplore
             _maxDistance = maxDistance;
             Origin = position;
             rotation = (float)directionVector.GetRotationFromVector();
-            velocityVector = new Vector2(directionVector.X, directionVector.Y);
-            velocityVector.Normalize();
+            _velocityVector = new Vector2(directionVector.X, directionVector.Y);
+            _velocityVector.Normalize();
         }
 
         public override void Update(GameTime gameTime)
@@ -30,7 +30,7 @@ namespace Xplore
             }
             else
             {
-                Velocity = velocityVector*Speed;
+                Velocity = _velocityVector*Speed;
             }
 
             position = position + Velocity;

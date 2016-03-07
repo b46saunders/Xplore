@@ -90,7 +90,7 @@ namespace Xplore
 
             }
 
-            CheckAndResolveCollisions();
+            CheckAndResolveCollisions(gameTime);
 
 
             previousMouseState = mouseState;
@@ -99,7 +99,7 @@ namespace Xplore
         /// <summary>
         /// we need to add a broad and narrow phase instead of checking O(n^2)
         /// </summary>
-        private void CheckAndResolveCollisions()
+        private void CheckAndResolveCollisions(GameTime gameTime)
         {
             bool collisionFound;
             //do
@@ -115,6 +115,8 @@ namespace Xplore
                         if (checkShip != ship && checkShip.IsCircleColliding(ship.BoundingCircle,out collsionVector))
                         {
                             checkShip.ResolveSphereCollision(collsionVector);
+                            checkShip.ApplyCollisionDamage(gameTime);
+                            ship.ApplyCollisionDamage(gameTime);
                             //Debug.WriteLine("COLLSION!");
                             //ship.ResolveCollision(checkShip.BoundingBox);
                             //collisionFound = true;

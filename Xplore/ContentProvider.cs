@@ -17,6 +17,8 @@ namespace Xplore
         public static List<Texture2D> EnemyShips { get; set; }
         public static Texture2D OutlineTexture { get; set; }
         public static Texture2D CollsionSphereTexture { get; set; }
+        public static Texture2D HealthBarSegment { get; set; }
+        public static Texture2D HealthBarContainer { get; set; }
 
         static ContentProvider()
         {
@@ -26,14 +28,16 @@ namespace Xplore
 
         public static void InitializeContent(ContentManager contentManager)
         {
+            HealthBarContainer = contentManager.Load<Texture2D>("UI/healthBar");
+            HealthBarSegment = contentManager.Load<Texture2D>("UI/healthBarSegment");
             OutlineTexture = contentManager.Load<Texture2D>("Vectors/outline");
-            EnemyShips.Add(contentManager.Load<Texture2D>("Ships/debugEnemy"));
-            //EnemyShips.Add(contentManager.Load<Texture2D>("Ships/enemyGreen2"));
-            //EnemyShips.Add(contentManager.Load<Texture2D>("Ships/enemyRed4"));
+            //EnemyShips.Add(contentManager.Load<Texture2D>("Ships/debugEnemy"));
+            EnemyShips.Add(contentManager.Load<Texture2D>("Ships/enemyGreen2"));
+            EnemyShips.Add(contentManager.Load<Texture2D>("Ships/enemyRed4"));
             CollsionSphereTexture = contentManager.Load<Texture2D>("Vectors/circle");
             Boulder = contentManager.Load<Texture2D>("Boulders/boulder1"); 
-            Ship = contentManager.Load<Texture2D>("Ships/debugPlayer");
-            //Ship = contentManager.Load<Texture2D>("Ships/playerShip1_orange");
+            //Ship = contentManager.Load<Texture2D>("Ships/debugPlayer");
+            Ship = contentManager.Load<Texture2D>("Ships/playerShip1_orange");
             SpriteFont = contentManager.Load<SpriteFont>("Fonts/spriteFont");
             ButtonTexture = contentManager.Load<Texture2D>("Buttons/red_button11");
             MouseOverTexture = contentManager.Load<Texture2D>("Buttons/red_button12");
