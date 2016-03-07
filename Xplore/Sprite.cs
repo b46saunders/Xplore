@@ -9,15 +9,11 @@ namespace Xplore
         protected Texture2D texture;
         protected Vector2 position;
         protected float rotation;
-        protected MouseState previousMouseState;
-        protected KeyboardState previousKeyboardState;
-        protected Vector2 velocity = Vector2.Zero;
+        
 
         //expose getters so that we can access externaly if necessary
         public Texture2D Texture => texture;
         public Vector2 Position => position;
-        public KeyboardState PreviousKeyboardState => previousKeyboardState;
-        public Vector2 Velocity => velocity;
 
         public Vector2 Center => new Vector2(position.X + texture.Width / 2f, position.Y + texture.Height / 2f);
         
@@ -30,9 +26,7 @@ namespace Xplore
 
         public virtual void Update(GameTime gameTime)
         {
-            position = position + velocity;
-            previousMouseState = Mouse.GetState();
-            previousKeyboardState = Keyboard.GetState();
+            
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)

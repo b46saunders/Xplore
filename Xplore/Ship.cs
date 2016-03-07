@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Xplore
 {
     public abstract class Ship : Sprite
     {
+        protected Vector2 Velocity = Vector2.Zero;
+        protected int HealthPoints;
         protected bool Colliding;
         protected Vector2 DirectionVector;
         protected Vector2 DirectionGoalVector;
         protected Vector2 VelocityGoal;
-        protected static Random random = new Random(100);
+        protected static Random Random = new Random(100);
         public Rectangle BoundingBox => new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
         public Circle BoundingCircle => new Circle(Center,texture.Height/2f);
         protected float RotationSpeed = 0.95f;
@@ -20,10 +23,15 @@ namespace Xplore
         protected Rectangle ScreenBounds;
         protected double LastFire = 0;
         protected readonly List<IParticle> CurrentParticles = new List<IParticle>();
+        protected MouseState previousMouseState;
+        protected KeyboardState previousKeyboardState;
+        
+
 
         protected Ship(Texture2D texture, Vector2 position, Rectangle screenBounds) : base(texture, position)
         {
             ScreenBounds = screenBounds;
+            HealthPoints = 10;
         }
 
         protected void CheckBounds()
@@ -48,9 +56,9 @@ namespace Xplore
         {
             //calculate the max speed at which the ship should experience speed loss due to friction
             //max speed will just be the speed of the ship...
-            if (velocity.Length() > Speed * 0.5f)
+            if (Velocity.Length() > Speed * 0.5f)
             {
-                var newVelocity = new Vector2(velocity.X,velocity.Y);
+                var newVelocity = new Vector2(Velocity.X,Velocity.Y);
                 newVelocity.Normalize();
                 newVelocity = newVelocity*Speed*0.5f;
                 VelocityGoal = newVelocity;
@@ -59,10 +67,10 @@ namespace Xplore
             position += mtdVector;
             //mtdVector.Normalize();
             //var v1 = mtdVector;
-            //var v2 = velocity;
+            //var v2 = Velocity;
 
             //var newDirection = v1 + v2;
-            //velocity = newDirection;
+            //Velocity = newDirection;
         }
 
         public bool IsCircleColliding(Circle collidingWith,out Vector2 collisionVector)
@@ -82,11 +90,6 @@ namespace Xplore
                 return true;
             }
             return false;
-        }
-
-        public void ResolveSphereCollision(Circle collidingWith)
-        {
-            
         }
 
         public Vector2 ResolveCollision(Rectangle collidingWith)
@@ -143,11 +146,11 @@ namespace Xplore
             
             if (mtd.X < 0 || mtd.X > 0)
             {
-                velocity.X = 0;
+                Velocity.X = 0;
             }
             if (mtd.Y < 0 || mtd.Y > 0)
             {
-                velocity.Y = 0;
+                Velocity.Y = 0;
             }
             position += mtd;
             return mtd;
@@ -161,6 +164,7 @@ namespace Xplore
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            
             DrawHelper.DrawRectangle(BoundingBox, ContentProvider.OutlineTexture, Color.Purple, spriteBatch, false, 1, rotation, new Vector2(position.X, position.Y));
             spriteBatch.Draw(ContentProvider.CollsionSphereTexture,BoundingCircle.SourceRectangle,Color.White);
             foreach (var currentParticle in CurrentParticles)
@@ -172,19 +176,22 @@ namespace Xplore
 
         public override void Update(GameTime gameTime)
         {
+            previousMouseState = Mouse.GetState();
+            previousKeyboardState = Keyboard.GetState();
             CleanupParticles();
             foreach (var currentParticle in CurrentParticles)
             {
                 currentParticle.Update(gameTime);
             }
             CheckBounds();
+            position = position + Velocity;
             base.Update(gameTime);
         }
 
 
         protected void CreateExhaustParticles()
         {
-            var rand = random.Next(0, ContentProvider.ExhaustParticles.Count - 1);
+            var rand = Random.Next(0, ContentProvider.ExhaustParticles.Count - 1);
             var particleTexture = ContentProvider.ExhaustParticles[rand];
 
 
@@ -197,8 +204,8 @@ namespace Xplore
             {
 
                 var particleDirection = -DirectionVector;
-                var x = (particleDirection.X + random.Next(-spread, spread) / 100f);
-                var y = (particleDirection.Y + random.Next(-spread, spread) / 100f);
+                var x = (particleDirection.X + Random.Next(-spread, spread) / 100f);
+                var y = (particleDirection.Y + Random.Next(-spread, spread) / 100f);
                 var randomVector = new Vector2(x, y);
                 randomVector.Normalize();
 

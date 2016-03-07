@@ -55,7 +55,7 @@ namespace Xplore
             }
 
             DirectionVector = Vector2.Lerp(DirectionGoalVector, DirectionVector, RotationSpeed);
-            velocity = Vector2.Lerp(VelocityGoal, velocity, 0.99f);
+            Velocity = Vector2.Lerp(VelocityGoal, Velocity, 0.99f);
             //scale = Vector2.Lerp(scaleGoal,scale,0.995f);
 
             base.Update(gameTime);

@@ -11,6 +11,8 @@ namespace Xplore
         private float fadeCurrent = 0f;
         public float fadePercent = 1f;
         private Vector2 _directionVector;
+        protected Vector2 Velocity = Vector2.Zero;
+
 
         public ShipExhaust(Texture2D texture, Vector2 position, Vector2 directionVector) : base(texture, position)
         {
@@ -25,13 +27,13 @@ namespace Xplore
 
             //lets spin
             //rotation = (float)_directionVector.GetRotationFromVector();
-            velocity = _directionVector * Speed;
-            //velocity = Vector2.Lerp(velocityGoal, velocity, 0.99f);
+            Velocity = _directionVector * Speed;
+            //Velocity = Vector2.Lerp(velocityGoal, Velocity, 0.99f);
             //progressivly fade
 
 
             fadeCurrent += gameTime.ElapsedGameTime.Milliseconds;
-            //fadeCurrent += random.Next(3);
+            //fadeCurrent += Random.Next(3);
             if (fadeCurrent > fadeSpeed)
             {
                 fadeCurrent = 0;
@@ -39,6 +41,7 @@ namespace Xplore
             }
             if (fadePercent < 0f ) IsActive = false;
             //rotation = (float)getRotationFromDirection(directionVector);
+            position = position + Velocity;
             base.Update(gameTime);
         }
 

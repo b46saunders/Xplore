@@ -6,6 +6,14 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Xplore
 {
+    public class HealthBar : Sprite
+    {
+        public HealthBar(Texture2D texture, Vector2 position) : base(texture, position)
+        {
+
+        }
+    }
+
     public class Enemy : Ship, IShip
     {
         private Vector2 _destination;
@@ -60,7 +68,7 @@ namespace Xplore
             {
                 VelocityGoal = Vector2.Zero;
             }
-            velocity = Vector2.Lerp(VelocityGoal, velocity, 0.99f);
+            Velocity = Vector2.Lerp(VelocityGoal, Velocity, 0.99f);
             DirectionVector = Vector2.Lerp(DirectionGoalVector, DirectionVector, RotationSpeed);
 
             CheckBounds();
@@ -77,6 +85,8 @@ namespace Xplore
             
             base.Draw(spriteBatch);
         }
+
+        
 
         private void Maneuver()
         {
@@ -108,6 +118,8 @@ namespace Xplore
             VelocityGoal = DirectionVector * Speed * a;
             //CreateExhaustParticles();
         }
+
+        
     }
 
 }

@@ -14,7 +14,7 @@ namespace Xplore
         private MouseState previousMouseState;
         private MouseState mouseState;
         private Player player;
-        private const int MaxEnemyCount = 100;
+        private const int MaxEnemyCount = 10;
 
 
 
