@@ -14,11 +14,12 @@ namespace Xplore
         private MouseState previousMouseState;
         private MouseState mouseState;
         private Player player;
-        private const int MaxEnemyCount = 100;
+        private SpatialGrid _spatialGrid;
+        private const int MaxEnemyCount = 5 ;
 
 
 
-        private const int gameSize = 2000;
+        private const int gameSize = 1000;
         private Rectangle gameBounds = new Rectangle(-(gameSize / 2), -(gameSize / 2), gameSize, gameSize);
         public override void LoadContent()
         {
@@ -80,6 +81,8 @@ namespace Xplore
 
         public override void Update(GameTime gameTime)
         {
+            _spatialGrid = new SpatialGrid(gameBounds,50);
+            
             mouseState = Mouse.GetState();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 ScreenManager.PauseGame();
@@ -109,6 +112,31 @@ namespace Xplore
         /// </summary>
         private void CheckAndResolveCollisions(GameTime gameTime)
         {
+            foreach (var ship in GetAllShips())
+            {
+                _spatialGrid.Insert(ship.BoundingCircle.SourceRectangle,ship);
+            }
+
+            foreach (var gridBox in _spatialGrid.GetCollsionGrid().Values)
+            {
+                if (gridBox.Count > 1)
+                {
+                    foreach (var collisionEntity in gridBox)
+                    {
+                        foreach (var entity in gridBox)
+                        {
+                            var collsionVector;
+                            if (entity != collisionEntity && CollisionHelper.IsCircleColliding(entity.BoundingCircle,collisionEntity.BoundingCircle,out collsionVector))
+                            {
+                                
+                            }
+                        }
+                    }
+                }
+                
+            }
+            
+            
             bool collisionFound;
             //do
             //{
@@ -120,7 +148,7 @@ namespace Xplore
                     {
                         //if intersect and not the same ship
                         Vector2 collsionVector;
-                        if (checkShip != ship && checkShip.IsCircleColliding(ship.BoundingCircle,out collsionVector))
+                        if (checkShip != ship && CollisionHelper.IsCircleColliding(checkShip.BoundingCircle,ship.BoundingCircle,out collsionVector))
                         {
                             checkShip.ResolveSphereCollision(collsionVector);
                             checkShip.ApplyCollisionDamage(gameTime);
@@ -163,6 +191,7 @@ namespace Xplore
         {
             spriteBatch.Draw(ContentProvider.Background, new Vector2(gameBounds.X, gameBounds.Y), new Rectangle(gameBounds.X, gameBounds.Y, gameBounds.Width, gameBounds.Height), Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
             player.Draw(spriteBatch);
+            _spatialGrid.RenderGrid(spriteBatch);
             foreach (var enemy in Enemies)
             {
                 enemy.Draw(spriteBatch);

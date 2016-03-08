@@ -9,7 +9,7 @@ namespace Xplore
 {
     
 
-    public abstract class Ship : Sprite
+    public abstract class Ship : Sprite, ICollisionEntity
     {
         protected double LastCollisionTime;
         protected double CollisionMillisecondInterval = 100;
@@ -83,25 +83,7 @@ namespace Xplore
             }
         }
 
-        public bool IsCircleColliding(Circle collidingWith,out Vector2 collisionVector)
-        {
-            var localBoundingCircle = BoundingCircle;
-            collisionVector = new Vector2(0,0);
-            var dx = localBoundingCircle.Position.X - collidingWith.Position.X;
-            var dy = localBoundingCircle.Position.Y - collidingWith.Position.Y;
-
-            var vector = new Vector2(dx,dy);
-            var vectorLength = vector.Length();
-            if (vectorLength < localBoundingCircle.Radius + collidingWith.Radius)
-            {
-                var mtdVectorLength = localBoundingCircle.Radius + collidingWith.Radius - vectorLength;
-                vector.Normalize();
-                var mtdVector = vector*mtdVectorLength;
-                collisionVector = mtdVector;
-                return true;
-            }
-            return false;
-        }
+        
 
         public Vector2 ResolveCollision(Rectangle collidingWith)
         {

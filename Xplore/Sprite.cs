@@ -18,7 +18,7 @@ namespace Xplore
         public Vector2 Position => position;
 
         public Vector2 Center => new Vector2(position.X + HalfTextureWidth, position.Y + HalfTextureHeight);
-        
+
 
         protected Sprite(Texture2D texture, Vector2 position)
         {

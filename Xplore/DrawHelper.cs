@@ -33,7 +33,7 @@ namespace Xplore
             else
             {
                 //var c = new Vector2(rec.X + rec.Width/2f, rec.Y + rec.Height/2f);
-                spriteBatch.Draw(tex, Position, rec, col, rotation, origin, 1.0f, SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(tex, rec, col);
             }
 
         }
