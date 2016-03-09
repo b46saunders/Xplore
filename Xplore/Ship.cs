@@ -21,7 +21,8 @@ namespace Xplore
         protected Vector2 DirectionGoalVector;
         protected Vector2 VelocityGoal;
         protected static Random Random = new Random(100);
-        public Rectangle BoundingBox => new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
+        public Guid Guid { get; }
+        public Rectangle BoundingBox => BoundingCircle.SourceRectangle;
         public Circle BoundingCircle => new Circle(Center,texture.Height/2f);
         protected float RotationSpeed = 0.95f;
         protected float Speed = 4f;
@@ -35,6 +36,7 @@ namespace Xplore
 
         protected Ship(Texture2D texture, Vector2 position, Rectangle screenBounds) : base(texture, position)
         {
+            Guid = Guid.NewGuid();
             ScreenBounds = screenBounds;
             MaxHealthPoints = 10;
             HealthPoints = 10;

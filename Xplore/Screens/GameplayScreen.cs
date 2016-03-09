@@ -15,11 +15,11 @@ namespace Xplore
         private MouseState mouseState;
         private Player player;
         private SpatialGrid _spatialGrid;
-        private const int MaxEnemyCount = 5 ;
+        private const int MaxEnemyCount = 1000 ;
+        
 
 
-
-        private const int gameSize = 1000;
+        private const int gameSize = 5000;
         private Rectangle gameBounds = new Rectangle(-(gameSize / 2), -(gameSize / 2), gameSize, gameSize);
         public override void LoadContent()
         {
@@ -81,7 +81,7 @@ namespace Xplore
 
         public override void Update(GameTime gameTime)
         {
-            _spatialGrid = new SpatialGrid(gameBounds,50);
+            _spatialGrid = new SpatialGrid(gameBounds,200);
             
             mouseState = Mouse.GetState();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -112,8 +112,10 @@ namespace Xplore
         /// </summary>
         private void CheckAndResolveCollisions(GameTime gameTime)
         {
+            var ships = new Dictionary<string,Ship>();
             foreach (var ship in GetAllShips())
             {
+                ships.Add(ship.Guid.ToString(),ship);
                 _spatialGrid.Insert(ship.BoundingCircle.SourceRectangle,ship);
             }
 
@@ -125,10 +127,12 @@ namespace Xplore
                     {
                         foreach (var entity in gridBox)
                         {
-                            var collsionVector;
+                            Vector2 collsionVector;
                             if (entity != collisionEntity && CollisionHelper.IsCircleColliding(entity.BoundingCircle,collisionEntity.BoundingCircle,out collsionVector))
                             {
-                                
+                                ships[entity.Guid.ToString()].ResolveSphereCollision(collsionVector);
+                                ships[entity.Guid.ToString()].ApplyCollisionDamage(gameTime);
+                                ships[collisionEntity.Guid.ToString()].ApplyCollisionDamage(gameTime);
                             }
                         }
                     }
@@ -137,30 +141,30 @@ namespace Xplore
             }
             
             
-            bool collisionFound;
-            //do
-            //{
-                //collisionFound = false;
-                foreach (var ship in GetAllShips())
-                {
-                    //check that this ship is not colliding with any other ships
-                    foreach (var checkShip in GetAllShips())
-                    {
-                        //if intersect and not the same ship
-                        Vector2 collsionVector;
-                        if (checkShip != ship && CollisionHelper.IsCircleColliding(checkShip.BoundingCircle,ship.BoundingCircle,out collsionVector))
-                        {
-                            checkShip.ResolveSphereCollision(collsionVector);
-                            checkShip.ApplyCollisionDamage(gameTime);
-                            ship.ApplyCollisionDamage(gameTime);
-                            //Debug.WriteLine("COLLSION!");
-                            //ship.ResolveCollision(checkShip.BoundingBox);
-                            //collisionFound = true;
-                        }
-                    }
-                }
+            //bool collisionFound;
+            ////do
+            ////{
+            //    //collisionFound = false;
+            //    foreach (var ship in GetAllShips())
+            //    {
+            //        //check that this ship is not colliding with any other ships
+            //        foreach (var checkShip in GetAllShips())
+            //        {
+            //            //if intersect and not the same ship
+            //            Vector2 collsionVector;
+            //            if (checkShip != ship && CollisionHelper.IsCircleColliding(checkShip.BoundingCircle,ship.BoundingCircle,out collsionVector))
+            //            {
+            //                checkShip.ResolveSphereCollision(collsionVector);
+            //                checkShip.ApplyCollisionDamage(gameTime);
+            //                ship.ApplyCollisionDamage(gameTime);
+            //                //Debug.WriteLine("COLLSION!");
+            //                //ship.ResolveCollision(checkShip.BoundingBox);
+            //                //collisionFound = true;
+            //            }
+            //        }
+            //    }
 
-            //} while (collisionFound);
+            ////} while (collisionFound);
         }
 
 

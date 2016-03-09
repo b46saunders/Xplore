@@ -10,6 +10,7 @@ namespace Xplore
 
     public interface ICollisionEntity
     {
+        Guid Guid { get; }
         Rectangle BoundingBox { get;}
         Circle BoundingCircle { get; }
     }
@@ -29,9 +30,9 @@ namespace Xplore
             _height = rectangle.Height/size;
             _size = size;
             _gridRectangle = rectangle;
-            for (int i = 0; i < _width; i++)
+            for (int i = 0; i <= _width; i++)
             {
-                for (int j = 0; j < _height; j++)
+                for (int j = 0; j <= _height; j++)
                 {
                     _grid[$"{i}_{j}"] = new List<ICollisionEntity>();
                 }
@@ -59,7 +60,7 @@ namespace Xplore
             Vector2 topLeft = new Vector2(rectangle.X,rectangle.Y);
             Vector2 topRight = new Vector2(rectangle.X + rectangle.Width,rectangle.Y);
             Vector2 bottomLeft = new Vector2(rectangle.X,rectangle.Y+_height);
-            Vector2 bottomRight = new Vector2(rectangle.X+_width,rectangle.Y+_height);
+            Vector2 bottomRight = new Vector2(rectangle.X+rectangle.Width,rectangle.Y+rectangle.Height);
 
             //GridPositions
             //top left
@@ -76,8 +77,8 @@ namespace Xplore
             var yBottomLeft = (int)Math.Floor((bottomLeft.Y - (_gridRectangle.Y)) / _size);
 
             //bottom right
-            var xBottomRight = (int)Math.Floor((bottomLeft.X - (_gridRectangle.X)) / _size);
-            var yBottomRight = (int)Math.Floor((bottomLeft.Y - (_gridRectangle.Y)) / _size);
+            var xBottomRight = (int)Math.Floor((bottomRight.X - (_gridRectangle.X)) / _size);
+            var yBottomRight = (int)Math.Floor((bottomRight.Y - (_gridRectangle.Y)) / _size);
 
             for (int x = xTopLeft; x <= xTopRight; x++)
             {
@@ -102,8 +103,6 @@ namespace Xplore
                     }
                 }
             }
-
-            Debug.WriteLine("Done");
         }
 
         public void RenderGrid(SpriteBatch spriteBatch)
