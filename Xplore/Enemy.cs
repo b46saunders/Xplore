@@ -18,7 +18,7 @@ namespace Xplore
 
         public Enemy(Texture2D texture, Vector2 position, Rectangle screenBounds) : base(texture, position, screenBounds)
         {
-            Speed = 2f;
+            Speed = 3.5f;
             DirectionVector = new Vector2(0,-1);
             RotationSpeed = 0.95f;
             healthBar = new HealthBar(this);
@@ -80,6 +80,7 @@ namespace Xplore
         {
             if (HealthPoints == 0)
             {
+
                 Destroyed?.Invoke(this,null);
             }
         }
@@ -124,7 +125,7 @@ namespace Xplore
             var c = Math.Abs(Vector2.Dot(DirectionVector, directionVector));
             var a = MathHelper.Clamp(c,0,1);
             VelocityGoal = DirectionVector * Speed * a;
-            //CreateExhaustParticles();
+            CreateExhaustParticles();
         }
 
         

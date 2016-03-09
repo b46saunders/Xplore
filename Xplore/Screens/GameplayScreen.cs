@@ -15,7 +15,8 @@ namespace Xplore
         private MouseState mouseState;
         private Player player;
         private SpatialGrid _spatialGrid;
-        private const int MaxEnemyCount = 1000 ;
+        private const int MaxEnemyCount = 100 ;
+        private Dictionary<string,Ship> collsionShips = new Dictionary<string, Ship>(); 
         
 
 
@@ -33,6 +34,7 @@ namespace Xplore
 
         private void EnemyShipDestroyed(object ship, EventArgs eventArgs)
         {
+            collsionShips.Remove(((Enemy) ship).Guid.ToString());
              Enemies.Remove((Enemy)ship);
         }
 
@@ -54,9 +56,10 @@ namespace Xplore
                 float x = player.Center.X + radius * (float)Math.Cos(angle);
                 float y = player.Center.Y + radius * (float)Math.Sin(angle);
 
-                var enemy = new Enemy(ContentProvider.EnemyShips[rand.Next(ContentProvider.EnemyShips.Count - 1)],
+                var enemy = new Enemy(ContentProvider.EnemyShips[rand.Next(ContentProvider.EnemyShips.Count)],
                     new Vector2(x, y),
                     gameBounds);
+                collsionShips.Add(enemy.Guid.ToString(),enemy);
                 enemy.Destroyed += EnemyShipDestroyed;
                 Enemies.Add(enemy);
             }
@@ -69,14 +72,14 @@ namespace Xplore
         public void ApplyMouseWheelZoom()
         {
             //zoom in/out
-            //if (mouseState.ScrollWheelValue > previousMouseState.ScrollWheelValue)
-            //{
-            //    Camera.Zoom += 0.05f;
-            //}
-            //if (mouseState.ScrollWheelValue < previousMouseState.ScrollWheelValue)
-            //{
-            //    Camera.Zoom -= 0.05f;
-            //}
+            if (mouseState.ScrollWheelValue > previousMouseState.ScrollWheelValue)
+            {
+                Camera.Zoom += 0.05f;
+            }
+            if (mouseState.ScrollWheelValue < previousMouseState.ScrollWheelValue)
+            {
+                Camera.Zoom -= 0.05f;
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -94,7 +97,7 @@ namespace Xplore
             var enemies = Enemies.ToArray();
             for (int i = 0; i < enemies.Length; i++)
             {
-                enemies[i].Update(gameTime);
+               enemies[i].Update(gameTime);
                 if ((player.Center - enemies[i].Center).Length() < 500)
                 {
                     enemies[i].Seek(player.Center);
@@ -112,10 +115,9 @@ namespace Xplore
         /// </summary>
         private void CheckAndResolveCollisions(GameTime gameTime)
         {
-            var ships = new Dictionary<string,Ship>();
             foreach (var ship in GetAllShips())
             {
-                ships.Add(ship.Guid.ToString(),ship);
+                
                 _spatialGrid.Insert(ship.BoundingCircle.SourceRectangle,ship);
             }
 
@@ -130,9 +132,9 @@ namespace Xplore
                             Vector2 collsionVector;
                             if (entity != collisionEntity && CollisionHelper.IsCircleColliding(entity.BoundingCircle,collisionEntity.BoundingCircle,out collsionVector))
                             {
-                                ships[entity.Guid.ToString()].ResolveSphereCollision(collsionVector);
-                                ships[entity.Guid.ToString()].ApplyCollisionDamage(gameTime);
-                                ships[collisionEntity.Guid.ToString()].ApplyCollisionDamage(gameTime);
+                                collsionShips[entity.Guid.ToString()].ResolveSphereCollision(collsionVector);
+                                collsionShips[entity.Guid.ToString()].ApplyCollisionDamage(gameTime);
+                                collsionShips[collisionEntity.Guid.ToString()].ApplyCollisionDamage(gameTime);
                             }
                         }
                     }
@@ -195,7 +197,7 @@ namespace Xplore
         {
             spriteBatch.Draw(ContentProvider.Background, new Vector2(gameBounds.X, gameBounds.Y), new Rectangle(gameBounds.X, gameBounds.Y, gameBounds.Width, gameBounds.Height), Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
             player.Draw(spriteBatch);
-            _spatialGrid.RenderGrid(spriteBatch);
+            //_spatialGrid.RenderGrid(spriteBatch);
             foreach (var enemy in Enemies)
             {
                 enemy.Draw(spriteBatch);
@@ -211,6 +213,7 @@ namespace Xplore
             ScreenType = ScreenType.Gameplay;
             Camera.Bounds = Game.GraphicsDevice.Viewport.Bounds;
             player = new Player(ContentProvider.Ship, new Vector2(0, 0), gameBounds);
+            collsionShips.Add(player.Guid.ToString(),player);
         }
     }
 }

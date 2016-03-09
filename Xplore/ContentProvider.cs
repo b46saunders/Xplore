@@ -19,11 +19,13 @@ namespace Xplore
         public static Texture2D CollsionSphereTexture { get; set; }
         public static Texture2D HealthBarSegment { get; set; }
         public static Texture2D HealthBarContainer { get; set; }
+        public static List<Texture2D> SideExhaustParticles { get; set; }
 
         static ContentProvider()
         {
             ExhaustParticles = new List<Texture2D>();
             EnemyShips = new List<Texture2D>();
+            SideExhaustParticles = new List<Texture2D>();
         }
 
         public static void InitializeContent(ContentManager contentManager)
@@ -34,6 +36,7 @@ namespace Xplore
             //EnemyShips.Add(contentManager.Load<Texture2D>("Ships/debugEnemy"));
             EnemyShips.Add(contentManager.Load<Texture2D>("Ships/enemyGreen2"));
             EnemyShips.Add(contentManager.Load<Texture2D>("Ships/enemyRed4"));
+            EnemyShips.Add(contentManager.Load<Texture2D>("Ships/enemyBlue1"));
             CollsionSphereTexture = contentManager.Load<Texture2D>("Vectors/circle");
             Boulder = contentManager.Load<Texture2D>("Boulders/boulder1"); 
             //Ship = contentManager.Load<Texture2D>("Ships/debugPlayer");
@@ -41,8 +44,11 @@ namespace Xplore
             SpriteFont = contentManager.Load<SpriteFont>("Fonts/spriteFont");
             ButtonTexture = contentManager.Load<Texture2D>("Buttons/red_button11");
             MouseOverTexture = contentManager.Load<Texture2D>("Buttons/red_button12");
-            Background = contentManager.Load<Texture2D>("Backgrounds/starBackground");
+            Background = contentManager.Load<Texture2D>("Backgrounds/darkPurple");
             Laser = contentManager.Load<Texture2D>("Lasers/laserBlue01");
+            SideExhaustParticles.Add(contentManager.Load<Texture2D>("Exhausts/particle8"));
+            SideExhaustParticles.Add(contentManager.Load<Texture2D>("Exhausts/particle7"));
+            SideExhaustParticles.Add(contentManager.Load<Texture2D>("Exhausts/particle8"));
             ExhaustParticles.Add(contentManager.Load<Texture2D>("Exhausts/particle1"));
             ExhaustParticles.Add(contentManager.Load<Texture2D>("Exhausts/particle2"));
             ExhaustParticles.Add(contentManager.Load<Texture2D>("Exhausts/particle3"));

@@ -64,25 +64,25 @@ namespace Xplore
 
             //GridPositions
             //top left
-            int xTopLeft = (int)Math.Floor((topLeft.X - (_gridRectangle.X)) / _size);
-            int yTopLeft = (int)Math.Floor((topLeft.Y - (_gridRectangle.Y)) / _size);
+            var xTopLeft = Math.Floor((topLeft.X - (_gridRectangle.X)) / _size);
+            var yTopLeft = Math.Floor((topLeft.Y - (_gridRectangle.Y)) / _size);
 
             //top right
-            var xTopRight = (int)Math.Floor((topRight.X - (_gridRectangle.X)) / _size);
-            var yTopRight = (int)Math.Floor((topRight.Y - (_gridRectangle.Y)) / _size);
+            var xTopRight = Math.Floor((topRight.X - (_gridRectangle.X)) / _size);
+            var yTopRight = Math.Floor((topRight.Y - (_gridRectangle.Y)) / _size);
 
             
             //bottom left
-            var xBottomLeft = (int)Math.Floor((bottomLeft.X - (_gridRectangle.X)) / _size);
-            var yBottomLeft = (int)Math.Floor((bottomLeft.Y - (_gridRectangle.Y)) / _size);
+            var xBottomLeft = Math.Floor((bottomLeft.X - (_gridRectangle.X)) / _size);
+            var yBottomLeft = Math.Floor((bottomLeft.Y - (_gridRectangle.Y)) / _size);
 
             //bottom right
-            var xBottomRight = (int)Math.Floor((bottomRight.X - (_gridRectangle.X)) / _size);
-            var yBottomRight = (int)Math.Floor((bottomRight.Y - (_gridRectangle.Y)) / _size);
+            var xBottomRight = Math.Floor((bottomRight.X - (_gridRectangle.X)) / _size);
+            var yBottomRight = Math.Floor((bottomRight.Y - (_gridRectangle.Y)) / _size);
 
-            for (int x = xTopLeft; x <= xTopRight; x++)
+            for (double x = xTopLeft; x <= xTopRight; x++)
             {
-                for (int y = yTopLeft; y <= yTopRight; y++)
+                for (double y = yTopLeft; y <= yTopRight; y++)
                 {
                     var key = $"{x}_{y}";
                     if (!_grid[key].Contains(collisionEntity))
@@ -92,9 +92,9 @@ namespace Xplore
                 }
             }
 
-            for (int x = xBottomLeft; x <= xBottomRight; x++)
+            for (double x = xBottomLeft; x <= xBottomRight; x++)
             {
-                for (int y = yBottomLeft; y <= yBottomRight; y++)
+                for (double y = yBottomLeft; y <= yBottomRight; y++)
                 {
                     var key = $"{x}_{y}";
                     if (!_grid[key].Contains(collisionEntity))

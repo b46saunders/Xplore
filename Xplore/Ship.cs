@@ -184,6 +184,30 @@ namespace Xplore
             base.Update(gameTime);
         }
 
+        protected void CreateSideExhaustParticles(Vector2 exhaustDirection,Vector2 exhaustPoint)
+        {
+            var rand = Random.Next(0, ContentProvider.SideExhaustParticles.Count - 1);
+            var particleTexture = ContentProvider.SideExhaustParticles[rand];
+            //var exhuastPoint = new Vector2(position.X + texture.Width / 2f, position.Y + texture.Height);
+            var origin = new Vector2(position.X + texture.Width / 2f, position.Y + texture.Height / 2f);
+            exhaustPoint = exhaustPoint.RotateAboutOrigin(origin, rotation);
+
+            var spread = 30;
+            for (int i = 0; i < 1; i++)
+            {
+                var x = (exhaustDirection.X + Random.Next(-spread, spread) / 100f);
+                var y = (exhaustDirection.Y + Random.Next(-spread, spread) / 100f);
+                var randomVector = new Vector2(x, y);
+                randomVector.Normalize();
+
+                CurrentParticles.Add(new ShipExhaust(particleTexture, exhaustPoint, randomVector));
+            }
+        }
+
+        protected void ExplodeShip()
+        {
+            
+        }
 
         protected void CreateExhaustParticles()
         {
