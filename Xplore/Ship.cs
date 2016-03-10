@@ -22,6 +22,7 @@ namespace Xplore
         protected Vector2 VelocityGoal;
         protected static Random Random = new Random(100);
         public Guid Guid { get; }
+        
         public Rectangle BoundingBox => BoundingCircle.SourceRectangle;
         public Circle BoundingCircle => new Circle(Center,texture.Height/2f);
         protected float RotationSpeed = 0.95f;
@@ -40,6 +41,11 @@ namespace Xplore
             ScreenBounds = screenBounds;
             MaxHealthPoints = 10;
             HealthPoints = 10;
+        }
+
+        public Vector2 GetVelocity()
+        {
+            return Velocity;
         }
 
         protected void CheckBounds()

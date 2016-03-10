@@ -1,6 +1,4 @@
 using System;
-using System.Diagnostics;
-using System.Security.AccessControl;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -10,7 +8,7 @@ namespace Xplore
 
     public class Player : Ship, IShip
     {
-
+        private const float SideThrust = 0.5f;
         public Player(Texture2D texture, Vector2 position, Rectangle screenBounds) : base(texture, position, screenBounds)
         {
             DirectionVector = new Vector2(0, -1);
@@ -45,19 +43,19 @@ namespace Xplore
             if (keyboardState.IsKeyDown(Keys.S))
             {
                 CreateSideExhaustParticles(DirectionVector, new Vector2(position.X+texture.Width/2f, position.Y));
-                VelocityGoal += (DirectionVector) *  (Speed*(-0.2f));
+                VelocityGoal += (DirectionVector) *  (Speed*(-SideThrust));
             }
             if (keyboardState.IsKeyDown(Keys.D))
             {
                 var right = new Vector2(-DirectionVector.Y, DirectionVector.X);
                 CreateSideExhaustParticles(-right,new Vector2(position.X,position.Y+texture.Height/2f));
-                VelocityGoal += right * (Speed * (0.2f));
+                VelocityGoal += right * (Speed * (SideThrust));
             }
             else if (keyboardState.IsKeyDown(Keys.A))
             {
                 var left = new Vector2(DirectionVector.Y, -DirectionVector.X);
                 CreateSideExhaustParticles(-left,new Vector2(position.X + texture.Width,position.Y+texture.Height/2f));
-                VelocityGoal += left * (Speed * (0.2f));
+                VelocityGoal += left * (Speed * (SideThrust));
             }
 
             DirectionVector = Vector2.Lerp(DirectionGoalVector, DirectionVector, RotationSpeed);

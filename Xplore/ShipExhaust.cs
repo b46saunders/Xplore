@@ -5,10 +5,9 @@ namespace Xplore
 {
     public class ShipExhaust : Sprite , IParticle
     {
-        private Vector2 velocityGoal;
         private float Speed = 5f;
         private float fadeSpeed = 20f;
-        private float fadeCurrent = 0f;
+        private float _fadeCurrent = 0f;
         public float fadePercent = 1f;
         private Vector2 _directionVector;
         protected Vector2 Velocity = Vector2.Zero;
@@ -32,11 +31,11 @@ namespace Xplore
             //progressivly fade
 
 
-            fadeCurrent += gameTime.ElapsedGameTime.Milliseconds;
+            _fadeCurrent += gameTime.ElapsedGameTime.Milliseconds;
             //fadeCurrent += Random.Next(3);
-            if (fadeCurrent > fadeSpeed)
+            if (_fadeCurrent > fadeSpeed)
             {
-                fadeCurrent = 0;
+                _fadeCurrent = 0;
                 fadePercent -= 0.1f;
             }
             if (fadePercent < 0f ) IsActive = false;
