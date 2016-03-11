@@ -15,12 +15,12 @@ namespace Xplore
         private MouseState mouseState;
         private Player player;
         private SpatialGrid _spatialGrid;
-        private const int MaxEnemyCount = 100 ;
+        private const int MaxEnemyCount = 100;
         private Dictionary<string,Ship> collsionShips = new Dictionary<string, Ship>(); 
         
 
 
-        private const int gameSize = 5000;
+        private const int gameSize = 20000;
         private Rectangle gameBounds = new Rectangle(-(gameSize / 2), -(gameSize / 2), gameSize, gameSize);
         public override void LoadContent()
         {
@@ -59,6 +59,7 @@ namespace Xplore
                 var enemy = new Enemy(ContentProvider.EnemyShips[rand.Next(ContentProvider.EnemyShips.Count)],
                     new Vector2(x, y),
                     gameBounds);
+                enemy.Wander();
                 collsionShips.Add(enemy.Guid.ToString(),enemy);
                 enemy.Destroyed += EnemyShipDestroyed;
                 Enemies.Add(enemy);
@@ -97,11 +98,13 @@ namespace Xplore
             var enemies = Enemies.ToArray();
             for (int i = 0; i < enemies.Length; i++)
             {
-               enemies[i].Update(gameTime);
-                if ((player.Center - enemies[i].Center).Length() < 500)
+                var fleeDistance = 1000f;
+                if ((player.Center - enemies[i].Center).Length() < fleeDistance)
                 {
-                    enemies[i].Seek(player.Center);
+                    enemies[i].Flee(player.Center, fleeDistance);
                 }
+                enemies[i].Update(gameTime);
+                
             }
 
             CheckAndResolveCollisions(gameTime);

@@ -8,7 +8,7 @@ namespace Xplore
     {
         public Vector2 Origin { get; set; }
         public bool IsActive { get; set; }
-        private float Speed = 8f;
+        private float Speed = 16f;
         private Vector2 _velocityVector;
         private readonly float _maxDistance;
         protected Vector2 Velocity = Vector2.Zero;

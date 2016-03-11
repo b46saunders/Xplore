@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -9,53 +10,63 @@ namespace Xplore
     {
         private readonly HealthBar _healthBar;
         private Vector2 _destination;
-        private const float SeekDistance = 100f;
-        private const float FleeDistance = 200f;
+        private const float WanderRotationSpeed = 0.99f;
+        private float SeekDistance = 100f;
+        private float _fleeDistance = 200f;
         public event EventHandler Destroyed;
         private double _lastWanderDecision;
-        private const float CircleDistance = 0.4f;
-        private const float CircleRadius = 100f;
-        private float _wanderAngle = 30f;
-        private float _angleChange = 60f;
-        private readonly Random _random;
+        private const float CircleDistance = 2f;
+        private const float CircleRadius = 400f;
+        private float _wanderAngle = 5f;
+        private float _angleChange = 2f;
         private ShipBehaviour _shipBehaviour;
 
         public Enemy(Texture2D texture, Vector2 position, Rectangle screenBounds) : base(texture, position, screenBounds)
         {
             _lastWanderDecision = 0;
-            _random = new Random();
             Speed = 3.5f;
-            DirectionVector = new Vector2(0, -1);
+            DirectionVector = new Vector2(0, 1);
             RotationSpeed = 0.95f;
             _healthBar = new HealthBar(this);
         }
         
-        public void Flee(Vector2 location)
+        public void Flee(Vector2 location,float distance)
         {
+            _fleeDistance = distance;
+            Speed = 3.5f;
             _shipBehaviour = ShipBehaviour.Flee;
             _destination = location;
         }
 
         public void Seek(Vector2 location)
         {
+            Speed = 3.5f;
             _shipBehaviour = ShipBehaviour.Seek;
             _destination = location;
         }
 
         public void Wander()
         {
+            Speed = 2f;
             _shipBehaviour = ShipBehaviour.Wander;
         }
 
         private void WanderBehaviour(GameTime gameTime)
         {
-            throw new NotImplementedException();
-            //TODO needs implementing
-            //var newVector = Wander(gameTime);
 
-            //var normailzed = new Vector2(newVector.X, newVector.Y);
-            //normailzed.Normalize();
-            //DirectionGoalVector = normailzed;
+            if (gameTime.TotalGameTime.TotalMilliseconds > _lastWanderDecision + 200)
+            {
+                _lastWanderDecision = gameTime.TotalGameTime.TotalMilliseconds;
+                var newVector = Wander(gameTime);
+
+                var normailzed = new Vector2(newVector.X, newVector.Y);
+                normailzed.Normalize();
+                DirectionGoalVector = normailzed;
+            }
+            var c = Math.Abs(Vector2.Dot(DirectionVector, DirectionGoalVector));
+            var a = MathHelper.Clamp(c, 0, 1);
+            VelocityGoal = DirectionVector * Speed * a;
+
         }
 
         private  void SeekBehaviour()
@@ -65,7 +76,7 @@ namespace Xplore
             if (vectorLength < SeekDistance)
             {
                 
-                _shipBehaviour = ShipBehaviour.None;
+                _shipBehaviour = ShipBehaviour.Wander;
                 return;
             }
             directionVector.Normalize();
@@ -81,10 +92,10 @@ namespace Xplore
         {
             var directionVector = -(_destination - Center);
             float vectorLength = directionVector.Length();
-            if (vectorLength > FleeDistance)
+            if (vectorLength > _fleeDistance)
             {
-                
-                _shipBehaviour = ShipBehaviour.None;
+
+                _shipBehaviour = ShipBehaviour.Wander;
                 return;
             }
             directionVector.Normalize();
@@ -109,7 +120,7 @@ namespace Xplore
             if (keyboardState.IsKeyDown(Keys.G))
             {
                 var mouseWorldPosition = Camera.GetWorldPosition(new Vector2(mouseState.X, mouseState.Y));
-                Flee(mouseWorldPosition);
+                Flee(mouseWorldPosition,2000f);
             }
             //END DEBUGGING HELP
 
@@ -129,13 +140,17 @@ namespace Xplore
                     break;
             }
 
-            if (_shipBehaviour != ShipBehaviour.None)
+            Velocity = Vector2.Lerp(VelocityGoal, Velocity, 0.99f);
+            if (_shipBehaviour == ShipBehaviour.Wander)
             {
-                CreateExhaustParticles();
+                DirectionVector = Vector2.Lerp(DirectionGoalVector, DirectionVector, WanderRotationSpeed);
+            }
+            else
+            {
+                DirectionVector = Vector2.Lerp(DirectionGoalVector, DirectionVector, RotationSpeed);
             }
 
-            Velocity = Vector2.Lerp(VelocityGoal, Velocity, 0.99f);
-            DirectionVector = Vector2.Lerp(DirectionGoalVector, DirectionVector, RotationSpeed);
+            
 
             CheckBounds();
             rotation = (float) DirectionVector.GetRotationFromVector();
@@ -162,32 +177,35 @@ namespace Xplore
 
         private Vector2 Wander(GameTime gameTime)
         {
-            var circleCenter = new Vector2(Velocity.X, Velocity.Y);
+            var circleCenter = new Vector2(DirectionVector.X, DirectionVector.Y);
             circleCenter.Normalize();
             circleCenter *= CircleDistance;
-            //calc displacement force
-            var displacement = new Vector2(0, -1);
+            
+            //calc displacement force - this is 90 degrees left
+            var displacement = new Vector2(0,-1);
+            displacement.Normalize();
             displacement *= CircleRadius;
 
             //randomly change the vector direction
             // by making it change its current angle
-            SetAngle(displacement, _wanderAngle);
+            displacement = SetAngle(displacement, _wanderAngle);
 
             //change wander angle just a bit
             //so it wont have the same value
             //in the next game frame
 
-            _wanderAngle += _random.Next(0, 100)*_angleChange - _angleChange*.5f;
+            _wanderAngle += (float)Random.NextDouble() *_angleChange - _angleChange*.5f;
 
             var wanderForce = circleCenter + displacement;
             return wanderForce;
         }
 
-        private void SetAngle(Vector2 displacement, float angle)
+        private Vector2 SetAngle(Vector2 displacement, float angle)
         {
             var length = displacement.Length();
             displacement.X = (float) Math.Cos(angle)*length;
-            displacement.X = (float) Math.Sin(angle)*length;
+            displacement.Y = (float) Math.Sin(angle)*length;
+            return displacement;
         }
     }
 }
