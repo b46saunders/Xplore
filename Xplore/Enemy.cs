@@ -22,13 +22,13 @@ namespace Xplore
         private float _angleChange = 2f;
         private ShipBehaviour _shipBehaviour;
 
-        public Enemy(Texture2D texture, Vector2 position, Rectangle screenBounds,ShipType shipType) : base(texture, position, screenBounds, shipType)
+        public Enemy(Texture2D texture, Vector2 position,ShipType shipType) : base(texture, position, shipType)
         {
             _lastWanderDecision = 0;
             Speed = 3.5f;
             DirectionVector = new Vector2(0, 1);
             RotationSpeed = 0.95f;
-            _healthBar = new HealthBar(this);
+            _healthBar = new HealthBar(new ShipHealthBar(this));
         }
         
         public void Flee(Vector2 location,float distance)
@@ -150,10 +150,6 @@ namespace Xplore
             {
                 DirectionVector = Vector2.Lerp(DirectionGoalVector, DirectionVector, RotationSpeed);
             }
-
-            
-
-            CheckBounds();
             rotation = (float) DirectionVector.GetRotationFromVector();
             _healthBar.Update(gameTime);
 

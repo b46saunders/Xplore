@@ -9,7 +9,7 @@ namespace Xplore
     public class Player : Ship, IShip
     {
         private const float SideThrust = 0.5f;
-        public Player(Texture2D texture, Vector2 position, Rectangle screenBounds,ShipType shipType) : base(texture, position, screenBounds,shipType)
+        public Player(Texture2D texture, Vector2 position,ShipType shipType) : base(texture, position,shipType)
         {
             DirectionVector = new Vector2(0, -1);
             DirectionGoalVector = DirectionVector;
@@ -72,6 +72,12 @@ namespace Xplore
 
     public static class Vector2DEx
     {
+
+        public static Vector2 GetVectorFromAngle(double angle)
+        {
+            return new Vector2((float)Math.Cos(angle),(float)Math.Sin(angle));    
+        }
+
         public static double GetRotationFromVector(this Vector2 unitLengthVector)
         {
             return (float)Math.Atan2(unitLengthVector.X, -unitLengthVector.Y);

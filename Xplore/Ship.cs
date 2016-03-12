@@ -7,8 +7,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Xplore
 {
-    
-
     public abstract class Ship : Sprite, ICollisionEntity
     {
 
@@ -28,7 +26,6 @@ namespace Xplore
         public Circle BoundingCircle => new Circle(Center,texture.Height/2f);
         protected float RotationSpeed = 0.95f;
         protected float Speed = 4f;
-        protected Rectangle ScreenBounds;
         protected double LastFire = 0;
         protected readonly List<IParticle> CurrentParticles = new List<IParticle>();
         protected MouseState previousMouseState;
@@ -37,11 +34,10 @@ namespace Xplore
         
 
 
-        protected Ship(Texture2D texture, Vector2 position, Rectangle screenBounds,ShipType shipType) : base(texture, position)
+        protected Ship(Texture2D texture, Vector2 position,ShipType shipType) : base(texture, position)
         {
             ShipType = shipType;
             Guid = Guid.NewGuid();
-            ScreenBounds = screenBounds;
             MaxHealthPoints = 10;
             HealthPoints = 10;
         }
@@ -49,12 +45,6 @@ namespace Xplore
         public Vector2 GetVelocity()
         {
             return Velocity;
-        }
-
-        protected void CheckBounds()
-        {
-            position.Y = MathHelper.Clamp(position.Y, -(ScreenBounds.Height / 2), ScreenBounds.Height / 2 - BoundingBox.Height);
-            position.X = MathHelper.Clamp(position.X, -(ScreenBounds.Width / 2), ScreenBounds.Width / 2 - BoundingBox.Width);
         }
 
         public void CleanupParticles()
@@ -192,7 +182,7 @@ namespace Xplore
             {
                 currentParticle.Update(gameTime);
             }
-            CheckBounds();
+           
             position = position + Velocity;
             base.Update(gameTime);
         }

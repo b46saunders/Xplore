@@ -13,6 +13,9 @@ namespace Xplore
         Guid Guid { get; }
         Rectangle BoundingBox { get;}
         Circle BoundingCircle { get; }
+         void ResolveSphereCollision(Vector2 mtdVector);
+         void ApplyCollisionDamage(GameTime gametime);
+
     }
 
     public class SpatialGrid
@@ -85,7 +88,7 @@ namespace Xplore
                 for (double y = yTopLeft; y <= yTopRight; y++)
                 {
                     var key = $"{x}_{y}";
-                    if (!_grid[key].Contains(collisionEntity))
+                    if (_grid.ContainsKey(key) && !_grid[key].Contains(collisionEntity))
                     {
                         _grid[key].Add(collisionEntity);
                     }
@@ -96,8 +99,10 @@ namespace Xplore
             {
                 for (double y = yBottomLeft; y <= yBottomRight; y++)
                 {
+                    
                     var key = $"{x}_{y}";
-                    if (!_grid[key].Contains(collisionEntity))
+
+                    if (_grid.ContainsKey(key) && !_grid[key].Contains(collisionEntity))
                     {
                         _grid[key].Add(collisionEntity);
                     }

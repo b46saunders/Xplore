@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -6,20 +5,19 @@ namespace Xplore
 {
     public class HealthBar
     {
-        private Vector2 HealthBarPosition => new Vector2(_ship.Center.X,_ship.Position.Y - 50);
-        private Ship _ship;
+        private readonly IHealthBarEntity _healthBarEntity;
         private const int HealthBarWidth = 100;
         private const int HealthBarHeight = 10;
-        public HealthBar(Ship ship)
+        public HealthBar(IHealthBarEntity healthBarEntity)
         {
-            _ship = ship;
+            _healthBarEntity = healthBarEntity;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            var healthBarPosition = new Vector2(HealthBarPosition.X - HealthBarWidth/2f,
-                HealthBarPosition.Y);
-            float healthBarPercent = (float) _ship.HealthPoints/(float) _ship.MaxHealthPoints;
+            var healthBarPosition = new Vector2(_healthBarEntity.HealthBarPosition.X - HealthBarWidth/2f,
+                _healthBarEntity.HealthBarPosition.Y);
+            float healthBarPercent = (float) _healthBarEntity.HealthPoints/(float) _healthBarEntity.MaxHealthPoints;
             int healthBarWidth = (int)(healthBarPercent*(float)HealthBarWidth);
             var drawRectangle = new Rectangle((int)healthBarPosition.X,(int)healthBarPosition.Y, healthBarWidth, HealthBarHeight);
 

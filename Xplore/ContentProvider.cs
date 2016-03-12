@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,6 +7,7 @@ namespace Xplore
 {
     public static class ContentProvider
     {
+        public static Random Random { get; set; }
         public static SpriteFont SpriteFont { get; set; }
         public static Texture2D ButtonTexture { get; set; }
         public static Texture2D MouseOverTexture { get; set; }
@@ -26,6 +28,7 @@ namespace Xplore
             ExhaustParticles = new List<Texture2D>();
             EnemyShips = new List<Texture2D>();
             SideExhaustParticles = new List<Texture2D>();
+            Random = new Random();
         }
 
         public static void InitializeContent(ContentManager contentManager)

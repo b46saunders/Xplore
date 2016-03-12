@@ -38,6 +38,8 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Boulder.cs" />
+    <Compile Include="BoulderHealthBar.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Circle.cs" />
     <Compile Include="CollisionHelper.cs" />
@@ -45,6 +47,7 @@
     <Compile Include="DrawHelper.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="HealthBar.cs" />
+    <Compile Include="IHealthBarEntity.cs" />
     <Compile Include="Screens\DebugScreen.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Screens\GameplayScreen.cs" />
@@ -67,6 +70,7 @@
     <Compile Include="Screens\ScreenType.cs" />
     <Compile Include="ShipExplosion.cs" />
     <Compile Include="ShipExplosionParticle.cs" />
+    <Compile Include="ShipHealthBar.cs" />
     <Compile Include="ShipType.cs" />
     <Compile Include="SpatialGrid.cs" />
     <Compile Include="Sprite.cs" />

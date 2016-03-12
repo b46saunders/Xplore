@@ -11,16 +11,16 @@ namespace Xplore
     {
         private Random rand = new Random();
         private List<Enemy> Enemies = new List<Enemy>();
+        private List<Boulder> Boulders = new List<Boulder>(); 
         private MouseState previousMouseState;
         private MouseState mouseState;
         private Player player;
         private SpatialGrid _spatialGrid;
-        private const int MaxEnemyCount = 1;
-        private Dictionary<string,Ship> collsionShips = new Dictionary<string, Ship>(); 
-        
+        private const int MaxEnemyCount = 100;
+        private const int MaxBoulderCount = 100;
+        private Dictionary<string,ICollisionEntity> _collisionEntities = new Dictionary<string, ICollisionEntity>(); 
 
-
-        private const int gameSize = 1000;
+        private const int gameSize = 5000;
         private Rectangle gameBounds = new Rectangle(-(gameSize / 2), -(gameSize / 2), gameSize, gameSize);
         public override void LoadContent()
         {
@@ -34,16 +34,8 @@ namespace Xplore
 
         private void EnemyShipDestroyed(object ship, EventArgs eventArgs)
         {
-            collsionShips.Remove(((Enemy) ship).Guid.ToString());
+            _collisionEntities.Remove(((Enemy) ship).Guid.ToString());
              Enemies.Remove((Enemy)ship);
-        }
-
-        private IEnumerable<Ship> GetAllShips()
-        {
-            var ships = new List<Ship>();
-            ships.AddRange(Enemies);
-            ships.Add(player);
-            return ships;
         }
 
         public void SpawnEnemies()
@@ -58,14 +50,30 @@ namespace Xplore
 
                 var enemy = new Enemy(ContentProvider.EnemyShips[rand.Next(ContentProvider.EnemyShips.Count)],
                     new Vector2(x, y),
-                    gameBounds,ShipType.NpcEnemy);
+                    ShipType.NpcEnemy);
                 enemy.Wander();
-                collsionShips.Add(enemy.Guid.ToString(),enemy);
+                _collisionEntities.Add(enemy.Guid.ToString(),enemy);
                 enemy.Destroyed += EnemyShipDestroyed;
                 Enemies.Add(enemy);
             }
 
 
+        }
+
+        public void SpawnBoulders()
+        {
+            while (Boulders.Count < MaxBoulderCount)
+            {
+                float radius = (float)rand.Next(gameBounds.Width / 2, gameBounds.Width) / 2;
+                float angle = (float)rand.NextDouble() * MathHelper.TwoPi;
+                float x = player.Center.X + radius * (float)Math.Cos(angle);
+                float y = player.Center.Y + radius * (float)Math.Sin(angle);
+
+                var boulder = new Boulder(ContentProvider.Boulder,
+                    new Vector2(x, y));
+                _collisionEntities.Add(boulder.Guid.ToString(), boulder);
+                Boulders.Add(boulder);
+            }
         }
 
 
@@ -83,8 +91,16 @@ namespace Xplore
             }
         }
 
+        public void UpdateGameBounds()
+        {
+
+            gameBounds = new Rectangle((int)(player.Position.X - gameSize/2f), (int)(player.Position.Y - gameSize/2f),gameSize,gameSize);
+            
+        }
+
         public override void Update(GameTime gameTime)
         {
+            UpdateGameBounds();
             _spatialGrid = new SpatialGrid(gameBounds,200);
             
             mouseState = Mouse.GetState();
@@ -93,6 +109,7 @@ namespace Xplore
             ApplyMouseWheelZoom();
             Camera.Location = new Vector2(player.Position.X, player.Position.Y);
             SpawnEnemies();
+            SpawnBoulders();
             player.Update(gameTime);
 
             var enemies = Enemies.ToArray();
@@ -106,6 +123,10 @@ namespace Xplore
                 enemies[i].Update(gameTime);
                 
             }
+            foreach (var boulder in Boulders)
+            {
+                boulder.Update(gameTime);
+            }
 
             CheckAndResolveCollisions(gameTime);
 
@@ -118,10 +139,9 @@ namespace Xplore
         /// </summary>
         private void CheckAndResolveCollisions(GameTime gameTime)
         {
-            foreach (var ship in GetAllShips())
+            foreach (var collisionEntity in _collisionEntities.Values)
             {
-                
-                _spatialGrid.Insert(ship.BoundingCircle.SourceRectangle,ship);
+                _spatialGrid.Insert(collisionEntity.BoundingCircle.SourceRectangle,collisionEntity);
             }
 
             foreach (var gridBox in _spatialGrid.GetCollsionGrid().Values)
@@ -135,9 +155,9 @@ namespace Xplore
                             Vector2 collsionVector;
                             if (entity != collisionEntity && CollisionHelper.IsCircleColliding(entity.BoundingCircle,collisionEntity.BoundingCircle,out collsionVector))
                             {
-                                collsionShips[entity.Guid.ToString()].ResolveSphereCollision(collsionVector);
-                                collsionShips[entity.Guid.ToString()].ApplyCollisionDamage(gameTime);
-                                collsionShips[collisionEntity.Guid.ToString()].ApplyCollisionDamage(gameTime);
+                                _collisionEntities[entity.Guid.ToString()].ResolveSphereCollision(collsionVector);
+                                _collisionEntities[entity.Guid.ToString()].ApplyCollisionDamage(gameTime);
+                                _collisionEntities[collisionEntity.Guid.ToString()].ApplyCollisionDamage(gameTime);
                             }
                         }
                     }
@@ -205,6 +225,10 @@ namespace Xplore
             {
                 enemy.Draw(spriteBatch);
             }
+            foreach (var boulder in Boulders)
+            {
+                boulder.Draw(spriteBatch);
+            }
 
         }
 
@@ -215,8 +239,8 @@ namespace Xplore
             UserInterface = false;
             ScreenType = ScreenType.Gameplay;
             Camera.Bounds = Game.GraphicsDevice.Viewport.Bounds;
-            player = new Player(ContentProvider.Ship, new Vector2(0, 0), gameBounds,ShipType.Player);
-            collsionShips.Add(player.Guid.ToString(),player);
+            player = new Player(ContentProvider.Ship, new Vector2(0, 0),ShipType.Player);
+            _collisionEntities.Add(player.Guid.ToString(),player);
         }
     }
 }
