@@ -65,6 +65,9 @@
     <Compile Include="Screens\Screen.cs" />
     <Compile Include="Screens\ScreenManager.cs" />
     <Compile Include="Screens\ScreenType.cs" />
+    <Compile Include="ShipExplosion.cs" />
+    <Compile Include="ShipExplosionParticle.cs" />
+    <Compile Include="ShipType.cs" />
     <Compile Include="SpatialGrid.cs" />
     <Compile Include="Sprite.cs" />
   </ItemGroup>

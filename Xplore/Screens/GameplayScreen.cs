@@ -15,12 +15,12 @@ namespace Xplore
         private MouseState mouseState;
         private Player player;
         private SpatialGrid _spatialGrid;
-        private const int MaxEnemyCount = 100;
+        private const int MaxEnemyCount = 1;
         private Dictionary<string,Ship> collsionShips = new Dictionary<string, Ship>(); 
         
 
 
-        private const int gameSize = 20000;
+        private const int gameSize = 1000;
         private Rectangle gameBounds = new Rectangle(-(gameSize / 2), -(gameSize / 2), gameSize, gameSize);
         public override void LoadContent()
         {
@@ -58,7 +58,7 @@ namespace Xplore
 
                 var enemy = new Enemy(ContentProvider.EnemyShips[rand.Next(ContentProvider.EnemyShips.Count)],
                     new Vector2(x, y),
-                    gameBounds);
+                    gameBounds,ShipType.NpcEnemy);
                 enemy.Wander();
                 collsionShips.Add(enemy.Guid.ToString(),enemy);
                 enemy.Destroyed += EnemyShipDestroyed;
@@ -215,7 +215,7 @@ namespace Xplore
             UserInterface = false;
             ScreenType = ScreenType.Gameplay;
             Camera.Bounds = Game.GraphicsDevice.Viewport.Bounds;
-            player = new Player(ContentProvider.Ship, new Vector2(0, 0), gameBounds);
+            player = new Player(ContentProvider.Ship, new Vector2(0, 0), gameBounds,ShipType.Player);
             collsionShips.Add(player.Guid.ToString(),player);
         }
     }

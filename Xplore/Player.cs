@@ -9,7 +9,7 @@ namespace Xplore
     public class Player : Ship, IShip
     {
         private const float SideThrust = 0.5f;
-        public Player(Texture2D texture, Vector2 position, Rectangle screenBounds) : base(texture, position, screenBounds)
+        public Player(Texture2D texture, Vector2 position, Rectangle screenBounds,ShipType shipType) : base(texture, position, screenBounds,shipType)
         {
             DirectionVector = new Vector2(0, -1);
             DirectionGoalVector = DirectionVector;

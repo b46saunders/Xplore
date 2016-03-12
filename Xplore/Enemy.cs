@@ -8,6 +8,7 @@ namespace Xplore
 {
     public class Enemy : Ship, IShip
     {
+        private bool _destroyAnimationStarted;
         private readonly HealthBar _healthBar;
         private Vector2 _destination;
         private const float WanderRotationSpeed = 0.99f;
@@ -21,7 +22,7 @@ namespace Xplore
         private float _angleChange = 2f;
         private ShipBehaviour _shipBehaviour;
 
-        public Enemy(Texture2D texture, Vector2 position, Rectangle screenBounds) : base(texture, position, screenBounds)
+        public Enemy(Texture2D texture, Vector2 position, Rectangle screenBounds,ShipType shipType) : base(texture, position, screenBounds, shipType)
         {
             _lastWanderDecision = 0;
             Speed = 3.5f;
@@ -163,9 +164,12 @@ namespace Xplore
 
         public void CheckIfDestroyed()
         {
-            if (HealthPoints == 0)
+            if (HealthPoints == 0 && !_destroyAnimationStarted)
             {
-                Destroyed?.Invoke(this, null);
+                _destroyAnimationStarted = true;
+                var explosion = new ShipExplosion(Center);
+                CurrentParticles.Add(explosion);
+                explosion.AnimationFinished += (sender, args) => Destroyed?.Invoke(this, null);
             }
         }
 

@@ -11,6 +11,7 @@ namespace Xplore
 
     public abstract class Ship : Sprite, ICollisionEntity
     {
+
         protected double LastCollisionTime;
         protected double CollisionMillisecondInterval = 100;
         protected Vector2 Velocity = Vector2.Zero;
@@ -32,11 +33,13 @@ namespace Xplore
         protected readonly List<IParticle> CurrentParticles = new List<IParticle>();
         protected MouseState previousMouseState;
         protected KeyboardState previousKeyboardState;
+        protected ShipType ShipType;
         
 
 
-        protected Ship(Texture2D texture, Vector2 position, Rectangle screenBounds) : base(texture, position)
+        protected Ship(Texture2D texture, Vector2 position, Rectangle screenBounds,ShipType shipType) : base(texture, position)
         {
+            ShipType = shipType;
             Guid = Guid.NewGuid();
             ScreenBounds = screenBounds;
             MaxHealthPoints = 10;
@@ -83,7 +86,7 @@ namespace Xplore
 
         public void ApplyCollisionDamage(GameTime gametime)
         {
-            if (gametime.TotalGameTime.TotalMilliseconds > LastCollisionTime + CollisionMillisecondInterval)
+            if (ShipType != ShipType.Player && gametime.TotalGameTime.TotalMilliseconds > LastCollisionTime + CollisionMillisecondInterval)
             {
                 LastCollisionTime = gametime.TotalGameTime.TotalMilliseconds;
                 HealthPoints -= 1;
@@ -172,7 +175,11 @@ namespace Xplore
             {
                 currentParticle.Draw(spriteBatch);
             }
-            base.Draw(spriteBatch);
+            if (HealthPoints > 0)
+            {
+                base.Draw(spriteBatch);
+            }
+            
         }
 
         public override void Update(GameTime gameTime)
@@ -208,11 +215,6 @@ namespace Xplore
 
                 CurrentParticles.Add(new ShipExhaust(particleTexture, exhaustPoint, randomVector));
             }
-        }
-
-        protected void ExplodeShip()
-        {
-            
         }
 
         protected void CreateExhaustParticles()

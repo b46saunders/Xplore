@@ -21,9 +21,6 @@ namespace Xplore
 
         public override void Update(GameTime gameTime)
         {
-
-            var movementRegister = false;
-
             //lets spin
             //rotation = (float)_directionVector.GetRotationFromVector();
             Velocity = _directionVector * Speed;
