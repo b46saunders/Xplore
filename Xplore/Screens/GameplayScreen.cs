@@ -76,6 +76,25 @@ namespace Xplore
             }
         }
 
+        public void DespawnSprites()
+        {
+            var boulders = Boulders.ToArray();
+            var enemies = Enemies.ToArray();
+            foreach (var boulder in boulders)
+            {
+                if (IsSpriteInGameBounds(boulder)) Boulders.Remove(boulder);
+            }
+            foreach (var enemy in enemies)
+            {
+                if (IsSpriteInGameBounds(enemy)) Enemies.Remove(enemy);
+            }
+
+        }
+
+        public bool IsSpriteInGameBounds(Sprite sprite)
+        {
+            return sprite.Position.X < gameBounds.X || sprite.Position.X > gameBounds.X + gameBounds.Width || sprite.Position.Y < gameBounds.Y || sprite.Position.Y > gameBounds.Y + gameBounds.Height;
+        }
 
 
         public void ApplyMouseWheelZoom()
@@ -110,6 +129,7 @@ namespace Xplore
             Camera.Location = new Vector2(player.Position.X, player.Position.Y);
             SpawnEnemies();
             SpawnBoulders();
+            DespawnSprites();
             player.Update(gameTime);
 
             var enemies = Enemies.ToArray();
