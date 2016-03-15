@@ -27,15 +27,17 @@ Stage 3
 
 Stage 4
   - Basic enemy behaviour
-    - Wander
+    - Wander (DONE)
     - Seek (DONE)
     - Flee (DONE)
+    - Collision Evasion - Not path finding but using steering vectors
   
 Stage 5
   - Boulders
-   - Random sizes and speeds
+   - Random sizes
+   - Random speeds (DONE)
    - Other random stuff to make them more fun
-   - Boulder collision physics with ship and bullets
+   - Boulder collision physics with ship(DONE) and bullets
     - Shooting them gives player score?
     - Make them explode!
     
