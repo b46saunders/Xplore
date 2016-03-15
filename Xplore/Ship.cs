@@ -9,7 +9,7 @@ namespace Xplore
 {
     public abstract class Ship : Sprite, ICollisionEntity
     {
-
+        protected float Mass = 10000f;
         protected double LastCollisionTime;
         protected double CollisionMillisecondInterval = 100;
         protected Vector2 Velocity = Vector2.Zero;
