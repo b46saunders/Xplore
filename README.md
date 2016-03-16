@@ -11,6 +11,8 @@ Understanding Steering Behaviours -
   Math for Game Developers -
   https://www.youtube.com/playlist?list=PLW3Zl3wyJwWOpdhYedlD-yCB7WQoHf-My
 
+#Progress
+
 Current WIP (Refactor)
   - Cleanup ScreenManager.cs and screen management in general
   - Define entities that need rendering/updates with interfaces
