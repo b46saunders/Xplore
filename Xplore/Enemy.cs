@@ -20,7 +20,7 @@ namespace Xplore
         private const float CircleDistance = 2f;
         private const float CircleRadius = 400f;
         private float _wanderAngle = 5f;
-        private float _angleChange = 0.1f;
+        private float _angleChange = 2f;
         private ShipBehaviour _shipBehaviour;
         private float maxForce = 1f;
 
@@ -56,7 +56,14 @@ namespace Xplore
 
         private Vector2 WanderBehaviour(GameTime gameTime)
         {
-            var newVector = Wander(gameTime);
+            //TODO: Direction vector needs to lerp to show smoother direction changes
+            var newVector = new Vector2(DirectionVector.X, DirectionVector.Y);
+            if(gameTime.TotalGameTime.TotalMilliseconds + 300 > _lastWanderDecision)
+            {
+                _lastWanderDecision = gameTime.TotalGameTime.TotalMilliseconds;
+                newVector = Wander(gameTime);
+            }
+            
             
             var normailzed = new Vector2(newVector.X, newVector.Y);
             normailzed.Normalize();
@@ -127,7 +134,8 @@ namespace Xplore
 
             steering = Vector2.Normalize(steering*maxForce);
             steering = steering/Mass;
-            DirectionVector = Vector2.Normalize(steering);
+            DirectionGoalVector = Vector2.Normalize(steering);
+            DirectionVector = Vector2.Lerp(DirectionGoalVector, DirectionVector, 0.99f);
             Velocity = DirectionVector*Speed;
             //Debug.WriteLine(DirectionVector);
 
