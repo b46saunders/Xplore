@@ -4,6 +4,15 @@ Aim of this project is to learn about game development by creating a simple 2d s
 
 I plan to use kenney's great set of free game assets for the project available at www.kenney.nl
 
+# Helpful Resources
+Understanding Steering Behaviours -
+  http://gamedevelopment.tutsplus.com/series/understanding-steering-behaviors--gamedev-12732
+
+  Math for Game Developers -
+  https://www.youtube.com/playlist?list=PLW3Zl3wyJwWOpdhYedlD-yCB7WQoHf-My
+
+#Progress
+
 Current WIP (Refactor)
   - Cleanup ScreenManager.cs and screen management in general
   - Define entities that need rendering/updates with interfaces
