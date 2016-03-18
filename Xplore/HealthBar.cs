@@ -17,8 +17,8 @@ namespace Xplore
         {
             var healthBarPosition = new Vector2(_healthBarEntity.HealthBarPosition.X - HealthBarWidth/2f,
                 _healthBarEntity.HealthBarPosition.Y);
-            float healthBarPercent = (float) _healthBarEntity.HealthPoints/(float) _healthBarEntity.MaxHealthPoints;
-            int healthBarWidth = (int)(healthBarPercent*(float)HealthBarWidth);
+            float healthBarPercent = _healthBarEntity.HealthPoints/(float) _healthBarEntity.MaxHealthPoints;
+            int healthBarWidth = (int)(healthBarPercent*HealthBarWidth);
             var drawRectangle = new Rectangle((int)healthBarPosition.X,(int)healthBarPosition.Y, healthBarWidth, HealthBarHeight);
 
 

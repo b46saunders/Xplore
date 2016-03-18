@@ -1,17 +1,18 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Xplore.Screens;
 
 namespace Xplore
 {
     public class Main : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        public  float timestep = 1000 / 250f;
-        public  float elapsedTime = 0f;
-        readonly ScreenManager _screenManager = new ScreenManager();
-        private Rectangle screenBounds;
+        private readonly GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+        public  float Timestep = 1000 / 250f;
+        public  float ElapsedTime = 0f;
+        private readonly ScreenManager _screenManager = new ScreenManager();
+        private Rectangle _screenBounds;
         
 
         public Main()
@@ -19,13 +20,13 @@ namespace Xplore
             IsFixedTimeStep = true;
             float dt = 1000 / 250f;
             
-            graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = 1920;
-            graphics.PreferredBackBufferHeight = 1080;
-            graphics.IsFullScreen = false;
-            graphics.SynchronizeWithVerticalRetrace = true;
+            _graphics = new GraphicsDeviceManager(this);
+            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.IsFullScreen = false;
+            _graphics.SynchronizeWithVerticalRetrace = true;
             TargetElapsedTime = TimeSpan.FromMilliseconds(dt);
-            graphics.ApplyChanges();
+            _graphics.ApplyChanges();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             
@@ -35,10 +36,10 @@ namespace Xplore
         {
             // TODO: Add your initialization logic here
             ContentProvider.InitializeContent(Content);
-            Camera.Bounds = graphics.GraphicsDevice.Viewport.Bounds;
-            Camera.Location = new Vector2(graphics.GraphicsDevice.Viewport.Bounds.Width / 2f, graphics.GraphicsDevice.Viewport.Bounds.Height / 2f);
-            screenBounds = new Rectangle(0, 0, graphics.GraphicsDevice.Viewport.Width, graphics.GraphicsDevice.Viewport.Height);
-            _screenManager.ScreenBounds = screenBounds;
+            Camera.Bounds = _graphics.GraphicsDevice.Viewport.Bounds;
+            Camera.Location = new Vector2(_graphics.GraphicsDevice.Viewport.Bounds.Width / 2f, _graphics.GraphicsDevice.Viewport.Bounds.Height / 2f);
+            _screenBounds = new Rectangle(0, 0, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height);
+            _screenManager.ScreenBounds = _screenBounds;
             _screenManager.Game = this;
             _screenManager.Init();
             
@@ -49,7 +50,7 @@ namespace Xplore
         {
             _screenManager.LoadContent();
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
         }
 
@@ -61,11 +62,11 @@ namespace Xplore
 
         protected override void Update(GameTime gameTime)
         {
-            elapsedTime += gameTime.ElapsedGameTime.Milliseconds;
-            if (elapsedTime > timestep)
+            ElapsedTime += gameTime.ElapsedGameTime.Milliseconds;
+            if (ElapsedTime > Timestep)
             {
                 _screenManager.Update(gameTime);
-                elapsedTime -= timestep;
+                ElapsedTime -= Timestep;
                 // TODO: Add your update logic here
             }
             
@@ -77,12 +78,12 @@ namespace Xplore
         {
 
             GraphicsDevice.Clear(Color.CornflowerBlue);
-                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearWrap, null,
+                _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearWrap, null,
                     null, null, Camera.TransformMatrix());
             
-            _screenManager.Draw(spriteBatch,gameTime);
+            _screenManager.Draw(_spriteBatch,gameTime);
             
-            spriteBatch.End();
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }

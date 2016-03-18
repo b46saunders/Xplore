@@ -1,8 +1,8 @@
 using System;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Xplore.Screens;
 
 namespace Xplore.Buttons
 {
@@ -10,9 +10,9 @@ namespace Xplore.Buttons
     {
         public Texture2D Texture { get; set; }
         public Texture2D MouseOverTexture { get; set; }
-        public Rectangle BoundingBox => new Rectangle((int)Camera.GetWorldPosition(Position).X, (int)Camera.GetWorldPosition(Position).Y, (int)((float)Texture.Width/Camera.Zoom), (int)((float)Texture.Height / Camera.Zoom));
-        private bool pressed = false;
-        private bool previousUpdateMouseDown = false;
+        public Rectangle BoundingBox => new Rectangle((int)Camera.GetWorldPosition(Position).X, (int)Camera.GetWorldPosition(Position).Y, (int)(Texture.Width/Camera.Zoom), (int)(Texture.Height / Camera.Zoom));
+        private bool _pressed;
+        private bool _previousUpdateMouseDown;
         public string Text { get; set; }
         public SpriteFont Font { get; set; }
         
@@ -41,7 +41,7 @@ namespace Xplore.Buttons
             fontYpos = fontYpos - stringSize.Y / 2f;
 
 
-            if (pressed)
+            if (_pressed)
             {
                 DrawButton(MouseOverTexture, spriteBatch, worldPosition);
             }
@@ -67,20 +67,20 @@ namespace Xplore.Buttons
             {
                 if (BoundingBox.Intersects(new Rectangle((int)Camera.GetWorldPosition(mousePos).X, (int)Camera.GetWorldPosition(mousePos).Y, 1, 1)))
                 {
-                    pressed = true;
+                    _pressed = true;
                 }
                 else
                 {
-                    pressed = false;
+                    _pressed = false;
                 }
-                previousUpdateMouseDown = true;
+                _previousUpdateMouseDown = true;
             }
 
             //click
-            if (mouseState.LeftButton == ButtonState.Released && previousUpdateMouseDown)
+            if (mouseState.LeftButton == ButtonState.Released && _previousUpdateMouseDown)
             {
 
-                if (pressed)
+                if (_pressed)
                 {
                     ClickEvent?.Invoke(this, null);
                     //Debug.WriteLine("CLICK ON BUTTON");
@@ -88,7 +88,7 @@ namespace Xplore.Buttons
             }
             if (mouseState.LeftButton == ButtonState.Released)
             {
-                previousUpdateMouseDown = false;
+                _previousUpdateMouseDown = false;
             }
 
 

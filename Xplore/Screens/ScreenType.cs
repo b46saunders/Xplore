@@ -1,4 +1,4 @@
-namespace Xplore
+namespace Xplore.Screens
 {
     public enum ScreenType
     {

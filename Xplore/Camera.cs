@@ -28,12 +28,12 @@ namespace Xplore
 
         public static Vector2 GetScreenPosition(Vector2 location)
         {
-            return Vector2.Transform(location, Camera.TransformMatrix());
+            return Vector2.Transform(location, TransformMatrix());
         }
 
         public static Vector2 GetWorldPosition(Vector2 location)
         {
-            return Vector2.Transform(location, Matrix.Invert(Camera.TransformMatrix()));
+            return Vector2.Transform(location, Matrix.Invert(TransformMatrix()));
             
         }
     }

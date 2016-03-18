@@ -7,23 +7,17 @@ namespace Xplore
     {
         public static void DrawRectangle(Rectangle rec, Texture2D tex, Color col, SpriteBatch spriteBatch, bool solid, int thickness, float rotation, Vector2 origin)
         {
-            Vector2 Position = new Vector2(rec.X, rec.Y);
             if (!solid)
             {
-                int border = thickness;
-
-                int borderWidth = (int)(rec.Width) + (border * 2);
-                int borderHeight = (int)(rec.Height) + (border);
-
                 //now we need to rotate all the vectors...
-                var topStart = new Vector2((int)rec.X, (int)rec.Y);
-                var topEnd = new Vector2((int)rec.X + rec.Width, (int)rec.Y);
-                var bottomStart = new Vector2((int)rec.X, (int)rec.Y + rec.Height);
-                var bottomEnd = new Vector2((int)rec.X + rec.Width, (int)rec.Y + rec.Height);
-                var leftStart = new Vector2((int)rec.X, (int)rec.Y);
-                var leftEnd = new Vector2((int)rec.X, (int)rec.Y + rec.Height);
-                var rightStart = new Vector2((int)rec.X + rec.Width, (int)rec.Y);
-                var rightEnd = new Vector2((int)rec.X + rec.Width, (int)rec.Y + rec.Height);
+                var topStart = new Vector2(rec.X, rec.Y);
+                var topEnd = new Vector2(rec.X + rec.Width, rec.Y);
+                var bottomStart = new Vector2(rec.X, rec.Y + rec.Height);
+                var bottomEnd = new Vector2(rec.X + rec.Width, rec.Y + rec.Height);
+                var leftStart = new Vector2(rec.X, rec.Y);
+                var leftEnd = new Vector2(rec.X, rec.Y + rec.Height);
+                var rightStart = new Vector2(rec.X + rec.Width, rec.Y);
+                var rightEnd = new Vector2(rec.X + rec.Width, rec.Y + rec.Height);
 
                 DrawStraightLine(topStart, topEnd, tex, col, spriteBatch, thickness, rotation, origin); //top bar 
                 DrawStraightLine(bottomStart, bottomEnd, tex, col, spriteBatch, thickness, rotation, origin); //bottom bar 
@@ -35,20 +29,20 @@ namespace Xplore
                 //var c = new Vector2(rec.X + rec.Width/2f, rec.Y + rec.Height/2f);
                 spriteBatch.Draw(tex, rec, col);
             }
-
         }
+
         //draws a line (rectangle of thickness) from A to B.  A and B have make either horiz or vert line. 
-        public static void DrawStraightLine(Vector2 A, Vector2 B, Texture2D tex, Color col, SpriteBatch spriteBatch, int thickness, float rotation, Vector2 origin)
+        public static void DrawStraightLine(Vector2 a, Vector2 b, Texture2D tex, Color col, SpriteBatch spriteBatch, int thickness, float rotation, Vector2 origin)
         {
             Rectangle rec;
 
-            if (A.X < B.X) // horiz line 
+            if (a.X < b.X) // horiz line 
             {
-                rec = new Rectangle((int)A.X, (int)A.Y, (int)(B.X - A.X), thickness);
+                rec = new Rectangle((int)a.X, (int)a.Y, (int)(b.X - a.X), thickness);
             }
             else //vert line 
             {
-                rec = new Rectangle((int)A.X, (int)A.Y, thickness, (int)(B.Y - A.Y));
+                rec = new Rectangle((int)a.X, (int)a.Y, thickness, (int)(b.Y - a.Y));
             }
 
             spriteBatch.Draw(tex, rec, col);

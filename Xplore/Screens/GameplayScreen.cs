@@ -1,27 +1,26 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Xplore
+namespace Xplore.Screens
 {
     public class GameplayScreen : Screen
     {
-        private Random rand = new Random();
-        private List<Enemy> Enemies = new List<Enemy>();
-        private List<Boulder> Boulders = new List<Boulder>(); 
-        private MouseState previousMouseState;
-        private MouseState mouseState;
-        private Player player;
+        private readonly Random _rand = new Random();
+        private readonly List<Enemy> _enemies = new List<Enemy>();
+        private readonly List<Boulder> _boulders = new List<Boulder>(); 
+        private MouseState _previousMouseState;
+        private MouseState _mouseState;
+        private readonly Player _player;
         private SpatialGrid _spatialGrid;
         private const int MaxEnemyCount = 100;
         private const int MaxBoulderCount = 100;
         private Dictionary<string,ICollisionEntity> _collisionEntities = new Dictionary<string, ICollisionEntity>(); 
 
-        private const int gameSize = 5000;
-        private Rectangle gameBounds = new Rectangle(-(gameSize / 2), -(gameSize / 2), gameSize, gameSize);
+        private const int GameSize = 5000;
+        private Rectangle _gameBounds = new Rectangle(-(GameSize / 2), -(GameSize / 2), GameSize, GameSize);
         public override void LoadContent()
         {
 
@@ -35,26 +34,26 @@ namespace Xplore
         private void EnemyShipDestroyed(object ship, EventArgs eventArgs)
         {
             _collisionEntities.Remove(((Enemy) ship).Guid.ToString());
-             Enemies.Remove((Enemy)ship);
+             _enemies.Remove((Enemy)ship);
         }
 
         public void SpawnEnemies()
         {
             //spawn an emeny if the count of total enemies is less than maxEnemyCount
-            while (Enemies.Count < MaxEnemyCount)
+            while (_enemies.Count < MaxEnemyCount)
             {
-                float radius = (float)rand.Next(gameBounds.Width / 2, gameBounds.Width) / 2;
-                float angle = (float)rand.NextDouble() * MathHelper.TwoPi;
-                float x = player.Center.X + radius * (float)Math.Cos(angle);
-                float y = player.Center.Y + radius * (float)Math.Sin(angle);
+                float radius = (float)_rand.Next(_gameBounds.Width / 2, _gameBounds.Width) / 2;
+                float angle = (float)_rand.NextDouble() * MathHelper.TwoPi;
+                float x = _player.Center.X + radius * (float)Math.Cos(angle);
+                float y = _player.Center.Y + radius * (float)Math.Sin(angle);
 
-                var enemy = new Enemy(ContentProvider.EnemyShips[rand.Next(ContentProvider.EnemyShips.Count)],
+                var enemy = new Enemy(ContentProvider.EnemyShips[_rand.Next(ContentProvider.EnemyShips.Count)],
                     new Vector2(x, y),
                     ShipType.NpcEnemy);
                 enemy.Wander();
                 _collisionEntities.Add(enemy.Guid.ToString(),enemy);
                 enemy.Destroyed += EnemyShipDestroyed;
-                Enemies.Add(enemy);
+                _enemies.Add(enemy);
             }
 
 
@@ -62,49 +61,49 @@ namespace Xplore
 
         public void SpawnBoulders()
         {
-            while (Boulders.Count < MaxBoulderCount)
+            while (_boulders.Count < MaxBoulderCount)
             {
-                float radius = (float)rand.Next(gameBounds.Width / 2, gameBounds.Width) / 2;
-                float angle = (float)rand.NextDouble() * MathHelper.TwoPi;
-                float x = player.Center.X + radius * (float)Math.Cos(angle);
-                float y = player.Center.Y + radius * (float)Math.Sin(angle);
+                float radius = (float)_rand.Next(_gameBounds.Width / 2, _gameBounds.Width) / 2;
+                float angle = (float)_rand.NextDouble() * MathHelper.TwoPi;
+                float x = _player.Center.X + radius * (float)Math.Cos(angle);
+                float y = _player.Center.Y + radius * (float)Math.Sin(angle);
 
                 var boulder = new Boulder(ContentProvider.Boulder,
                     new Vector2(x, y));
                 _collisionEntities.Add(boulder.Guid.ToString(), boulder);
-                Boulders.Add(boulder);
+                _boulders.Add(boulder);
             }
         }
 
         public void DespawnSprites()
         {
-            var boulders = Boulders.ToArray();
-            var enemies = Enemies.ToArray();
+            var boulders = _boulders.ToArray();
+            var enemies = _enemies.ToArray();
             foreach (var boulder in boulders)
             {
-                if (IsSpriteInGameBounds(boulder)) Boulders.Remove(boulder);
+                if (IsSpriteInGameBounds(boulder)) _boulders.Remove(boulder);
             }
             foreach (var enemy in enemies)
             {
-                if (IsSpriteInGameBounds(enemy)) Enemies.Remove(enemy);
+                if (IsSpriteInGameBounds(enemy)) _enemies.Remove(enemy);
             }
 
         }
 
         public bool IsSpriteInGameBounds(Sprite sprite)
         {
-            return sprite.Position.X < gameBounds.X || sprite.Position.X > gameBounds.X + gameBounds.Width || sprite.Position.Y < gameBounds.Y || sprite.Position.Y > gameBounds.Y + gameBounds.Height;
+            return sprite.Position.X < _gameBounds.X || sprite.Position.X > _gameBounds.X + _gameBounds.Width || sprite.Position.Y < _gameBounds.Y || sprite.Position.Y > _gameBounds.Y + _gameBounds.Height;
         }
 
 
         public void ApplyMouseWheelZoom()
         {
             //zoom in/out
-            if (mouseState.ScrollWheelValue > previousMouseState.ScrollWheelValue)
+            if (_mouseState.ScrollWheelValue > _previousMouseState.ScrollWheelValue)
             {
                 Camera.Zoom += 0.05f;
             }
-            if (mouseState.ScrollWheelValue < previousMouseState.ScrollWheelValue)
+            if (_mouseState.ScrollWheelValue < _previousMouseState.ScrollWheelValue)
             {
                 Camera.Zoom -= 0.05f;
             }
@@ -113,37 +112,37 @@ namespace Xplore
         public void UpdateGameBounds()
         {
 
-            gameBounds = new Rectangle((int)(player.Position.X - gameSize/2f), (int)(player.Position.Y - gameSize/2f),gameSize,gameSize);
+            _gameBounds = new Rectangle((int)(_player.Position.X - GameSize/2f), (int)(_player.Position.Y - GameSize/2f),GameSize,GameSize);
             
         }
 
         public override void Update(GameTime gameTime)
         {
             UpdateGameBounds();
-            _spatialGrid = new SpatialGrid(gameBounds,200);
+            _spatialGrid = new SpatialGrid(_gameBounds,200);
             
-            mouseState = Mouse.GetState();
+            _mouseState = Mouse.GetState();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 ScreenManager.PauseGame();
             ApplyMouseWheelZoom();
-            Camera.Location = new Vector2(player.Position.X, player.Position.Y);
+            Camera.Location = new Vector2(_player.Position.X, _player.Position.Y);
             SpawnEnemies();
             SpawnBoulders();
             DespawnSprites();
-            player.Update(gameTime);
+            _player.Update(gameTime);
 
-            var enemies = Enemies.ToArray();
+            var enemies = _enemies.ToArray();
             for (int i = 0; i < enemies.Length; i++)
             {
                 var fleeDistance = 1000f;
-                if ((player.Center - enemies[i].Center).Length() < fleeDistance)
+                if ((_player.Center - enemies[i].Center).Length() < fleeDistance)
                 {
-                    enemies[i].Flee(player.Center, fleeDistance);
+                    enemies[i].Flee(_player.Center, fleeDistance);
                 }
                 enemies[i].Update(gameTime);
                 
             }
-            foreach (var boulder in Boulders)
+            foreach (var boulder in _boulders)
             {
                 boulder.Update(gameTime);
             }
@@ -151,7 +150,7 @@ namespace Xplore
             CheckAndResolveCollisions(gameTime);
 
 
-            previousMouseState = mouseState;
+            _previousMouseState = _mouseState;
         }
 
         /// <summary>
@@ -238,14 +237,14 @@ namespace Xplore
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            spriteBatch.Draw(ContentProvider.Background, new Vector2(gameBounds.X, gameBounds.Y), new Rectangle(gameBounds.X, gameBounds.Y, gameBounds.Width, gameBounds.Height), Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
-            player.Draw(spriteBatch);
+            spriteBatch.Draw(ContentProvider.Background, new Vector2(_gameBounds.X, _gameBounds.Y), new Rectangle(_gameBounds.X, _gameBounds.Y, _gameBounds.Width, _gameBounds.Height), Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+            _player.Draw(spriteBatch);
             //_spatialGrid.RenderGrid(spriteBatch);
-            foreach (var enemy in Enemies)
+            foreach (var enemy in _enemies)
             {
                 enemy.Draw(spriteBatch);
             }
-            foreach (var boulder in Boulders)
+            foreach (var boulder in _boulders)
             {
                 boulder.Draw(spriteBatch);
             }
@@ -259,8 +258,8 @@ namespace Xplore
             UserInterface = false;
             ScreenType = ScreenType.Gameplay;
             Camera.Bounds = Game.GraphicsDevice.Viewport.Bounds;
-            player = new Player(ContentProvider.Ship, new Vector2(0, 0),ShipType.Player);
-            _collisionEntities.Add(player.Guid.ToString(),player);
+            _player = new Player(ContentProvider.Ship, new Vector2(0, 0),ShipType.Player);
+            _collisionEntities.Add(_player.Guid.ToString(),_player);
         }
     }
 }

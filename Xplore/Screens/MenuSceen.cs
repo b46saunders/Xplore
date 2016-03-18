@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Xplore.Buttons;
 
-namespace Xplore
+namespace Xplore.Screens
 {
     public class MenuSceen : Screen
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Xplore
+namespace Xplore.Buttons
 {
     public abstract class MenuItem
     {

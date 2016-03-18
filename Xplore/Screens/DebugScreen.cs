@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Xplore
+namespace Xplore.Screens
 {
     /// <summary>
     /// TODO have a static member so we can access the debug screen anywhere in the program - helpful if we want to live debug stuff. maybe have some sort of handle that can be placed on the screen in a location specified
@@ -12,14 +12,14 @@ namespace Xplore
     /// </summary>
     public class DebugScreen : Screen
     {
-        private double _lastFrameSecond = 0;
-        private double _lastUpdateSecond = 0;
-        private double _frameCount = 0;
-        private double _updateCount = 0;
-        private double _previousUpdateCount = 0;
-        private double _previousFrameCount = 0;
-        private Vector2 mousePos = Vector2.Zero;
-        private Vector2 worldPos = Vector2.Zero;
+        private double _lastFrameSecond;
+        private double _lastUpdateSecond;
+        private double _frameCount;
+        private double _updateCount;
+        private double _previousUpdateCount;
+        private double _previousFrameCount;
+        private Vector2 _mousePos = Vector2.Zero;
+        private Vector2 _worldPos = Vector2.Zero;
 
         public override void LoadContent()
         {
@@ -39,9 +39,9 @@ namespace Xplore
                 _updateCount = 0;
             }
             var mouseState = Mouse.GetState();
-            mousePos.X = mouseState.X;
-            mousePos.Y = mouseState.Y;
-            worldPos = Camera.GetWorldPosition(new Vector2(mousePos.X, mousePos.Y));
+            _mousePos.X = mouseState.X;
+            _mousePos.Y = mouseState.Y;
+            _worldPos = Camera.GetWorldPosition(new Vector2(_mousePos.X, _mousePos.Y));
         }
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
@@ -55,8 +55,8 @@ namespace Xplore
             var cameraPos = new Vector2(worldPosz.X,worldPosz.Y + 16);
             spriteBatch.DrawString(ContentProvider.SpriteFont, $"UPS : {_previousUpdateCount}", updatePos, Color.Black);
             spriteBatch.DrawString(ContentProvider.SpriteFont, $"FPS : {_previousFrameCount}", fpsPos, Color.Black);
-            spriteBatch.DrawString(ContentProvider.SpriteFont,$"Mouse pos : [{mousePos.X},{mousePos.Y}]", mousePoss, Color.Black);
-            spriteBatch.DrawString(ContentProvider.SpriteFont, $"World Pos : [{worldPos.X},{worldPos.Y}]", worldPosz, Color.Black);
+            spriteBatch.DrawString(ContentProvider.SpriteFont,$"Mouse pos : [{_mousePos.X},{_mousePos.Y}]", mousePoss, Color.Black);
+            spriteBatch.DrawString(ContentProvider.SpriteFont, $"World Pos : [{_worldPos.X},{_worldPos.Y}]", worldPosz, Color.Black);
             spriteBatch.DrawString(ContentProvider.SpriteFont,$"Camera Pos: [{Camera.Location.X},{Camera.Location.Y}]",cameraPos,Color.Black);
             _frameCount++;
             if (gameTime.TotalGameTime.TotalSeconds > _lastFrameSecond + 1)

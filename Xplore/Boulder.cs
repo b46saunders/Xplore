@@ -23,9 +23,9 @@ namespace Xplore
             _healthBar = new HealthBar(new BoulderHealthBar(this));
             RotationSpeed = (float)ContentProvider.Random.Next(1, 3)/1000;
             Speed = Speed*(float)ContentProvider.Random.NextDouble();
-            rotation = MathHelper.WrapAngle(ContentProvider.Random.Next(0, 360));
+            Rotation = MathHelper.WrapAngle(ContentProvider.Random.Next(0, 360));
             //now that we have a random rotation
-            var newDirectionVector = Vector2DEx.GetVectorFromAngle(rotation);
+            var newDirectionVector = Vector2DEx.GetVectorFromAngle(Rotation);
             newDirectionVector.Normalize();
             DirectionVector = newDirectionVector;
             
@@ -44,7 +44,7 @@ namespace Xplore
         public override void Update(GameTime gameTime)
         {
 
-            rotation = MathHelper.WrapAngle(rotation + RotationSpeed * (float)gameTime.ElapsedGameTime.TotalMilliseconds);
+            Rotation = MathHelper.WrapAngle(Rotation + RotationSpeed * (float)gameTime.ElapsedGameTime.TotalMilliseconds);
             Velocity = DirectionVector*Speed*(float)gameTime.ElapsedGameTime.TotalMilliseconds;
             position += Velocity;
             base.Update(gameTime);

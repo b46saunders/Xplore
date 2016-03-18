@@ -1,8 +1,7 @@
-﻿using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Xplore
+namespace Xplore.Screens
 {
     public abstract class Screen
     {

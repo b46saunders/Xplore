@@ -28,8 +28,8 @@ namespace Xplore
         protected float Speed = 4f;
         protected double LastFire = 0;
         protected readonly List<IParticle> CurrentParticles = new List<IParticle>();
-        protected MouseState previousMouseState;
-        protected KeyboardState previousKeyboardState;
+        protected MouseState PreviousMouseState;
+        protected KeyboardState PreviousKeyboardState;
         protected ShipType ShipType;
         
 
@@ -175,8 +175,8 @@ namespace Xplore
         public override void Update(GameTime gameTime)
         {
             
-            previousMouseState = Mouse.GetState();
-            previousKeyboardState = Keyboard.GetState();
+            PreviousMouseState = Mouse.GetState();
+            PreviousKeyboardState = Keyboard.GetState();
             CleanupParticles();
             foreach (var currentParticle in CurrentParticles)
             {
@@ -193,7 +193,7 @@ namespace Xplore
             var particleTexture = ContentProvider.SideExhaustParticles[rand];
             //var exhuastPoint = new Vector2(position.X + texture.Width / 2f, position.Y + texture.Height);
             var origin = new Vector2(position.X + texture.Width / 2f, position.Y + texture.Height / 2f);
-            exhaustPoint = exhaustPoint.RotateAboutOrigin(origin, rotation);
+            exhaustPoint = exhaustPoint.RotateAboutOrigin(origin, Rotation);
 
             var spread = 30;
             for (int i = 0; i < 1; i++)
@@ -215,7 +215,7 @@ namespace Xplore
 
             var exhuastPoint = new Vector2(position.X + texture.Width / 2f, position.Y + texture.Height);
             var origin = new Vector2(position.X + texture.Width / 2f, position.Y + texture.Height / 2f);
-            exhuastPoint = exhuastPoint.RotateAboutOrigin(origin, rotation);
+            exhuastPoint = exhuastPoint.RotateAboutOrigin(origin, Rotation);
 
             var spread = 30;
             for (int i = 0; i < 4; i++)

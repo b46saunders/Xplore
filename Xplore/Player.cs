@@ -26,7 +26,7 @@ namespace Xplore
             DirectionGoalVector.X = vector.X - (BoundingBox.Center.X - BoundingBox.Width / 2f);
             DirectionGoalVector.Y = vector.Y - (BoundingBox.Center.Y - BoundingBox.Height / 2f);
             DirectionGoalVector.Normalize();
-            rotation = (float)DirectionVector.GetRotationFromVector();
+            Rotation = (float)DirectionVector.GetRotationFromVector();
 
             if (mouseState.LeftButton == ButtonState.Pressed && gameTime.TotalGameTime.TotalMilliseconds > LastFire + 200)
             {

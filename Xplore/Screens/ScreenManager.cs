@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Xplore
+namespace Xplore.Screens
 {
     public class ScreenManager
     {

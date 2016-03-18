@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -148,7 +147,7 @@ namespace Xplore
             //{
             //    DirectionVector = Vector2.Lerp(DirectionGoalVector, DirectionVector, RotationSpeed);
             //}
-            rotation = (float)DirectionVector.GetRotationFromVector();
+            Rotation = (float)DirectionVector.GetRotationFromVector();
             _healthBar.Update(gameTime);
 
             CheckIfDestroyed();

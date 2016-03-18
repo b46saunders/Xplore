@@ -9,8 +9,8 @@ namespace Xplore
         private float Speed = 3f;
         private float fadeSpeed = 60f;
         private float _fadeCurrent = 0f;
-        public float fadePercent = 1f;
-        private Vector2 _directionVector;
+        public float FadePercent = 1f;
+        private readonly Vector2 _directionVector;
         
         
         public ShipExplosionParticle(Texture2D texture, Vector2 position,Vector2 directionVector,float speed) : base(texture, position)
@@ -23,7 +23,7 @@ namespace Xplore
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position, null, Color.White * fadePercent, rotation, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, position, null, Color.White * FadePercent, Rotation, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, SpriteEffects.None, 0f);
         }
 
         public override void Update(GameTime gameTime)
@@ -39,9 +39,9 @@ namespace Xplore
             if (_fadeCurrent > fadeSpeed)
             {
                 _fadeCurrent = 0;
-                fadePercent -= 0.1f;
+                FadePercent -= 0.1f;
             }
-            if (fadePercent < 0f) IsActive = false;
+            if (FadePercent < 0f) IsActive = false;
             //rotation = (float)getRotationFromDirection(directionVector);
             position = position + Velocity;
             base.Update(gameTime);
