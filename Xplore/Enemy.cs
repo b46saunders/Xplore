@@ -19,7 +19,7 @@ namespace Xplore
         private const float CircleDistance = 2f;
         private const float CircleRadius = 400f;
         private float _wanderAngle = 5f;
-        private float _angleChange = 2f;
+        private float _angleChange = 2.1f;
         private ShipBehaviour _shipBehaviour;
         private float maxForce = 1f;
 
@@ -55,13 +55,13 @@ namespace Xplore
 
         private Vector2 WanderBehaviour(GameTime gameTime)
         {
-            //TODO: Direction vector needs to lerp to show smoother direction changes
+            
             var newVector = new Vector2(DirectionVector.X, DirectionVector.Y);
-            if(gameTime.TotalGameTime.TotalMilliseconds + 300 > _lastWanderDecision)
-            {
+            //if(_lastWanderDecision + 10 < gameTime.TotalGameTime.TotalMilliseconds)
+            //{
                 _lastWanderDecision = gameTime.TotalGameTime.TotalMilliseconds;
                 newVector = Wander(gameTime);
-            }
+            //}
             
             
             var normailzed = new Vector2(newVector.X, newVector.Y);
@@ -160,9 +160,10 @@ namespace Xplore
             if (HealthPoints == 0 && !_destroyAnimationStarted)
             {
                 _destroyAnimationStarted = true;
-                var explosion = new ShipExplosion(Center);
-                CurrentParticles.Add(explosion);
-                explosion.AnimationFinished += (sender, args) => Destroyed?.Invoke(this, null);
+                //var explosion = new ShipExplosion(Center);
+                //CurrentParticles.Add(explosion);
+                //explosion.AnimationFinished += (sender, args) => Destroyed?.Invoke(this, null);
+                Destroyed?.Invoke(this,null);
             }
         }
 

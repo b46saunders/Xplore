@@ -15,8 +15,8 @@ namespace Xplore.Screens
         private MouseState _mouseState;
         private readonly Player _player;
         private SpatialGrid _spatialGrid;
-        private const int MaxEnemyCount = 100;
-        private const int MaxBoulderCount = 100;
+        private const int MaxEnemyCount = 20;
+        private const int MaxBoulderCount = 20;
         private Dictionary<string,ICollisionEntity> _collisionEntities = new Dictionary<string, ICollisionEntity>(); 
 
         private const int GameSize = 5000;
@@ -85,7 +85,12 @@ namespace Xplore.Screens
             }
             foreach (var enemy in enemies)
             {
-                if (IsSpriteInGameBounds(enemy)) _enemies.Remove(enemy);
+                if (IsSpriteInGameBounds(enemy))
+                {
+                    //we need to cleanup the ship current particles
+                    enemy.CleanupParticles();
+                    _enemies.Remove(enemy);
+                }
             }
 
         }
