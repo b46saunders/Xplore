@@ -16,12 +16,12 @@ namespace Xplore
         private float _fleeDistance = 200f;
         public event EventHandler Destroyed;
         private double _lastWanderDecision;
-        private const float CircleDistance = 2f;
+        private const float CircleDistance = 5f;
         private const float CircleRadius = 400f;
-        private float _wanderAngle = 5f;
+        private float _wanderAngle = 0f;
         private float _angleChange = 2.1f;
         private ShipBehaviour _shipBehaviour;
-        private float maxForce = 1f;
+        private float maxForce = 4f;
 
         public Enemy(Texture2D texture, Vector2 position, ShipType shipType) : base(texture, position, shipType)
         {
@@ -55,19 +55,24 @@ namespace Xplore
 
         private Vector2 WanderBehaviour(GameTime gameTime)
         {
-            
-            var newVector = new Vector2(DirectionVector.X, DirectionVector.Y);
-            //if(_lastWanderDecision + 10 < gameTime.TotalGameTime.TotalMilliseconds)
+
+            //if (_shipBehaviour == ShipBehaviour.Wander)
             //{
-                _lastWanderDecision = gameTime.TotalGameTime.TotalMilliseconds;
-                newVector = Wander(gameTime);
+            //    DirectionVector = Vector2.Lerp(DirectionGoalVector, DirectionVector, WanderRotationSpeed);
             //}
-            
-            
-            var normailzed = new Vector2(newVector.X, newVector.Y);
-            normailzed.Normalize();
-            //Debug.WriteLine(normailzed);
-            return normailzed;
+            //else
+            //{
+            //    DirectionVector = Vector2.Lerp(DirectionGoalVector, DirectionVector, RotationSpeed);
+            //}
+
+
+            if(_lastWanderDecision + 500 < gameTime.TotalGameTime.TotalMilliseconds)
+            {
+                _lastWanderDecision = gameTime.TotalGameTime.TotalMilliseconds;
+                return Vector2.Normalize(Wander(gameTime));
+            }
+
+            return new Vector2(DirectionGoalVector.X, DirectionGoalVector.Y);
 
         }
 
@@ -131,22 +136,14 @@ namespace Xplore
                 steering += FleeBehaviour();
             }
 
-            steering = Vector2.Normalize(steering*maxForce);
+            steering = Vector2.Normalize(steering);
+            steering = steering*maxForce;
             steering = steering/Mass;
             DirectionGoalVector = Vector2.Normalize(steering);
             DirectionVector = Vector2.Lerp(DirectionGoalVector, DirectionVector, 0.99f);
             Velocity = DirectionVector*Speed;
             //Debug.WriteLine(DirectionVector);
 
-
-            //if (_shipBehaviour == ShipBehaviour.Wander)
-            //{
-            //    DirectionVector = Vector2.Lerp(DirectionGoalVector, DirectionVector, WanderRotationSpeed);
-            //}
-            //else
-            //{
-            //    DirectionVector = Vector2.Lerp(DirectionGoalVector, DirectionVector, RotationSpeed);
-            //}
             Rotation = (float)DirectionVector.GetRotationFromVector();
             _healthBar.Update(gameTime);
 
@@ -157,13 +154,16 @@ namespace Xplore
 
         public void CheckIfDestroyed()
         {
-            if (HealthPoints == 0 && !_destroyAnimationStarted)
+            if (HealthPoints <= 0 && !_destroyAnimationStarted)
             {
                 _destroyAnimationStarted = true;
-                //var explosion = new ShipExplosion(Center);
-                //CurrentParticles.Add(explosion);
-                //explosion.AnimationFinished += (sender, args) => Destroyed?.Invoke(this, null);
-                Destroyed?.Invoke(this,null);
+                var explosion = new ShipExplosion(Center);
+                CurrentParticles.Add(explosion);
+                explosion.AnimationFinished += (sender, args) =>
+                {
+                    Destroyed?.Invoke(this, null);
+                };
+                //Destroyed?.Invoke(this,null);
             }
         }
 

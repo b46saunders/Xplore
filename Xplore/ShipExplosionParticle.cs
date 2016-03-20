@@ -15,7 +15,7 @@ namespace Xplore
         
         public ShipExplosionParticle(Texture2D texture, Vector2 position,Vector2 directionVector,float speed) : base(texture, position)
         {
-            IsActive = true;
+            IsParticleActive = true;
             Origin = position;
             Speed = Speed * speed;
             _directionVector = directionVector;
@@ -41,13 +41,13 @@ namespace Xplore
                 _fadeCurrent = 0;
                 FadePercent -= 0.1f;
             }
-            if (FadePercent < 0f) IsActive = false;
+            if (FadePercent < 0f) IsParticleActive = false;
             //rotation = (float)getRotationFromDirection(directionVector);
             position = position + Velocity;
             base.Update(gameTime);
         }
 
         public Vector2 Origin { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsParticleActive { get; set; }
     }
 }

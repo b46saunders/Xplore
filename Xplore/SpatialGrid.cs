@@ -5,14 +5,24 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Xplore
 {
+    [Flags]
+    public enum CollisionType
+    {
+        None =0,
+        Ship =2,
+        Boulder =4,
+        Lazer = 8   
+    }
 
     public interface ICollisionEntity
     {
+        CollisionType CollisionsWith { get; }
+        bool Active { get; }
         Guid Guid { get; }
         Rectangle BoundingBox { get;}
         Circle BoundingCircle { get; }
          void ResolveSphereCollision(Vector2 mtdVector);
-         void ApplyCollisionDamage(GameTime gametime);
+         void ApplyCollisionDamage(GameTime gametime,int damage);
 
     }
 

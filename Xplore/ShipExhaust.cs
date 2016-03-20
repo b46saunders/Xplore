@@ -35,7 +35,7 @@ namespace Xplore
                 _fadeCurrent = 0;
                 FadePercent -= 0.1f;
             }
-            if (FadePercent < 0f ) IsActive = false;
+            if (FadePercent < 0f ) IsParticleActive = false;
             //rotation = (float)getRotationFromDirection(directionVector);
             position = position + Velocity;
             base.Update(gameTime);
@@ -47,6 +47,6 @@ namespace Xplore
         }
 
         public Vector2 Origin { get; set; }
-        public bool IsActive { get; set; } = true;
+        public bool IsParticleActive { get; set; } = true;
     }
 }

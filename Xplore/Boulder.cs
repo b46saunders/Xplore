@@ -7,6 +7,9 @@ namespace Xplore
     public class Boulder : Sprite, ICollisionEntity
     {
         private readonly HealthBar _healthBar;
+        public CollisionType CollisionsWith => CollisionType.Boulder;
+        public bool Active => active;
+        private bool active = true;
         public Guid Guid { get; }
         public Rectangle BoundingBox => BoundingCircle.SourceRectangle;
         public Circle BoundingCircle => new Circle(Center, (texture.Height / 2f)-20f);
@@ -72,7 +75,7 @@ namespace Xplore
             //position += mtdVector;
         }
 
-        public void ApplyCollisionDamage(GameTime gametime)
+        public void ApplyCollisionDamage(GameTime gametime, int damage)
         {
             
         }

@@ -1,13 +1,14 @@
+using System;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Xplore
 {
-    public class Lazer : Sprite, IParticle
+    public class Lazer : Sprite, IParticle, ICollisionEntity
     {
         public Vector2 Origin { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsParticleActive { get; set; }
         private float Speed = 16f;
         private readonly Vector2 _velocityVector;
         private readonly float _maxDistance;
@@ -15,6 +16,7 @@ namespace Xplore
 
         public Lazer(Texture2D texture, Vector2 position, Vector2 directionVector,float maxDistance) : base(texture, position)
         {
+            Guid = Guid.NewGuid();
             _maxDistance = maxDistance;
             Origin = position;
             Rotation = (float)directionVector.GetRotationFromVector();
@@ -26,7 +28,7 @@ namespace Xplore
         {
             if ((position - Origin).Length() > _maxDistance)
             {
-                IsActive = false;
+                IsParticleActive = false;
             }
             else
             {
@@ -35,6 +37,21 @@ namespace Xplore
 
             position = position + Velocity;
             base.Update(gameTime);
+        }
+
+        public CollisionType CollisionsWith => CollisionType.Lazer;
+        public bool Active => IsParticleActive;
+        public Guid Guid { get; }
+        public Rectangle BoundingBox => BoundingCircle.SourceRectangle;
+        public Circle BoundingCircle => new Circle(position,5);
+        public void ResolveSphereCollision(Vector2 mtdVector)
+        {
+            
+        }
+
+        public void ApplyCollisionDamage(GameTime gametime, int damage)
+        {
+            
         }
     }
 }

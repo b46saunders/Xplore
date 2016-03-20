@@ -20,6 +20,8 @@ namespace Xplore
         protected Vector2 DirectionGoalVector;
         protected Vector2 VelocityGoal;
         protected static Random Random = new Random(100);
+        public CollisionType CollisionsWith =>CollisionType.Ship;
+        public bool Active => true;
         public Guid Guid { get; }
         
         public Rectangle BoundingBox => BoundingCircle.SourceRectangle;
@@ -28,6 +30,7 @@ namespace Xplore
         protected float Speed = 4f;
         protected double LastFire = 0;
         protected readonly List<IParticle> CurrentParticles = new List<IParticle>();
+        public List<Lazer> LazerBullets = new List<Lazer>(); 
         protected MouseState PreviousMouseState;
         protected KeyboardState PreviousKeyboardState;
         protected ShipType ShipType;
@@ -52,8 +55,12 @@ namespace Xplore
             var particleArray = CurrentParticles.ToArray();
             for (int i = 0; i < particleArray.Length; i++)
             {
-                if (!particleArray[i].IsActive)
+                if (!particleArray[i].IsParticleActive)
                 {
+                    if (particleArray[i].GetType() == typeof (Lazer))
+                    {
+                        LazerBullets.Remove((Lazer) particleArray[i]);
+                    }
                     CurrentParticles.Remove(particleArray[i]);
                 }
             }
@@ -74,12 +81,12 @@ namespace Xplore
             position += mtdVector;
         }
 
-        public void ApplyCollisionDamage(GameTime gametime)
+        public void ApplyCollisionDamage(GameTime gametime, int damage)
         {
             if (ShipType != ShipType.Player && gametime.TotalGameTime.TotalMilliseconds > LastCollisionTime + CollisionMillisecondInterval)
             {
                 LastCollisionTime = gametime.TotalGameTime.TotalMilliseconds;
-                HealthPoints -= 1;
+                HealthPoints -= damage;
                 MathHelper.Clamp(HealthPoints, 0, MaxHealthPoints);
             }
         }
@@ -153,7 +160,12 @@ namespace Xplore
 
         protected void Fire()
         {
-            CurrentParticles.Add(new Lazer(ContentProvider.Laser, new Vector2(Center.X - ContentProvider.Laser.Width / 2f, Center.Y - ContentProvider.Laser.Height / 2f), DirectionVector, 2000f) { IsActive = true });
+            var lazerPos = new Vector2(Center.X - ContentProvider.Laser.Width/2f,
+                Center.Y - ContentProvider.Laser.Height/2f);
+            lazerPos = new Vector2(Center.X - ContentProvider.Laser.Width/2f, Center.Y - ContentProvider.Laser.Height).RotateAboutOrigin(lazerPos, Rotation);
+            var lazer = new Lazer(ContentProvider.Laser,lazerPos,DirectionVector, 2000f) {IsParticleActive = true};
+            LazerBullets.Add(lazer);
+            CurrentParticles.Add(lazer);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

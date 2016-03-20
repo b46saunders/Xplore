@@ -12,7 +12,7 @@ namespace Xplore
         public EventHandler AnimationFinished;
         public ShipExplosion(Vector2 position)
         {
-            IsActive = true;
+            IsParticleActive = true;
             Origin = position;
             var random = new Random();
             var particleCount = 200;
@@ -21,7 +21,7 @@ namespace Xplore
                 var vector = new Vector2(0, -1);
                 vector = SetAngle(vector, random.Next(0, 360));
                 vector.Normalize();
-                var explosionParticle = new ShipExplosionParticle(ContentProvider.ExhaustParticles[0], position, vector, (float)random.NextDouble());
+                var explosionParticle = new ShipExplosionParticle(ContentProvider.ExhaustParticles[6], position, vector, (float)random.NextDouble());
                 _shipParticles.Add(explosionParticle);
             }
         }
@@ -35,7 +35,7 @@ namespace Xplore
         }
 
         public Vector2 Origin { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsParticleActive { get; set; }
         public void Update(GameTime gametime)
         {
             foreach (var shipParticle in _shipParticles)
@@ -43,10 +43,10 @@ namespace Xplore
                 shipParticle.Update(gametime);
             }
 
-            if (_shipParticles.All(particle => !particle.IsActive))
+            if (_shipParticles.All(particle => !particle.IsParticleActive))
             {
                 AnimationFinished?.Invoke(this,null);
-                IsActive = false;
+                IsParticleActive = false;
             }
         }
 
