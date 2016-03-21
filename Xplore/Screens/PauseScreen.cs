@@ -18,13 +18,13 @@ namespace Xplore.Screens
         {
             //get center of screen
             var buttonTexture = ContentProvider.ButtonTexture;
-            var mouseOverTexture = ContentProvider.MouseOverTexture;
+            var buttonPressedTexture = ContentProvider.ButtonPressedTexture;
             var pos = new Vector2(100, 100);
             var pos2 = new Vector2(100, pos.Y + buttonTexture.Height + 20);
             var font = ContentProvider.SpriteFont;
 
-            _resumeButton = new MenuButton(pos, buttonTexture, mouseOverTexture, "RESUME", font);
-            _menuButton = new MenuButton(pos2, buttonTexture, mouseOverTexture, "MENU", font);
+            _resumeButton = new MenuButton(pos, buttonTexture, buttonPressedTexture, "RESUME", font);
+            _menuButton = new MenuButton(pos2, buttonTexture, buttonPressedTexture, "MENU", font);
 
             _menuButton.ClickEvent += MenuClick;
             _resumeButton.ClickEvent += ResumeClick;

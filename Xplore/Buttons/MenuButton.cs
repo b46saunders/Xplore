@@ -9,11 +9,13 @@ namespace Xplore.Buttons
     public class MenuButton : MenuItem
     {
         public Texture2D Texture { get; set; }
-        public Texture2D MouseOverTexture { get; set; }
-        public Rectangle BoundingBox => new Rectangle((int)Camera.GetWorldPosition(Position).X, (int)Camera.GetWorldPosition(Position).Y, (int)(Texture.Width/Camera.Zoom), (int)(Texture.Height / Camera.Zoom));
+        public Texture2D ButtonPressedTexture { get; set; }
+        public Rectangle BoundingBox => new Rectangle((int)Camera.GetWorldPosition(Position).X, (int)Camera.GetWorldPosition(Position).Y, (int)(Width/Camera.Zoom), (int)(Height / Camera.Zoom));
         private bool _pressed;
         private bool _previousUpdateMouseDown;
         public string Text { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
         public SpriteFont Font { get; set; }
         
 
@@ -21,10 +23,12 @@ namespace Xplore.Buttons
 
         public ScreenManager ScreenManager { get; set; }
 
-        public MenuButton(Vector2 position, Texture2D texture, Texture2D mouseOverTexture, string text, SpriteFont font) : base(position)
+        public MenuButton(Vector2 position, Texture2D texture, Texture2D buttonPressedTexture, string text, SpriteFont font) : base(position)
         {
+            Height = 100;
+            Width = 200;
             Texture = texture;
-            MouseOverTexture = mouseOverTexture;
+            ButtonPressedTexture = buttonPressedTexture;
             Text = text;
             Font = font;
 
@@ -35,15 +39,15 @@ namespace Xplore.Buttons
             //we want to make sure the position is trasformed by the camera correctly
             var worldPosition = Camera.GetWorldPosition(Position);
             var stringSize = Font.MeasureString(Text);
-            var fontXpos = worldPosition.X + (Texture.Width / 2f) ;
-            var fontYpos = worldPosition.Y + (Texture.Height / 2f);
+            var fontXpos = worldPosition.X + (Width / 2f) ;
+            var fontYpos = worldPosition.Y + (Height / 2f);
             fontXpos = fontXpos - stringSize.X / 2f;
             fontYpos = fontYpos - stringSize.Y / 2f;
 
 
             if (_pressed)
             {
-                DrawButton(MouseOverTexture, spriteBatch, worldPosition);
+                DrawButton(ButtonPressedTexture, spriteBatch, worldPosition);
             }
             else
             {
@@ -55,7 +59,7 @@ namespace Xplore.Buttons
 
         private void DrawButton(Texture2D texture, SpriteBatch spriteBatch,Vector2 position)
         {
-            spriteBatch.Draw(texture,position, null, Color.White, 0f, Vector2.Zero, 1f/Camera.Zoom, SpriteEffects.None, 1f);
+            spriteBatch.Draw(texture,null,new Rectangle((int)position.X,(int)position.Y,Width,Height), null, Vector2.Zero,0f,new Vector2(1f / Camera.Zoom), Color.White , SpriteEffects.None, 1f);
         }
 
         public override void Update(GameTime gameTime)

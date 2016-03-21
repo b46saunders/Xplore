@@ -92,6 +92,12 @@
     <Content Include="Content\Backgrounds\darkPurple.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Buttons\grey.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Buttons\grey_pressed.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Ships\debugPlayer.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

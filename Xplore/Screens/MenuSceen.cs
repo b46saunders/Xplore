@@ -18,14 +18,14 @@ namespace Xplore.Screens
         {
             //get center of screen
             var buttonTexture = ContentProvider.ButtonTexture;
-            var mouseOverTexture = ContentProvider.MouseOverTexture;
+            var buttonPressedTexture = ContentProvider.ButtonPressedTexture;
             var pos = new Vector2(100, 100);
             var pos2 = new Vector2(100, pos.Y + buttonTexture.Height + 20);
             var pos3 = new Vector2(100, pos2.Y + buttonTexture.Height + 20);
             var font = ContentProvider.SpriteFont;
 
-            _singleplayer = new MenuButton(pos, buttonTexture, mouseOverTexture, "Singleplayer", font);
-            _endButton = new MenuButton(pos3, buttonTexture, mouseOverTexture, "Quit", font);
+            _singleplayer = new MenuButton(pos, buttonTexture, buttonPressedTexture, "Singleplayer", font);
+            _endButton = new MenuButton(pos3, buttonTexture, buttonPressedTexture, "Quit", font);
 
             _singleplayer.ClickEvent += StartSinglePlayerGame;
             _endButton.ClickEvent += EndGame;
