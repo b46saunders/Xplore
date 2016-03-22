@@ -40,6 +40,8 @@ Stage 4
     - Wander (DONE)
     - Seek (DONE)
     - Flee (DONE)
+    - Bullets do damage to enemy ships (DONE)
+    - Enemy ship explosions when Heal == 0 (DONE)
     - Collision Evasion - Not path finding but using steering vectors
   
 Stage 5
