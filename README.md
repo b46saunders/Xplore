@@ -10,6 +10,9 @@ Understanding Steering Behaviours -
 
   Math for Game Developers -
   https://www.youtube.com/playlist?list=PLW3Zl3wyJwWOpdhYedlD-yCB7WQoHf-My
+  
+  2d collision detection
+  https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
 
 #Progress
 
