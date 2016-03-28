@@ -20,7 +20,6 @@ namespace Xplore.Screens
         }
         public void Init()
         {
-
             var menuScreen = new MenuSceen(true, Game, this);
             var debugScreen = new DebugScreen(true, Game, this);
             menuScreen.StartSinglePlayerGame += (sender, args) => StartSinglePlayerGame();

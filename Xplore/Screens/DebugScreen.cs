@@ -47,17 +47,17 @@ namespace Xplore.Screens
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             //draw the update strings
-            
+            var scale = Camera.Zoom;
             var updatePos = Camera.GetWorldPosition(new Vector2(10, 10));
-            var fpsPos = new Vector2(updatePos.X, updatePos.Y + 16);
-            var mousePoss = new Vector2(fpsPos.X, fpsPos.Y + 16);
-            var worldPosz = new Vector2(mousePoss.X,mousePoss.Y + 16);
-            var cameraPos = new Vector2(worldPosz.X,worldPosz.Y + 16);
-            spriteBatch.DrawString(ContentProvider.SpriteFont, $"UPS : {_previousUpdateCount}", updatePos, Color.Black);
-            spriteBatch.DrawString(ContentProvider.SpriteFont, $"FPS : {_previousFrameCount}", fpsPos, Color.Black);
-            spriteBatch.DrawString(ContentProvider.SpriteFont,$"Mouse pos : [{_mousePos.X},{_mousePos.Y}]", mousePoss, Color.Black);
-            spriteBatch.DrawString(ContentProvider.SpriteFont, $"World Pos : [{_worldPos.X},{_worldPos.Y}]", worldPosz, Color.Black);
-            spriteBatch.DrawString(ContentProvider.SpriteFont,$"Camera Pos: [{Camera.Location.X},{Camera.Location.Y}]",cameraPos,Color.Black);
+            var fpsPos = new Vector2(updatePos.X, updatePos.Y + (16 / scale));
+            var mousePoss = new Vector2(fpsPos.X, fpsPos.Y + (16 / scale));
+            var worldPosz = new Vector2(mousePoss.X,mousePoss.Y + (16 / scale));
+            var cameraPos = new Vector2(worldPosz.X,worldPosz.Y + (16 / scale));
+            DrawDebugString($"UPS : {_previousUpdateCount}", updatePos,spriteBatch);
+            DrawDebugString($"FPS : {_previousFrameCount}", fpsPos,spriteBatch);
+            DrawDebugString($"Mouse pos : [{_mousePos.X},{_mousePos.Y}]", mousePoss,spriteBatch);
+            DrawDebugString($"World Pos : [{_worldPos.X},{_worldPos.Y}]", worldPosz,spriteBatch);
+            DrawDebugString($"Camera Pos: [{Camera.Location.X},{Camera.Location.Y}]",cameraPos,spriteBatch);
             _frameCount++;
             if (gameTime.TotalGameTime.TotalSeconds > _lastFrameSecond + 1)
             {
@@ -65,6 +65,11 @@ namespace Xplore.Screens
                 _lastFrameSecond = gameTime.TotalGameTime.TotalSeconds;
                 _frameCount = 0;
             }
+        }
+
+        public void DrawDebugString(string text,Vector2 textposition,SpriteBatch spriteBatch)
+        {
+            spriteBatch.DrawString(ContentProvider.SpriteFont, text, textposition, Color.Black, 0f, Vector2.Zero, 1f / Camera.Zoom, SpriteEffects.None, 0);
         }
 
         public DebugScreen(bool active, Main game, ScreenManager screenManager) : base(active, game, screenManager)
