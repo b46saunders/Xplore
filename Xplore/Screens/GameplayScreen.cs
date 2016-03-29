@@ -135,7 +135,7 @@ namespace Xplore.Screens
             
             _mouseState = Mouse.GetState();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                ScreenManager.PauseGame();
+                GameManager.PauseGame();
             ApplyMouseWheelZoom();
             Camera.Location = new Vector2(_player.Position.X, _player.Position.Y);
             UpdateLazersCollsions();
@@ -325,7 +325,7 @@ namespace Xplore.Screens
             }
         }
 
-        public GameplayScreen(bool active, Main game, ScreenManager screenManager) : base(active, game, screenManager)
+        public GameplayScreen(bool active, Main game) : base(active, game)
         {
             UserInterface = false;
             ScreenType = ScreenType.Gameplay;

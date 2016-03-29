@@ -21,8 +21,6 @@ namespace Xplore.Buttons
 
         public event EventHandler ClickEvent;
 
-        public ScreenManager ScreenManager { get; set; }
-
         public MenuButton(Vector2 position, Texture2D texture, Texture2D buttonPressedTexture, string text, SpriteFont font) : base(position)
         {
             Height = 100;

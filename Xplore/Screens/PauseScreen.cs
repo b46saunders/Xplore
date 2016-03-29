@@ -53,7 +53,7 @@ namespace Xplore.Screens
         }
 
 
-        public PauseScreen(bool active, Main game, ScreenManager screenManager) : base(active, game, screenManager)
+        public PauseScreen(bool active, Main game) : base(active, game)
         {
             UserInterface = true;
             ScreenType = ScreenType.Pause;

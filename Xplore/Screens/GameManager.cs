@@ -5,26 +5,25 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Xplore.Screens
 {
-    public class ScreenManager
+    public static class GameManager
     {
-        public Rectangle ScreenBounds { get; set; }
-        public GraphicsDeviceManager GraphicsDeviceManager { get; set; }
-        public Dictionary<string, Screen> Screens { get; set; }
-        public SpriteFont SpriteFont { get; set; }
-        public Main Game { get; set; }
+        public static Rectangle ScreenBounds { get; set; }
+        public static GraphicsDeviceManager GraphicsDeviceManager { get; set; }
+        public static Dictionary<string, Screen> Screens { get; set; }
+        public static Main Game { get; set; }
         
 
-        public ScreenManager()
+        static GameManager()
         {
             Screens = new Dictionary<string, Screen>();
         }
-        public void Init()
+        public static void Init()
         {
-            var menuScreen = new MenuSceen(true, Game, this);
-            var debugScreen = new DebugScreen(true, Game, this);
+            var menuScreen = new MenuSceen(true, Game);
+            var debugScreen = new DebugScreen(true, Game);
             menuScreen.StartSinglePlayerGame += (sender, args) => StartSinglePlayerGame();
             menuScreen.EndGame += (sender, args) => QuitGame();
-            var pauseScreen = new PauseScreen(false, Game, this);
+            var pauseScreen = new PauseScreen(false, Game);
             pauseScreen.MenuClick += (sender, args) => MainMenu();
             pauseScreen.ResumeClick += (sender, args) => ResumeGame();
             Screens.Add("Menu", menuScreen);
@@ -33,20 +32,25 @@ namespace Xplore.Screens
             //Screens.Add("Gameplay", gameplayScreen);
         }
 
-        private void StartSinglePlayerGame()
+        public static DebugScreen GetDebugScreen()
         {
-            Screens["Menu"].Active = false;
-            Screens.Add("Gameplay", new GameplayScreen(true, Game, this));
+            return (DebugScreen)Screens["Debug"];
         }
 
-        public void ResumeGame()
+        private static void StartSinglePlayerGame()
+        {
+            Screens["Menu"].Active = false;
+            Screens.Add("Gameplay", new GameplayScreen(true, Game));
+        }
+
+        public static void ResumeGame()
         {
             Screens["Pause"].Active = false;
             Screens["Gameplay"].Active = true;
             Screens["Debug"].Active = true;
         }
 
-        public void MainMenu()
+        public static void MainMenu()
         {
 
             Screens["Pause"].Active = false;
@@ -55,7 +59,7 @@ namespace Xplore.Screens
             Screens.Remove("Gameplay");
         }
 
-        public void PauseGame()
+        public static void PauseGame()
         {
             //get the pause menu
             var pauseMenu = Screens["Pause"];
@@ -70,36 +74,36 @@ namespace Xplore.Screens
             }
         }
 
-        private IEnumerable<Screen> GetActiveScreens()
+        public static IEnumerable<Screen> GetActiveScreens()
         {
             return Screens.Values.Where(a => a.Active);
         }
 
-        public void StartGame()
+        public static void StartGame()
         {
             RestartGame();
 
         }
 
-        public void QuitGame()
+        public static void QuitGame()
         {
             Game.Exit();
         }
 
-        public void RestartGame()
+        public static void RestartGame()
         {
             Screen screen;
             if (Screens.TryGetValue("Gameplay", out screen))
             {
                 Screens.Remove("Gameplay");
             }
-            screen = new GameplayScreen(true, Game, this);
+            screen = new GameplayScreen(true, Game);
             screen.Active = true;
             Screens["Menu"].Active = false;
             Screens.Add("Gameplay", screen);
         }
 
-        public void LoadContent()
+        public static void LoadContent()
         {
             foreach (var screen in Screens.Values)
             {
@@ -107,7 +111,7 @@ namespace Xplore.Screens
             }
         }
 
-        public void Update(GameTime gameTime)
+        public static void Update(GameTime gameTime)
         {
             for (int i = 0; i < Screens.Values.Count; i++)
             {
@@ -120,7 +124,7 @@ namespace Xplore.Screens
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public static void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             foreach (var screen in Screens.Values.OrderBy(screen => screen.ScreenType))
             {
@@ -131,7 +135,7 @@ namespace Xplore.Screens
             }
         }
 
-        public void UnloadContent()
+        public static void UnloadContent()
         {
             foreach (var screen in Screens.Values)
             {

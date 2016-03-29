@@ -72,7 +72,7 @@ namespace Xplore.Screens
             spriteBatch.DrawString(ContentProvider.SpriteFont, text, textposition, Color.Black, 0f, Vector2.Zero, 1f / Camera.Zoom, SpriteEffects.None, 0);
         }
 
-        public DebugScreen(bool active, Main game, ScreenManager screenManager) : base(active, game, screenManager)
+        public DebugScreen(bool active, Main game) : base(active, game)
         {
             UserInterface = true;
             ScreenType = ScreenType.Debug;

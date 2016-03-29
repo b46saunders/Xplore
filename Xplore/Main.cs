@@ -11,7 +11,6 @@ namespace Xplore
         private SpriteBatch _spriteBatch;
         public  float Timestep = 1000 / 250f;
         public  float ElapsedTime = 0f;
-        private readonly ScreenManager _screenManager = new ScreenManager();
         private Rectangle _screenBounds;
         
 
@@ -39,16 +38,16 @@ namespace Xplore
             Camera.Bounds = _graphics.GraphicsDevice.Viewport.Bounds;
             Camera.Location = new Vector2(_graphics.GraphicsDevice.Viewport.Bounds.Width / 2f, _graphics.GraphicsDevice.Viewport.Bounds.Height / 2f);
             _screenBounds = new Rectangle(0, 0, _graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height);
-            _screenManager.ScreenBounds = _screenBounds;
-            _screenManager.Game = this;
-            _screenManager.Init();
+            GameManager.ScreenBounds = _screenBounds;
+            GameManager.Game = this;
+            GameManager.Init();
             
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            _screenManager.LoadContent();
+            GameManager.LoadContent();
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
@@ -56,7 +55,7 @@ namespace Xplore
 
         protected override void UnloadContent()
         {
-            _screenManager.UnloadContent();
+            GameManager.UnloadContent();
             // TODO: Unload any non ContentManager content here
         }
 
@@ -65,7 +64,7 @@ namespace Xplore
             ElapsedTime += gameTime.ElapsedGameTime.Milliseconds;
             if (ElapsedTime > Timestep)
             {
-                _screenManager.Update(gameTime);
+                GameManager.Update(gameTime);
                 ElapsedTime -= Timestep;
                 // TODO: Add your update logic here
             }
@@ -81,7 +80,7 @@ namespace Xplore
                 _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearWrap, null,
                     null, null, Camera.TransformMatrix());
             
-            _screenManager.Draw(_spriteBatch,gameTime);
+            GameManager.Draw(_spriteBatch,gameTime);
             
             _spriteBatch.End();
             base.Draw(gameTime);

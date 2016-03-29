@@ -54,7 +54,7 @@ namespace Xplore.Screens
         }
 
 
-        public MenuSceen(bool active, Main game, ScreenManager screenManager) : base(active, game, screenManager)
+        public MenuSceen(bool active, Main game) : base(active, game)
         {
             UserInterface = true;
             ScreenType = ScreenType.Menu;
