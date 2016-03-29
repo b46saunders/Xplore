@@ -23,7 +23,7 @@ namespace Xplore.Screens
         private Vector2 _mousePos = Vector2.Zero;
         private Vector2 _worldPos = Vector2.Zero;
 
-        private List<DebugDisplayItem> debugDisplayItems = new List<DebugDisplayItem>();
+        private readonly List<DebugDisplayItem> _debugDisplayItems = new List<DebugDisplayItem>();
 
         public override void LoadContent()
         {
@@ -60,18 +60,18 @@ namespace Xplore.Screens
         private void InitDebugItems()
         {
             var initPos = Camera.GetWorldPosition(new Vector2(10, 10));
-            debugDisplayItems.Add(new DebugDisplayItem(initPos, ()=>$"UPS : {_previousUpdateCount}"));
-            debugDisplayItems.Add(new DebugDisplayItem(initPos, ()=>$"FPS : {_previousFrameCount}"));
-            debugDisplayItems.Add(new DebugDisplayItem(initPos, () => $"Mouse pos : [{_mousePos.X},{_mousePos.Y}]"));
-            debugDisplayItems.Add(new DebugDisplayItem(initPos, () => $"World Pos : [{_worldPos.X},{_worldPos.Y}]"));
-            debugDisplayItems.Add(new DebugDisplayItem(initPos, () => $"Camera Pos: [{Camera.Location.X},{Camera.Location.Y}]"));
+            _debugDisplayItems.Add(new DebugDisplayItem(initPos, ()=>$"UPS : {_previousUpdateCount}"));
+            _debugDisplayItems.Add(new DebugDisplayItem(initPos, ()=>$"FPS : {_previousFrameCount}"));
+            _debugDisplayItems.Add(new DebugDisplayItem(initPos, () => $"Mouse pos : [{_mousePos.X},{_mousePos.Y}]"));
+            _debugDisplayItems.Add(new DebugDisplayItem(initPos, () => $"World Pos : [{_worldPos.X},{_worldPos.Y}]"));
+            _debugDisplayItems.Add(new DebugDisplayItem(initPos, () => $"Camera Pos: [{Camera.Location.X},{Camera.Location.Y}]"));
         }
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
 
             var yPosOffset = 0f;
-            foreach (var debugDisplayItem in debugDisplayItems)
+            foreach (var debugDisplayItem in _debugDisplayItems)
             {
                 var newPos = Camera.GetWorldPosition(new Vector2(10, 10));
                 newPos.Y += yPosOffset;
