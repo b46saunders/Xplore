@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -21,6 +23,8 @@ namespace Xplore.Screens
         private Vector2 _mousePos = Vector2.Zero;
         private Vector2 _worldPos = Vector2.Zero;
 
+        private List<DebugDisplayItem> debugDisplayItems = new List<DebugDisplayItem>();
+
         public override void LoadContent()
         {
         }
@@ -28,6 +32,15 @@ namespace Xplore.Screens
         public override void UnloadContent()
         {
         }
+
+        //public void AddDebugData(string data,Vector2? debugPosition = null)
+        //{
+        //    Vector2 drawPosition;
+        //    if (debugPosition == null)
+        //    {
+        //        drawPosition = 
+        //    }
+        //}
 
         public override void Update(GameTime gameTime)
         {
@@ -44,20 +57,31 @@ namespace Xplore.Screens
             _worldPos = Camera.GetWorldPosition(new Vector2(_mousePos.X, _mousePos.Y));
         }
 
+        private void InitDebugItems()
+        {
+            var initPos = Camera.GetWorldPosition(new Vector2(10, 10));
+            debugDisplayItems.Add(new DebugDisplayItem(initPos, ()=>$"UPS : {_previousUpdateCount}"));
+            debugDisplayItems.Add(new DebugDisplayItem(initPos, ()=>$"FPS : {_previousFrameCount}"));
+            debugDisplayItems.Add(new DebugDisplayItem(initPos, () => $"Mouse pos : [{_mousePos.X},{_mousePos.Y}]"));
+            debugDisplayItems.Add(new DebugDisplayItem(initPos, () => $"World Pos : [{_worldPos.X},{_worldPos.Y}]"));
+            debugDisplayItems.Add(new DebugDisplayItem(initPos, () => $"Camera Pos: [{Camera.Location.X},{Camera.Location.Y}]"));
+        }
+
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
+
+            var yPosOffset = 0f;
+            foreach (var debugDisplayItem in debugDisplayItems)
+            {
+                var newPos = Camera.GetWorldPosition(new Vector2(10, 10));
+                newPos.Y += yPosOffset;
+                DrawDebugString(debugDisplayItem.Func(), newPos, spriteBatch);
+                yPosOffset += (16f / Camera.Zoom);
+            }
+
             //draw the update strings
-            var scale = Camera.Zoom;
-            var updatePos = Camera.GetWorldPosition(new Vector2(10, 10));
-            var fpsPos = new Vector2(updatePos.X, updatePos.Y + (16 / scale));
-            var mousePoss = new Vector2(fpsPos.X, fpsPos.Y + (16 / scale));
-            var worldPosz = new Vector2(mousePoss.X,mousePoss.Y + (16 / scale));
-            var cameraPos = new Vector2(worldPosz.X,worldPosz.Y + (16 / scale));
-            DrawDebugString($"UPS : {_previousUpdateCount}", updatePos,spriteBatch);
-            DrawDebugString($"FPS : {_previousFrameCount}", fpsPos,spriteBatch);
-            DrawDebugString($"Mouse pos : [{_mousePos.X},{_mousePos.Y}]", mousePoss,spriteBatch);
-            DrawDebugString($"World Pos : [{_worldPos.X},{_worldPos.Y}]", worldPosz,spriteBatch);
-            DrawDebugString($"Camera Pos: [{Camera.Location.X},{Camera.Location.Y}]",cameraPos,spriteBatch);
+            
+            
             _frameCount++;
             if (gameTime.TotalGameTime.TotalSeconds > _lastFrameSecond + 1)
             {
@@ -74,8 +98,21 @@ namespace Xplore.Screens
 
         public DebugScreen(bool active, Main game) : base(active, game)
         {
+            InitDebugItems();
             UserInterface = true;
             ScreenType = ScreenType.Debug;
         }
+    }
+
+    public class DebugDisplayItem
+    {
+        public Vector2 ScreenPosition { get; set; }
+        public Func<string> Func { get; set; }
+        public DebugDisplayItem(Vector2 screenPosition, Func<string> func)
+        {
+            ScreenPosition = screenPosition;
+            Func = func;
+        }
+          
     }
 }
