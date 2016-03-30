@@ -48,6 +48,7 @@
     <Compile Include="Enemy.cs" />
     <Compile Include="HealthBar.cs" />
     <Compile Include="IHealthBarEntity.cs" />
+    <Compile Include="Screens\DebugDisplayItem.cs" />
     <Compile Include="Screens\DebugScreen.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Screens\GameplayScreen.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="ShipType.cs" />
     <Compile Include="SpatialGrid.cs" />
     <Compile Include="Sprite.cs" />
+    <Compile Include="Vector2DEx.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

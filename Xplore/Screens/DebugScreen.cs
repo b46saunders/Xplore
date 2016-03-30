@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,12 +5,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Xplore.Screens
 {
-    /// <summary>
-    /// TODO have a static member so we can access the debug screen anywhere in the program - helpful if we want to live debug stuff. maybe have some sort of handle that can be placed on the screen in a location specified
-    /// include some functions for updating etc
-    /// maybe just some hook into the update method for this class
-    /// MOVE THIS TO BE DRAWN LAST!!!
-    /// </summary>
     public class DebugScreen : Screen
     {
         private double _lastFrameSecond;
@@ -33,14 +26,10 @@ namespace Xplore.Screens
         {
         }
 
-        //public void AddDebugData(string data,Vector2? debugPosition = null)
-        //{
-        //    Vector2 drawPosition;
-        //    if (debugPosition == null)
-        //    {
-        //        drawPosition = 
-        //    }
-        //}
+        public void AddDebugData(DebugDisplayItem debugDisplayItem)
+        {
+            _debugDisplayItems.Add(debugDisplayItem);
+        }
 
         public override void Update(GameTime gameTime)
         {
@@ -59,12 +48,11 @@ namespace Xplore.Screens
 
         private void InitDebugItems()
         {
-            var initPos = Camera.GetWorldPosition(new Vector2(10, 10));
-            _debugDisplayItems.Add(new DebugDisplayItem(initPos, ()=>$"UPS : {_previousUpdateCount}"));
-            _debugDisplayItems.Add(new DebugDisplayItem(initPos, ()=>$"FPS : {_previousFrameCount}"));
-            _debugDisplayItems.Add(new DebugDisplayItem(initPos, () => $"Mouse pos : [{_mousePos.X},{_mousePos.Y}]"));
-            _debugDisplayItems.Add(new DebugDisplayItem(initPos, () => $"World Pos : [{_worldPos.X},{_worldPos.Y}]"));
-            _debugDisplayItems.Add(new DebugDisplayItem(initPos, () => $"Camera Pos: [{Camera.Location.X},{Camera.Location.Y}]"));
+            _debugDisplayItems.Add(new DebugDisplayItem(()=>$"UPS : {_previousUpdateCount}"));
+            _debugDisplayItems.Add(new DebugDisplayItem(()=>$"FPS : {_previousFrameCount}"));
+            _debugDisplayItems.Add(new DebugDisplayItem(() => $"Mouse pos : [{_mousePos.X},{_mousePos.Y}]"));
+            _debugDisplayItems.Add(new DebugDisplayItem(() => $"World Pos : [{_worldPos.X},{_worldPos.Y}]"));
+            _debugDisplayItems.Add(new DebugDisplayItem(() => $"Camera Pos: [{Camera.Location.X},{Camera.Location.Y}]"));
         }
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
@@ -79,9 +67,6 @@ namespace Xplore.Screens
                 yPosOffset += (16f / Camera.Zoom);
             }
 
-            //draw the update strings
-            
-            
             _frameCount++;
             if (gameTime.TotalGameTime.TotalSeconds > _lastFrameSecond + 1)
             {
@@ -102,17 +87,5 @@ namespace Xplore.Screens
             UserInterface = true;
             ScreenType = ScreenType.Debug;
         }
-    }
-
-    public class DebugDisplayItem
-    {
-        public Vector2 ScreenPosition { get; set; }
-        public Func<string> Func { get; set; }
-        public DebugDisplayItem(Vector2 screenPosition, Func<string> func)
-        {
-            ScreenPosition = screenPosition;
-            Func = func;
-        }
-          
     }
 }
