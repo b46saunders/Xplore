@@ -50,6 +50,11 @@ namespace Xplore.Screens
             Screens["Debug"].Active = true;
         }
 
+        public static void ToggleDebug()
+        {
+            Screens["Debug"].Active = !Screens["Debug"].Active;
+        }
+
         public static void MainMenu()
         {
 

@@ -136,6 +136,12 @@ namespace Xplore.Screens
             _mouseState = Mouse.GetState();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 GameManager.PauseGame();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.K))
+            {
+                GameManager.ToggleDebug();
+            }
+
             ApplyMouseWheelZoom();
             Camera.Location = new Vector2(_player.Position.X, _player.Position.Y);
             UpdateLazersCollsions();
@@ -155,6 +161,7 @@ namespace Xplore.Screens
                 enemies[i].Update(gameTime);
                 
             }
+
             foreach (var boulder in _boulders)
             {
                 boulder.Update(gameTime);
