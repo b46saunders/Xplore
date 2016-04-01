@@ -13,6 +13,7 @@ namespace Xplore.Screens
         private readonly List<Enemy> _enemies = new List<Enemy>();
         private readonly List<Boulder> _boulders = new List<Boulder>(); 
         private MouseState _previousMouseState;
+        private KeyboardState _previousKeyboardState;
         private MouseState _mouseState;
         private readonly Player _player;
         private SpatialGrid _spatialGrid;
@@ -23,6 +24,7 @@ namespace Xplore.Screens
 
         private const int GameSize = 8000;
         private Rectangle _gameBounds = new Rectangle(-(GameSize / 2), -(GameSize / 2), GameSize, GameSize);
+        private KeyboardState _keyboardState;
         private Rectangle _backgroundRect => new Rectangle(_gameBounds.X-(_gameBounds.Width/2),_gameBounds.Y-(_gameBounds.Height/2),_gameBounds.Width*2,_gameBounds.Height*2);
         public override void LoadContent()
         {
@@ -132,12 +134,12 @@ namespace Xplore.Screens
         {
             UpdateGameBounds();
             _spatialGrid = new SpatialGrid(_gameBounds,200);
-            
+            _keyboardState = Keyboard.GetState();
             _mouseState = Mouse.GetState();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 GameManager.PauseGame();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.K))
+            if (_keyboardState.IsKeyDown(Keys.K) && !_previousKeyboardState.IsKeyDown(Keys.K))
             {
                 GameManager.ToggleDebug();
             }
@@ -171,6 +173,7 @@ namespace Xplore.Screens
 
 
             _previousMouseState = _mouseState;
+            _previousKeyboardState = _keyboardState;
         }
 
         private IEnumerable<Ship> GetAllShips()

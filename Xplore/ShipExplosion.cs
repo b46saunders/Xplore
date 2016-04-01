@@ -45,6 +45,7 @@ namespace Xplore
 
             if (_shipParticles.All(particle => !particle.IsParticleActive))
             {
+                _shipParticles.Clear();
                 AnimationFinished?.Invoke(this,null);
                 IsParticleActive = false;
             }
