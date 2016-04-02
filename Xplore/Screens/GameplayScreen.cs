@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,8 +18,8 @@ namespace Xplore.Screens
         private MouseState _mouseState;
         private readonly Player _player;
         private SpatialGrid _spatialGrid;
-        private const int MaxEnemyCount = 100;
-        private const int MaxBoulderCount = 8;
+        private const int MaxEnemyCount = 4;
+        private const int MaxBoulderCount = 0;
          
         private Dictionary<string,ICollisionEntity> _collisionEntities = new Dictionary<string, ICollisionEntity>(); 
 
@@ -214,6 +215,8 @@ namespace Xplore.Screens
         /// </summary>
         private void CheckAndResolveCollisions(GameTime gameTime)
         {
+            
+            var loopCount = 0;
             foreach (var collisionEntity in _collisionEntities.Values)
             {
                 _spatialGrid.Insert(collisionEntity.BoundingCircle.SourceRectangle,collisionEntity);
@@ -221,14 +224,31 @@ namespace Xplore.Screens
 
             foreach (var gridBox in _spatialGrid.GetCollsionGrid().Values)
             {
+                List<string> checkedCollisions = new List<string>();
                 if (gridBox.Count > 1)
                 {
                     foreach (var collisionEntity in gridBox)
                     {
+                        
+
+
                         foreach (var entity in gridBox)
                         {
+
+                            var collisionIds =
+                                    new string[] { collisionEntity.Guid.ToString(), entity.Guid.ToString() }.OrderBy(
+                                        a => a);
+                            var value = string.Join("", collisionIds);
+
+                            //if we have already performed a collision check for these two objects skip check logic
+                            //also if the compare objects are the same don't bother checking...
+                            if (checkedCollisions.Contains(value) || entity == collisionEntity)
+                            {
+                                continue;
+                            }
+                            loopCount++;
                             Vector2 collsionVector;
-                            if (entity != collisionEntity && CollisionHelper.IsCircleColliding(entity.BoundingCircle,collisionEntity.BoundingCircle,out collsionVector))
+                            if (CollisionHelper.IsCircleColliding(entity.BoundingCircle,collisionEntity.BoundingCircle,out collsionVector))
                             {
                                 if (collisionEntity.CollisionsWith == CollisionType.Lazer ||
                                     entity.CollisionsWith == CollisionType.Lazer)
@@ -261,12 +281,18 @@ namespace Xplore.Screens
                                 }
                                 _collisionEntities[collisionEntity.Guid.ToString()].ApplyCollisionDamage(gameTime, damage);
                                 _collisionEntities[entity.Guid.ToString()].ApplyCollisionDamage(gameTime,0);
+
+                                //entity is colliding with collision entity so add it to the computed list of collisions
                                 
                             }
+                            checkedCollisions.Add(value);
                         }
+                        
                     }
                 }
             }
+
+            Debug.WriteLine(loopCount);
 
 
             //bool collisionFound;
