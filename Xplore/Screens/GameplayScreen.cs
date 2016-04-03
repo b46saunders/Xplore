@@ -131,6 +131,7 @@ namespace Xplore.Screens
             
         }
 
+        //TODO there is an issue where either collision entities or sprites are not being correctly removed from the dictionary of objects requiring updates
         public override void Update(GameTime gameTime)
         {
             UpdateGameBounds();
