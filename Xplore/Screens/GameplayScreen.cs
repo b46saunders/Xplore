@@ -18,8 +18,8 @@ namespace Xplore.Screens
         private MouseState _mouseState;
         private readonly Player _player;
         private SpatialGrid _spatialGrid;
-        private const int MaxEnemyCount = 4;
-        private const int MaxBoulderCount = 0;
+        private const int MaxEnemyCount = 100;
+        private const int MaxBoulderCount = 50;
          
         private Dictionary<string,ICollisionEntity> _collisionEntities = new Dictionary<string, ICollisionEntity>(); 
 
@@ -293,57 +293,7 @@ namespace Xplore.Screens
             }
 
             Debug.WriteLine(loopCount);
-
-
-            //bool collisionFound;
-            ////do
-            ////{
-            //    //collisionFound = false;
-            //    foreach (var ship in GetAllShips())
-            //    {
-            //        //check that this ship is not colliding with any other ships
-            //        foreach (var checkShip in GetAllShips())
-            //        {
-            //            //if intersect and not the same ship
-            //            Vector2 collsionVector;
-            //            if (checkShip != ship && CollisionHelper.IsCircleColliding(checkShip.BoundingCircle,ship.BoundingCircle,out collsionVector))
-            //            {
-            //                checkShip.ResolveSphereCollision(collsionVector);
-            //                checkShip.ApplyCollisionDamage(gameTime);
-            //                ship.ApplyCollisionDamage(gameTime);
-            //                //Debug.WriteLine("COLLSION!");
-            //                //ship.ResolveCollision(checkShip.BoundingBox);
-            //                //collisionFound = true;
-            //            }
-            //        }
-            //    }
-
-            ////} while (collisionFound);
         }
-
-
-        //private void CheckAndResolveCollisions()
-        //{
-        //    bool collisionFound;
-        //    //do
-        //    //{
-        //    collisionFound = false;
-        //    foreach (var ship in GetAllShips())
-        //    {
-        //        //check that this ship is not colliding with any other ships
-        //        foreach (var checkShip in GetAllShips())
-        //        {
-        //            //if intersect and not the same ship
-        //            if (checkShip != ship && checkShip.BoundingBox.Intersects(ship.BoundingBox))
-        //            {
-        //                ship.ResolveCollision(checkShip.BoundingBox);
-        //                collisionFound = true;
-        //            }
-        //        }
-        //    }
-
-        //    //} while (collisionFound);
-        //}
 
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
