@@ -87,7 +87,7 @@ namespace Xplore.Screens
             var enemies = _enemies.ToArray();
             foreach (var boulder in boulders)
             {
-                if (IsSpriteInGameBounds(boulder))
+                if (IsSpriteOutSideGameBounds(boulder))
                 {
                     _boulders.Remove(boulder);
                     _collisionEntities.Remove(boulder.Guid.ToString());
@@ -95,17 +95,18 @@ namespace Xplore.Screens
             }
             foreach (var enemy in enemies)
             {
-                if (IsSpriteInGameBounds(enemy))
+                if (IsSpriteOutSideGameBounds(enemy))
                 {
                     //we need to cleanup the ship current particles
                     enemy.CleanupParticles();
+                    _collisionEntities.Remove(enemy.Guid.ToString());
                     _enemies.Remove(enemy);
                 }
             }
 
         }
 
-        public bool IsSpriteInGameBounds(Sprite sprite)
+        public bool IsSpriteOutSideGameBounds(Sprite sprite)
         {
             return sprite.Position.X < _gameBounds.X || sprite.Position.X > _gameBounds.X + _gameBounds.Width || sprite.Position.Y < _gameBounds.Y || sprite.Position.Y > _gameBounds.Y + _gameBounds.Height;
         }
